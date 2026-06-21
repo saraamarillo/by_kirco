@@ -1,0 +1,28 @@
+# Vercel
+.vercel/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Dependencies
+node_modules/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+.idea/
+
+# Build artifacts
+design_file.bin
+design_file.gz
+design_extracted/
+
+# Logs
+*.log
+npm-debug.log*

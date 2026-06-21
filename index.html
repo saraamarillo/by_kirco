@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>by_kirco — Queridos desconocidos</title>
+<meta name="description" content="Cartas anónimas escritas a mano que dejo para ti en algún lugar." />
+<meta property="og:title" content="by_kirco — Queridos desconocidos" />
+<meta property="og:description" content="Cartas anónimas escritas a mano que dejo para ti en algún lugar." />
+<!-- TODO(og:image): añade /assets/og.jpg (1200×630) y descomenta -->
+<!-- <meta property="og:image" content="/assets/og.jpg" /> -->
+<meta name="theme-color" content="#f7f1e3" />
+<link rel="icon" type="image/png" href="/assets/favicon.png" />
+<link rel="apple-touch-icon" href="/assets/favicon.png" />
+
+<!-- Lottie for animated logo -->
+<script src="https://unpkg.com/lottie-web@5.12.2/build/player/lottie.min.js"></script>
+<!-- Caveat for handwritten letter text -->
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&display=swap" rel="stylesheet" />
+
+<style>
+/* ============================================================
+   TOKENS — by_kirco Design System
+   ============================================================ */
+@font-face {
+  font-family: "Visby Round CF";
+  src: url("fonts/VisbyRoundCF-Heavy.ttf") format("truetype");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "OCR B Std";
+  src: url("fonts/OCRBStd.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "OCR A Std";
+  src: url("fonts/OCRAStd.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* --- Colors --- */
+  --kirco-green:        #a0d76b;
+  --kirco-green-deep:   #6f9c3e;
+  --kirco-green-tint:   #ecf7df;
+  --kirco-orange:       #ffaa4d;
+  --kirco-orange-deep:  #d07f1f;
+  --kirco-orange-tint:  #fff2e2;
+  --kirco-yellow:       #fffa7d;
+  --kirco-yellow-tint:  #fffdda;
+  --kirco-white:        #ffffff;
+  --kirco-paper:        #f7f1e3;
+  --kirco-ink:          #2e2b25;
+  --kirco-ink-soft:     #6b6557;
+  --kirco-line:         #e8e1d2;
+
+  /* --- Semantic aliases --- */
+  --surface-page:   var(--kirco-white);
+  --surface-soft:   var(--kirco-yellow-tint);
+  --surface-card:   var(--kirco-white);
+  --text-body:      var(--kirco-ink);
+  --text-muted:     var(--kirco-ink-soft);
+  --accent-primary: var(--kirco-green);
+
+  /* --- Typography --- */
+  --font-display: "Visby Round CF", system-ui, sans-serif;
+  --font-mono:    "OCR B Std", "OCR A Std", monospace;
+  --font-body:    system-ui, -apple-system, "Segoe UI", sans-serif;
+  --track-mono:   0.16em;
+
+  /* --- Spacing --- */
+  --space-1: 4px;   --space-2: 8px;   --space-3: 16px;
+  --space-4: 24px;  --space-5: 40px;  --space-6: 64px;
+
+  /* --- Radii --- */
+  --radius-sm:   10px;
+  --radius-md:   16px;
+  --radius-lg:   28px;
+  --radius-pill: 999px;
+
+  /* --- Shadows --- */
+  --shadow-card:       0 2px 6px rgba(46,43,37,.06), 0 10px 28px rgba(46,43,37,.08);
+  --shadow-pop:        0 4px 12px rgba(46,43,37,.10), 0 18px 44px rgba(46,43,37,.14);
+  --shadow-glow-green: 0 0 0 6px rgba(160,215,107,.3);
+}
+
+/* ============================================================
+   RESET & BASE
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; }
+html { margin: 0; padding: 0; scroll-behavior: smooth; }
+body {
+  margin: 0; padding: 0;
+  background: var(--kirco-paper);
+  color: var(--text-body);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+}
+.wrap { max-width: 1100px; margin: 0 auto; padding: 0 48px; }
+
+/* ============================================================
+   LOADER
+   ============================================================ */
+.loader {
+  position: fixed; inset: 0;
+  background: var(--kirco-paper);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 1000;
+  transition: opacity 600ms ease-out;
+}
+.loader.hide { opacity: 0; pointer-events: none; }
+.loader-anim { width: min(320px, 64vw); height: min(320px, 64vw); }
+
+/* ============================================================
+   BRAND WATERMARK FLOWERS
+   ============================================================ */
+.flor-marca {
+  position: absolute;
+  background: no-repeat center / contain;
+  opacity: 0.07;
+  pointer-events: none;
+  z-index: 0;
+}
+.flor-marca.verde   { background-image: url("assets/monograma-verde.png"); }
+.flor-marca.naranja { background-image: url("assets/monograma-naranja.png?v=2"); }
+main, footer { position: relative; z-index: 1; }
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 26px 0 0;
+  position: relative; z-index: 2;
+}
+.logo-anim {
+  width: 300px; height: 300px;
+  display: flex; align-items: center;
+}
+.logo-anim .logo-img { height: 300px; width: 300px; object-fit: contain; }
+.handle {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: var(--track-mono);
+  color: var(--text-muted);
+}
+
+/* ============================================================
+   GLOBAL BUTTON
+   ============================================================ */
+.btn {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 19px;
+  letter-spacing: 0.01em;
+  color: #ffffff;
+  background: var(--kirco-orange-deep);
+  border: 2px solid var(--kirco-orange-deep);
+  border-radius: var(--radius-pill);
+  padding: 17px 42px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 180ms ease-out, filter 180ms ease-out;
+  line-height: 1;
+}
+.btn:hover  { transform: translateY(-2px); filter: brightness(0.96); }
+.btn:active { transform: scale(0.98); }
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero {
+  position: relative; overflow: hidden;
+  text-align: center;
+  padding: 110px 0 140px;
+}
+.hero .flor-marca.h1f { width: 620px; height: 620px; top: -160px; left: -180px; transform: rotate(-14deg); }
+.hero .flor-marca.h2f { width: 340px; height: 340px; bottom: -60px; right: -90px; transform: rotate(12deg); }
+.hero .wrap { position: relative; }
+
+.hero .kicker {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  letter-spacing: var(--track-mono);
+  text-transform: uppercase;
+  color: var(--kirco-orange-deep);
+  margin: 0 0 26px;
+}
+.hero h1 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(64px, 9vw, 118px);
+  line-height: 0.98;
+  margin: 0;
+  color: var(--kirco-green-deep);
+}
+.hero .sub {
+  font-size: 23px;
+  line-height: 1.6;
+  color: var(--text-muted);
+  max-width: 600px;
+  margin: 34px auto 0;
+}
+.hero .btn  { margin-top: 46px; }
+.hero .flor-sep {
+  display: block;
+  width: 50px; height: 50px;
+  margin: 56px auto 0;
+  opacity: 0.65;
+}
+
+/* ============================================================
+   CARTA ANIMADA (envelope)
+   ============================================================ */
+.carta-scene {
+  position: relative;
+  background: var(--kirco-paper);
+  padding: 130px 0 150px;
+  text-align: center;
+  overflow: hidden;
+}
+.carta-scene .flor-marca.c1f { width: 480px; height: 480px; top: 60px; right: -150px; transform: rotate(16deg); }
+.carta-scene .flor-marca.c2f { width: 300px; height: 300px; bottom: -70px; left: -80px; transform: rotate(-10deg); }
+.carta-scene .wrap { position: relative; }
+.carta-scene .label {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  letter-spacing: var(--track-mono);
+  text-transform: uppercase;
+  color: var(--kirco-green-deep);
+  margin: 0 0 70px;
+}
+
+.envelope {
+  position: relative;
+  width: 480px; max-width: 86vw;
+  height: 300px;
+  margin: 290px auto 0;
+}
+.env-back {
+  position: absolute; inset: 0;
+  background: var(--kirco-orange);
+  border-radius: var(--radius-md);
+  z-index: 1;
+}
+.env-flap {
+  position: absolute; top: 0; left: 0;
+  width: 100%; height: 150px;
+  background: var(--kirco-orange-deep);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  transform-origin: top center;
+  transition: transform 700ms cubic-bezier(0.4,0,0.2,1), z-index 0s 350ms;
+  z-index: 4;
+}
+.env-front {
+  position: absolute; inset: 0;
+  background: var(--kirco-orange);
+  clip-path: polygon(0 26%, 50% 62%, 100% 26%, 100% 100%, 0 100%);
+  border-radius: var(--radius-md);
+  z-index: 3;
+}
+.env-front .logo-sobre {
+  position: absolute;
+  left: 50%; bottom: 12px;
+  width: 152px;
+  transform: translateX(-50%);
+}
+.letter {
+  position: absolute;
+  left: 50%; bottom: 18px;
+  width: 400px; max-width: 78vw;
+  background: var(--kirco-white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-pop);
+  padding: 26px 40px 20px;
+  text-align: left;
+  transform: translateX(-50%) translateY(10px) rotate(0deg);
+  transition: transform 900ms cubic-bezier(0.34,1.3,0.5,1) 420ms;
+  z-index: 2;
+}
+.letter .saludo {
+  font-family: "Caveat", cursive;
+  font-weight: 600; font-size: 34px;
+  color: var(--kirco-orange-deep);
+  margin: 0 0 12px;
+}
+.letter p {
+  font-family: "Caveat", cursive;
+  font-weight: 500; font-size: 24px;
+  line-height: 1.5;
+  color: var(--text-body);
+  margin: 0 0 10px;
+}
+.hl {
+  background: var(--kirco-yellow);
+  border-radius: 6px;
+  padding: 0 6px;
+  color: var(--kirco-ink);
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+.letter .flor-firma { height: 50px; width: 50px; margin-top: 16px; display: block; margin-left: auto; margin-right: auto; }
+.letter .saludo, .letter p, .letter .flor-firma {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 500ms ease-out, transform 500ms ease-out;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .envelope.open .env-flap  { transform: rotateX(180deg); z-index: 1; }
+  .envelope.open .letter    { transform: translateX(-50%) translateY(-218px) rotate(-1.6deg); }
+  .envelope.open .letter .saludo   { opacity: 1; transform: none; transition-delay: 900ms; }
+  .envelope.open .letter p.l1      { opacity: 1; transform: none; transition-delay: 1150ms; }
+  .envelope.open .letter p.l2      { opacity: 1; transform: none; transition-delay: 1450ms; }
+  .envelope.open .letter .flor-firma { opacity: 1; transform: none; transition-delay: 1750ms; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .env-flap  { transform: rotateX(180deg); z-index: 1; }
+  .letter    { transform: translateX(-50%) translateY(-218px) rotate(-1.6deg); }
+  .letter .saludo, .letter p, .letter .flor-firma { opacity: 1; transform: none; }
+}
+
+/* ============================================================
+   GALERÍA — polaroids
+   ============================================================ */
+.galeria {
+  position: relative; overflow: hidden;
+  padding: 120px 0 130px;
+}
+.galeria .flor-marca.g1f { width: 520px; height: 520px; top: -120px; left: -160px; transform: rotate(-12deg); }
+.galeria .flor-marca.g2f { width: 280px; height: 280px; bottom: -60px; right: -70px; transform: rotate(9deg); }
+.galeria h2 {
+  font-family: var(--font-display);
+  font-weight: 800; font-size: 52px; line-height: 1.1;
+  color: var(--kirco-green-deep);
+  text-align: center; margin: 0;
+}
+.galeria .gal-sub {
+  font-family: var(--font-mono);
+  font-size: 13px; letter-spacing: var(--track-mono);
+  text-transform: uppercase;
+  color: var(--text-muted);
+  text-align: center; margin: 20px 0 0;
+}
+.gal-strip {
+  display: flex; gap: 36px;
+  justify-content: safe center;
+  margin-top: 70px;
+  padding: 30px 48px 50px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+.gal-strip::-webkit-scrollbar { display: none; }
+
+.polaroid {
+  flex: 0 0 280px;
+  scroll-snap-align: center;
+  background: var(--kirco-white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  padding: 16px 16px 20px;
+  opacity: 0;
+  transform: translateY(36px);
+  transition: opacity 600ms ease-out,
+              transform 600ms cubic-bezier(0.34,1.3,0.5,1),
+              box-shadow 200ms ease-out;
+}
+.polaroid:hover { box-shadow: var(--shadow-pop); }
+.gal-strip.in .polaroid                { opacity: 1; }
+.gal-strip.in .polaroid:nth-child(odd)  { transform: translateY(0) rotate(-1.8deg); transition-delay: calc(var(--i) * 120ms); }
+.gal-strip.in .polaroid:nth-child(even) { transform: translateY(0) rotate(1.6deg);  transition-delay: calc(var(--i) * 120ms); }
+.gal-strip.in .polaroid:hover           { transform: translateY(-6px) rotate(0deg); transition-delay: 0ms; }
+
+.polaroid .foto {
+  display: block; width: 100%; height: 300px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+.polaroid .pie {
+  display: flex; align-items: center; gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 11px; letter-spacing: var(--track-mono);
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-top: 14px;
+}
+.polaroid .pie img { width: 50px; height: 50px; }
+
+/* ============================================================
+   PEDIDO — form section
+   ============================================================ */
+.pedido {
+  position: relative;
+  background: var(--kirco-paper);
+  padding: 120px 0 130px;
+  overflow: hidden;
+}
+.flor-fondo {
+  position: absolute;
+  background: url("assets/monograma-naranja.png?v=2") no-repeat center / contain;
+  opacity: 0.09;
+  pointer-events: none;
+}
+.flor-fondo.f1 { width: 420px; height: 420px; top: 40px; left: -130px; transform: rotate(-16deg); }
+.flor-fondo.f2 { width: 300px; height: 300px; bottom: -80px; right: -70px; transform: rotate(20deg); }
+.flor-fondo.f3 { width: 150px; height: 150px; top: 90px; right: 16%; transform: rotate(-8deg); }
+.pedido .wrap { position: relative; }
+
+.pedido h2 {
+  font-family: var(--font-display);
+  font-weight: 800; font-size: 56px; line-height: 1.08;
+  color: var(--kirco-green-deep);
+  text-align: center; margin: 0;
+}
+.pedido .sub {
+  font-size: 20px; line-height: 1.6;
+  color: var(--text-muted);
+  text-align: center; max-width: 540px;
+  margin: 22px auto 0;
+}
+.pedido form {
+  background: var(--kirco-green-deep);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-pop);
+  max-width: 620px;
+  margin: 56px auto 0;
+  padding: 48px;
+  display: flex; flex-direction: column; gap: 20px;
+}
+.campos-fila {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+}
+label {
+  font-family: var(--font-mono);
+  font-size: 12px; letter-spacing: var(--track-mono);
+  text-transform: uppercase;
+  color: var(--text-muted);
+  display: flex; flex-direction: column; gap: 8px;
+}
+.pedido form label { color: var(--kirco-paper); }
+
+input, textarea, select {
+  font-family: var(--font-body);
+  font-size: 17px;
+  color: var(--text-body);
+  background: var(--kirco-paper);
+  border: 2px solid var(--kirco-line);
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+  outline: none;
+  resize: vertical;
+  width: 100%;
+}
+input:focus, textarea:focus, select:focus {
+  border-color: var(--kirco-green);
+  box-shadow: var(--shadow-glow-green);
+}
+.pedido form .btn {
+  align-self: center; margin-top: 10px;
+  background: var(--kirco-paper);
+  border-color: var(--kirco-paper);
+  color: var(--kirco-green-deep);
+}
+.pedido form .nota {
+  font-size: 14px;
+  color: var(--kirco-paper);
+  opacity: 0.85;
+  text-align: center;
+  margin: 4px 0 0;
+}
+.form-status {
+  min-height: 1.4em;
+  text-align: center;
+  font-style: italic;
+  color: var(--kirco-yellow);
+  font-size: 15px;
+}
+.label-check {
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-body);
+  font-size: 15px;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--kirco-paper);
+  cursor: pointer;
+}
+.label-check input[type="checkbox"] {
+  width: 20px; height: 20px;
+  flex: 0 0 20px;
+  accent-color: var(--kirco-green);
+  cursor: pointer;
+  border-radius: 4px;
+}
+.label-check a { color: var(--kirco-yellow); }
+.nota-geo {
+  opacity: 0.7;
+  font-size: 13px;
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+footer {
+  background: var(--kirco-orange-deep);
+  padding: 90px 0 60px;
+  color: var(--kirco-paper);
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1.3fr;
+  gap: 64px; align-items: start;
+}
+.logo-foot { height: 84px; }
+footer .claim {
+  font-size: 16px; line-height: 1.6;
+  color: var(--kirco-paper); opacity: 0.92;
+  margin: 18px 0 0; max-width: 280px;
+}
+footer h4 {
+  font-family: var(--font-mono);
+  font-size: 12px; font-weight: 400;
+  letter-spacing: var(--track-mono);
+  text-transform: uppercase;
+  color: var(--kirco-paper); opacity: 0.8;
+  margin: 0 0 20px;
+}
+.foot-links { display: flex; flex-direction: column; gap: 12px; }
+.foot-links a {
+  font-family: var(--font-display);
+  font-weight: 800; font-size: 17px;
+  color: var(--kirco-paper); text-decoration: none;
+  transition: transform 150ms ease-out, opacity 150ms ease-out;
+}
+.foot-links a:hover { transform: translateX(3px); opacity: 0.85; }
+.redes { display: flex; gap: 12px; margin-top: 6px; }
+.redes a {
+  font-family: var(--font-display);
+  font-weight: 800; font-size: 16px;
+  color: var(--kirco-orange-deep);
+  background: var(--kirco-paper);
+  border-radius: var(--radius-pill);
+  padding: 11px 24px;
+  text-decoration: none;
+  transition: transform 150ms ease-out;
+}
+.redes a:hover { transform: translateY(-2px); }
+.footer-avisos {}
+.footer-avisos p.avisos-desc {
+  font-size: 15px; line-height: 1.6;
+  color: var(--kirco-paper); opacity: 0.88;
+  margin: 0 0 16px;
+}
+.avisos-row { display: flex; gap: 10px; flex-wrap: wrap; }
+.footer-avisos input {
+  background: var(--kirco-paper);
+  border-color: var(--kirco-paper); flex: 1; min-width: 160px;
+}
+.footer-avisos input:focus { border-color: var(--kirco-green); box-shadow: none; }
+.btn-mini {
+  font-family: var(--font-display);
+  font-weight: 800; font-size: 16px;
+  color: #ffffff;
+  background: var(--kirco-green);
+  border: 2px solid var(--kirco-green);
+  border-radius: var(--radius-pill);
+  padding: 0 26px; cursor: pointer;
+  transition: transform 150ms ease-out;
+  white-space: nowrap;
+}
+.btn-mini:hover { transform: translateY(-2px); }
+.avisos-status-foot {
+  min-height: 1.2em; margin-top: 10px;
+  font-style: italic; font-size: 14px;
+  color: var(--kirco-paper); opacity: 0.85;
+}
+.legal {
+  display: flex; align-items: center;
+  justify-content: space-between; gap: 24px;
+  flex-wrap: wrap;
+  border-top: 2px solid rgba(247,241,227,.35);
+  margin-top: 70px; padding-top: 28px;
+  font-family: var(--font-mono);
+  font-size: 12px; letter-spacing: var(--track-mono);
+  text-transform: uppercase;
+  color: var(--kirco-paper);
+}
+.legal a { color: var(--kirco-paper); text-decoration: none; }
+.legal a:hover { text-decoration: underline; }
+.legal .legal-links { display: flex; gap: 22px; }
+.flor-legal { width: 50px; height: 50px; vertical-align: -3px; }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+/* ---- Tablet ---- */
+@media (max-width: 900px) {
+  .wrap { padding: 0 28px; }
+  .footer-grid { grid-template-columns: 1fr; gap: 44px; }
+  .campos-fila { grid-template-columns: 1fr; }
+  .logo-anim { width: 200px; height: 200px; }
+  .logo-anim .logo-img { width: 200px; height: 200px; }
+  .hero { padding: 80px 0 100px; }
+  .pedido h2, .galeria h2 { font-size: 42px; }
+}
+
+/* ---- Mobile ---- */
+@media (max-width: 640px) {
+  .wrap { padding: 0 20px; }
+
+  /* Header */
+  .logo-anim { width: 130px; height: 130px; }
+  .logo-anim .logo-img { width: 130px; height: 130px; }
+  .handle { font-size: 11px; letter-spacing: 0.1em; }
+
+  /* Hero */
+  .hero { padding: 48px 0 64px; }
+  .hero h1 { font-size: clamp(44px, 13vw, 72px); }
+  .hero .sub { font-size: 18px; }
+  .hero .btn { font-size: 17px; padding: 14px 32px; margin-top: 32px; }
+  .hero .flor-sep { margin-top: 36px; }
+
+  /* Carta animada */
+  .carta-scene { padding: 72px 0 88px; }
+  .envelope { margin-top: 200px; }
+  .letter { padding: 18px 22px 14px; }
+  .letter .saludo { font-size: 26px; }
+  .letter p { font-size: 18px; }
+
+  /* Galería — vertical en móvil */
+  .galeria { padding: 80px 0 90px; }
+  .galeria h2 { font-size: 34px; }
+  .gal-strip {
+    flex-direction: column;
+    align-items: center;
+    overflow-x: visible;
+    scroll-snap-type: none;
+    gap: 28px;
+    padding: 20px 20px 36px;
+    margin-top: 40px;
+  }
+  .polaroid { flex: 0 0 auto; width: 100%; max-width: 340px; }
+  .polaroid .foto { height: 260px; }
+
+  /* Pedido */
+  .pedido { padding: 72px 0 80px; }
+  .pedido h2 { font-size: 34px; }
+  .pedido .sub { font-size: 17px; }
+  .pedido form { padding: 32px 20px; margin-top: 36px; }
+
+  /* Footer */
+  footer { padding: 60px 0 44px; }
+  .footer-grid { gap: 32px; }
+  .redes { flex-wrap: wrap; }
+  .legal { flex-direction: column; align-items: flex-start; gap: 14px; }
+}
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div class="loader" id="loader">
+  <div class="loader-anim" id="loaderAnim"></div>
+</div>
+
+<main>
+  <div class="wrap">
+    <header>
+      <div class="logo-anim" id="logoAnim">
+        <img class="logo-img" src="assets/logo-verde.png" alt="by_kirco" />
+      </div>
+      <span class="handle">@BY_KIRCO</span>
+    </header>
+  </div>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <div class="flor-marca verde h1f"></div>
+    <div class="flor-marca verde h2f"></div>
+    <div class="wrap">
+      <p class="kicker">Cartas que esperan ser encontradas</p>
+      <h1>Queridos<br />desconocidos</h1>
+      <p class="sub">Cartas anónimas escritas a mano que dejo para ti en algún lugar.</p>
+      <a class="btn" href="#pedido">Quiero una carta</a>
+      <img class="flor-sep" src="assets/monograma-verde.png" alt="" aria-hidden="true" />
+    </div>
+  </section>
+
+  <!-- ===== CARTA ANIMADA ===== -->
+  <section class="carta-scene">
+    <div class="flor-marca naranja c1f"></div>
+    <div class="flor-marca naranja c2f"></div>
+    <div class="wrap">
+      <p class="label">Si encuentras una, es para ti</p>
+      <div class="envelope" id="envelope">
+        <div class="env-back"></div>
+        <div class="letter">
+          <p class="saludo">Querido desconocido,</p>
+          <p class="l1">si encontraste esta carta, el universo tiene este mensaje para ti…</p>
+          <p class="l2"><span class="hl">no tengas miedo a ser quien eres.</span></p>
+          <img class="flor-firma" src="assets/monograma-verde.png" alt="by_kirco" />
+        </div>
+        <div class="env-front">
+          <img class="logo-sobre" src="assets/logo-naranja-negativo.png" alt="by_kirco" />
+        </div>
+        <div class="env-flap"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== GALERÍA ===== -->
+  <section class="galeria">
+    <div class="flor-marca verde g1f"></div>
+    <div class="flor-marca verde g2f"></div>
+    <h2>Cartitas que ya encontraron a alguien</h2>
+    <p class="gal-sub">Dejadas por ahí, con cariño</p>
+    <div class="gal-strip" id="galStrip">
+      <div class="polaroid" style="--i:0">
+        <img class="foto" src="assets/galeria/02-naturaleza.png" alt="Cartita naranja entre la hierba" />
+        <div class="pie"><img src="assets/monograma-verde.png" alt="" /><span>Banco del parque</span></div>
+      </div>
+      <div class="polaroid" style="--i:1">
+        <img class="foto" src="assets/galeria/04-metro.png" alt="Cartita verde en la estación" />
+        <div class="pie"><img src="assets/monograma-verde.png" alt="" /><span>Estación de tren</span></div>
+      </div>
+      <div class="polaroid" style="--i:2">
+        <img class="foto" src="assets/galeria/03-prota.png" alt="Cartita naranja: tú eres el/la prota" />
+        <div class="pie"><img src="assets/monograma-verde.png" alt="" /><span>Entre dos libros</span></div>
+      </div>
+      <div class="polaroid" style="--i:3">
+        <img class="foto" src="assets/galeria/06-metro-nota.png" alt="Cartita verde en el metro" />
+        <div class="pie"><img src="assets/monograma-verde.png" alt="" /><span>En el metro</span></div>
+      </div>
+      <div class="polaroid" style="--i:4">
+        <img class="foto" src="assets/galeria/05-tren.png" alt="Cartita naranja en un tren" />
+        <div class="pie"><img src="assets/monograma-verde.png" alt="" /><span>Vagón de tren</span></div>
+      </div>
+      <div class="polaroid" style="--i:5">
+        <img class="foto" src="assets/galeria/01-calle.png" alt="Cartita en la calle" />
+        <div class="pie"><img src="assets/monograma-verde.png" alt="" /><span>Parabrisas con suerte</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PEDIDO ===== -->
+  <section class="pedido" id="pedido">
+    <div class="flor-fondo f1"></div>
+    <div class="flor-fondo f2"></div>
+    <div class="flor-fondo f3"></div>
+    <div class="wrap">
+      <h2>¿Quieres una carta personalizada?</h2>
+      <p class="sub">Déjame tu dirección y te la envío por correo, con sobre, sello y flor.</p>
+      <!--
+        TODO: conecta el formulario a tu proveedor.
+        Opción A — Formspree: action="https://formspree.io/f/xxxxxx" method="POST"
+        Opción B — tu API:    action="/api/carta" method="POST"
+        Mientras tanto el botón confirma en pantalla sin enviar nada.
+      -->
+      <form id="formPedido" novalidate>
+        <!-- FormSubmit.co config -->
+        <input type="hidden" name="_subject" value="Nueva solicitud de carta — by_kirco" />
+        <input type="hidden" name="_captcha" value="false" />
+        <input type="hidden" name="_template" value="table" />
+        <!-- antispam honeypot -->
+        <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" />
+        <label>Tu nombre
+          <input type="text" name="nombre" placeholder="¿Cómo te llamas?" required />
+        </label>
+        <label>Dirección
+          <input type="text" name="direccion" placeholder="Calle, número, piso…" />
+        </label>
+        <div class="campos-fila">
+          <label>Ciudad
+            <input type="text" name="ciudad" placeholder="Tu ciudad" />
+          </label>
+          <label>Código postal
+            <input type="text" name="cp" placeholder="00000" />
+          </label>
+        </div>
+        <label>Cuéntame un poco de ti
+          <textarea name="sobre-ti" rows="4" placeholder="Lo que quieras compartir: cómo estás, qué te haría ilusión leer…"></textarea>
+        </label>
+        <label class="label-check">
+          <input type="checkbox" name="privacidad" id="checkPrivacidad" required />
+          <span>He leído y acepto la <a href="/politica-privacidad.html" target="_blank" rel="noopener">política de privacidad</a></span>
+        </label>
+        <button class="btn" type="submit">Envíame una carta</button>
+        <p class="form-status" id="pedidoStatus" aria-live="polite"></p>
+        <p class="nota">Solo usaré tu dirección para enviarte la carta. Prometido.</p>
+        <p class="nota">Solo a España por ahora.</p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <img class="logo-foot" src="assets/logo-naranja-negativo.png" alt="by_kirco" />
+        <p class="claim">Cartas anónimas escritas a mano, repartidas por España para quien las necesite.</p>
+      </div>
+      <div>
+        <h4>Legal</h4>
+        <div class="foot-links">
+          <a href="/aviso-legal.html">Aviso legal</a>
+          <a href="/politica-privacidad.html">Política de privacidad</a>
+          <a href="/politica-cookies.html">Cookies</a>
+        </div>
+        <h4 style="margin-top:32px">Sígueme</h4>
+        <div class="redes">
+          <a href="https://www.instagram.com/by_kirco/" target="_blank" rel="noopener">Instagram</a>
+          <a href="https://www.tiktok.com/@by_kirco" target="_blank" rel="noopener">TikTok</a>
+          <a href="https://www.facebook.com/profile.php?id=61567524682650" target="_blank" rel="noopener">Facebook</a>
+        </div>
+      </div>
+      <div class="footer-avisos" id="avisos">
+        <h4>¿Dónde estará la próxima?</h4>
+        <p class="avisos-desc">Te aviso de dónde dejo las siguientes cartas por Madrid. Nada más.</p>
+        <form id="formAvisos" novalidate>
+          <div class="avisos-row">
+            <input type="email" name="email" placeholder="tu@correo.com" required />
+            <button class="btn-mini" type="submit">Avísame</button>
+          </div>
+        </form>
+        <p class="avisos-status-foot" id="avisosStatus" aria-live="polite"></p>
+      </div>
+    </div>
+    <div class="legal">
+      <span>
+        © 2026 by_kirco
+        <img class="flor-legal" src="assets/monograma-verde.png" alt=""
+             style="filter:brightness(0) invert(1);opacity:.85" aria-hidden="true" />
+        Cartas con cariño
+      </span>
+      <span class="legal-links"><a href="#">@BY_KIRCO</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ---------------------------------------------------------------
+   LOADER — animated logo
+--------------------------------------------------------------- */
+(function () {
+  var loader = document.getElementById('loader');
+  var loaderDone = false;
+  function hideLoader() {
+    if (loaderDone) return;
+    loaderDone = true;
+    loader.classList.add('hide');
+    setTimeout(function () { loader.remove(); }, 700);
+  }
+  if (window.lottie) {
+    try {
+      var anim = lottie.loadAnimation({
+        container: document.getElementById('loaderAnim'),
+        renderer: 'svg', loop: false, autoplay: true,
+        path: 'assets/anim-logo.json'
+      });
+      anim.setSpeed(1.4);
+      anim.addEventListener('complete', function () { setTimeout(hideLoader, 250); });
+      anim.addEventListener('data_failed', hideLoader);
+      setTimeout(hideLoader, 6000);
+    } catch (e) { hideLoader(); }
+  } else {
+    setTimeout(hideLoader, 600);
+  }
+
+  /* header logo anim */
+  var logoBox = document.getElementById('logoAnim');
+  if (window.lottie) {
+    try {
+      var hAnim = lottie.loadAnimation({
+        container: logoBox, renderer: 'svg', loop: false, autoplay: true,
+        path: 'assets/anim-logo.json'
+      });
+      hAnim.addEventListener('DOMLoaded', function () {
+        var fb = logoBox.querySelector('.logo-img');
+        if (fb) fb.remove();
+      });
+    } catch (e) { /* keep PNG */ }
+  }
+})();
+
+/* ---------------------------------------------------------------
+   ENVELOPE — open on scroll into view
+--------------------------------------------------------------- */
+(function () {
+  var env = document.getElementById('envelope');
+  if (!env) return;
+  var obs = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { env.classList.add('open'); obs.disconnect(); }
+    });
+  }, { threshold: 0.55 });
+  obs.observe(env);
+})();
+
+/* ---------------------------------------------------------------
+   GALERÍA — staggered entrance
+--------------------------------------------------------------- */
+(function () {
+  var strip = document.getElementById('galStrip');
+  if (!strip) return;
+  var obs = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { strip.classList.add('in'); obs.disconnect(); }
+    });
+  }, { threshold: 0.25 });
+  obs.observe(strip);
+})();
+
+/* ---------------------------------------------------------------
+   FORMULARIOS — FormSubmit.co (envío a by.kirco@gmail.com)
+   Primera vez: FormSubmit.co enviará un email de verificación
+   a by.kirco@gmail.com — haz clic en el enlace y listo.
+--------------------------------------------------------------- */
+var FORMSUBMIT = 'https://formsubmit.co/ajax/by.kirco@gmail.com';
+
+function submitForm(form, statusEl, asunto, msgOk) {
+  var btn = form.querySelector('button[type=submit]');
+  var emailEl = form.querySelector('input[type=email]');
+  if (emailEl && !emailEl.checkValidity()) {
+    statusEl.textContent = 'Déjame un correo donde encontrarte.';
+    emailEl.focus(); return;
+  }
+  var nombreEl = form.querySelector('input[name=nombre]');
+  if (nombreEl && !nombreEl.value.trim()) {
+    statusEl.textContent = 'Dime cómo te llamas.';
+    nombreEl.focus(); return;
+  }
+
+  statusEl.textContent = 'Enviando…';
+  if (btn) btn.disabled = true;
+
+  var data = {};
+  new FormData(form).forEach(function(v, k) {
+    if (k !== '_honey') data[k] = v;
+  });
+  data._subject = asunto;
+  data._captcha = 'false';
+  data._template = 'table';
+
+  fetch(FORMSUBMIT, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify(data)
+  })
+  .then(function(r) { return r.json().then(function(j){ return { ok: r.ok, json: j }; }); })
+  .then(function(res) {
+    statusEl.textContent = res.ok ? msgOk : 'Algo falló. Inténtalo de nuevo.';
+    if (res.ok) form.reset();
+  })
+  .catch(function() {
+    statusEl.textContent = 'Sin conexión. Inténtalo en un rato.';
+  })
+  .finally(function() {
+    if (btn) btn.disabled = false;
+  });
+}
+
+document.getElementById('formPedido').addEventListener('submit', function(ev) {
+  ev.preventDefault();
+  if (!document.getElementById('checkPrivacidad').checked) {
+    document.getElementById('pedidoStatus').textContent = 'Tienes que aceptar la política de privacidad para continuar.';
+    return;
+  }
+  submitForm(
+    this,
+    document.getElementById('pedidoStatus'),
+    'Nueva solicitud de carta — by_kirco',
+    '¡Listo! En cuanto pueda te escribo.'
+  );
+});
+
+document.getElementById('formAvisos').addEventListener('submit', function(ev) {
+  ev.preventDefault();
+  submitForm(
+    this,
+    document.getElementById('avisosStatus'),
+    'Nuevo aviso de cartas — by_kirco',
+    'Apuntado. Te aviso cuando deje la próxima.'
+  );
+});
+</script>
+
+</body>
+</html>
