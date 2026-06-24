@@ -516,9 +516,13 @@ header {
   max-width: 520px;
   margin: 56px auto 0;
   padding: 48px;
-  display: flex; flex-direction: column; gap: 16px;
-  align-items: center;
   text-align: center;
+}
+.pedido-caja form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
 }
 .pedido-caja input[type="email"] {
   width: 100%;
@@ -536,12 +540,16 @@ header {
   box-shadow: var(--shadow-glow-green);
 }
 .pedido-caja .btn {
+  width: 100%;
   background: var(--kirco-paper);
   border-color: var(--kirco-paper);
   color: var(--kirco-green-deep);
+  font-size: 18px;
+  padding: 16px;
 }
 .form-status {
   min-height: 1.4em;
+  margin-top: 10px;
   text-align: center;
   font-style: italic;
   color: var(--kirco-yellow);
@@ -704,7 +712,8 @@ footer h4 {
   .pedido { padding: 72px 0 80px; }
   .pedido h2 { font-size: 34px; }
   .pedido .sub { font-size: 17px; }
-  .pedido-caja { padding: 32px 20px; margin-top: 36px; }
+  .pedido-caja { padding: 32px 24px; margin-top: 36px; }
+  .pedido-caja .btn { font-size: 17px; }
 
   /* Footer */
   footer { padding: 60px 0 44px; }
@@ -840,11 +849,7 @@ footer h4 {
       <p class="sub">Déjame tu correo y me pongo en contacto contigo.</p>
       <div class="pedido-caja">
         <form id="formPedido" novalidate>
-          <input type="hidden" name="_subject" value="Nueva solicitud de carta — by_kirco" />
-          <input type="hidden" name="_captcha" value="false" />
-          <input type="hidden" name="_template" value="table" />
-          <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" />
-          <input type="email" name="email" placeholder="tu@correo.com" required autocomplete="email" />
+          <input type="email" name="email_address" placeholder="tu@correo.com" required autocomplete="email" />
           <button class="btn" type="submit">Pedir mi carta</button>
         </form>
         <p class="form-status" id="pedidoStatus" aria-live="polite"></p>
@@ -1021,15 +1026,41 @@ function submitForm(form, statusEl, asunto, msgOk) {
   });
 }
 
-document.getElementById('formPedido').addEventListener('submit', function(ev) {
-  ev.preventDefault();
-  submitForm(
-    this,
-    document.getElementById('pedidoStatus'),
-    'Nueva solicitud de carta — by_kirco',
-    '¡Listo! Te escribo pronto.'
-  );
-});
+(function () {
+  var form = document.getElementById('formPedido');
+  var statusEl = document.getElementById('pedidoStatus');
+  if (!form) return;
+  form.addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    var emailEl = form.querySelector('input[type=email]');
+    if (!emailEl || !emailEl.checkValidity()) {
+      statusEl.textContent = 'Déjame un correo donde encontrarte.';
+      emailEl && emailEl.focus(); return;
+    }
+    var btn = form.querySelector('button[type=submit]');
+    statusEl.textContent = 'Un momento…';
+    if (btn) btn.disabled = true;
+    fetch('https://app.kit.com/forms/9602040/subscriptions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email_address: emailEl.value.trim() })
+    })
+    .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, json: j }; }); })
+    .then(function (res) {
+      if (res.ok) {
+        statusEl.textContent = '¡Listo! Te escribo pronto.';
+        form.reset();
+      } else {
+        statusEl.textContent = 'Algo no fue bien. Prueba de nuevo.';
+        if (btn) btn.disabled = false;
+      }
+    })
+    .catch(function () {
+      statusEl.textContent = 'Sin conexión. Prueba en un rato.';
+      if (btn) btn.disabled = false;
+    });
+  });
+})();
 
 /* ---------------------------------------------------------------
    IMÁN DE LEADS — Kit (ConvertKit) · Form ID 9602040
