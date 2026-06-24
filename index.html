@@ -287,8 +287,8 @@ header {
   z-index: 2;
 }
 .letter .saludo {
-  font-family: "Caveat", cursive;
-  font-weight: 600; font-size: 34px;
+  font-family: var(--font-display);
+  font-weight: 800; font-size: 26px;
   color: var(--kirco-orange-deep);
   margin: 0 0 12px;
 }
@@ -427,87 +427,51 @@ header {
   text-align: center; max-width: 540px;
   margin: 22px auto 0;
 }
-.pedido form {
+.pedido-caja {
   background: var(--kirco-green-deep);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-pop);
-  max-width: 620px;
+  max-width: 520px;
   margin: 56px auto 0;
   padding: 48px;
-  display: flex; flex-direction: column; gap: 20px;
+  text-align: center;
 }
-.campos-fila {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 20px;
+.pedido-caja form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
 }
-label {
-  font-family: var(--font-mono);
-  font-size: 12px; letter-spacing: var(--track-mono);
-  text-transform: uppercase;
-  color: var(--text-muted);
-  display: flex; flex-direction: column; gap: 8px;
-}
-.pedido form label { color: var(--kirco-paper); }
-
-input, textarea, select {
+.pedido-caja input[type="email"] {
+  width: 100%;
   font-family: var(--font-body);
   font-size: 17px;
   color: var(--text-body);
   background: var(--kirco-paper);
-  border: 2px solid var(--kirco-line);
+  border: 2px solid var(--kirco-paper);
   border-radius: var(--radius-md);
   padding: 14px 18px;
   outline: none;
-  resize: vertical;
-  width: 100%;
 }
-input:focus, textarea:focus, select:focus {
+.pedido-caja input[type="email"]:focus {
   border-color: var(--kirco-green);
   box-shadow: var(--shadow-glow-green);
 }
-.pedido form .btn {
-  align-self: center; margin-top: 10px;
+.pedido-caja .btn {
+  width: 100%;
   background: var(--kirco-paper);
   border-color: var(--kirco-paper);
   color: var(--kirco-green-deep);
-}
-.pedido form .nota {
-  font-size: 14px;
-  color: var(--kirco-paper);
-  opacity: 0.85;
-  text-align: center;
-  margin: 4px 0 0;
+  font-size: 18px;
+  padding: 16px;
 }
 .form-status {
   min-height: 1.4em;
+  margin-top: 10px;
   text-align: center;
   font-style: italic;
   color: var(--kirco-yellow);
   font-size: 15px;
-}
-.label-check {
-  flex-direction: row;
-  align-items: center;
-  gap: 12px;
-  font-family: var(--font-body);
-  font-size: 15px;
-  text-transform: none;
-  letter-spacing: 0;
-  color: var(--kirco-paper);
-  cursor: pointer;
-}
-.label-check input[type="checkbox"] {
-  width: 20px; height: 20px;
-  flex: 0 0 20px;
-  accent-color: var(--kirco-green);
-  cursor: pointer;
-  border-radius: 4px;
-}
-.label-check a { color: var(--kirco-yellow); }
-.nota-geo {
-  opacity: 0.7;
-  font-size: 13px;
 }
 
 /* ============================================================
@@ -658,7 +622,8 @@ footer h4 {
   .pedido { padding: 72px 0 80px; }
   .pedido h2 { font-size: 34px; }
   .pedido .sub { font-size: 17px; }
-  .pedido form { padding: 32px 20px; margin-top: 36px; }
+  .pedido-caja { padding: 32px 24px; margin-top: 36px; }
+  .pedido-caja .btn { font-size: 17px; }
 
   /* Footer */
   footer { padding: 60px 0 44px; }
@@ -708,8 +673,8 @@ footer h4 {
         <div class="env-back"></div>
         <div class="letter">
           <p class="saludo">Querido desconocido,</p>
-          <p class="l1">si encontraste esta carta, el universo tiene este mensaje para ti…</p>
-          <p class="l2"><span class="hl">no tengas miedo a ser quien eres.</span></p>
+          <p class="l1">Quién no arriesga no gana. Sé que habrás escuchado mucho esta frase, pero es la verdad. Aunque tengas que tomar una decisión difícil, hazlo, inténtalo.</p>
+          <p class="l2"><span class="hl">No te quedes con el casi.</span></p>
           <img class="flor-firma" src="assets/monograma-verde.png" alt="by_kirco" />
         </div>
         <div class="env-front">
@@ -761,46 +726,14 @@ footer h4 {
     <div class="flor-fondo f3"></div>
     <div class="wrap">
       <h2>¿Quieres una carta personalizada?</h2>
-      <p class="sub">Déjame tu dirección y te la envío por correo, con sobre, sello y flor.</p>
-      <!--
-        TODO: conecta el formulario a tu proveedor.
-        Opción A — Formspree: action="https://formspree.io/f/xxxxxx" method="POST"
-        Opción B — tu API:    action="/api/carta" method="POST"
-        Mientras tanto el botón confirma en pantalla sin enviar nada.
-      -->
-      <form id="formPedido" novalidate>
-        <!-- FormSubmit.co config -->
-        <input type="hidden" name="_subject" value="Nueva solicitud de carta — by_kirco" />
-        <input type="hidden" name="_captcha" value="false" />
-        <input type="hidden" name="_template" value="table" />
-        <!-- antispam honeypot -->
-        <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" />
-        <label>Tu nombre
-          <input type="text" name="nombre" placeholder="¿Cómo te llamas?" required />
-        </label>
-        <label>Dirección
-          <input type="text" name="direccion" placeholder="Calle, número, piso…" />
-        </label>
-        <div class="campos-fila">
-          <label>Ciudad
-            <input type="text" name="ciudad" placeholder="Tu ciudad" />
-          </label>
-          <label>Código postal
-            <input type="text" name="cp" placeholder="00000" />
-          </label>
-        </div>
-        <label>Cuéntame un poco de ti
-          <textarea name="sobre-ti" rows="4" placeholder="Lo que quieras compartir: cómo estás, qué te haría ilusión leer…"></textarea>
-        </label>
-        <label class="label-check">
-          <input type="checkbox" name="privacidad" id="checkPrivacidad" required />
-          <span>He leído y acepto la <a href="/politica-privacidad.html" target="_blank" rel="noopener">política de privacidad</a></span>
-        </label>
-        <button class="btn" type="submit">Envíame una carta</button>
+      <p class="sub">Déjame tu correo y me pongo en contacto contigo.</p>
+      <div class="pedido-caja">
+        <form id="formPedido" novalidate>
+          <input type="email" name="email_address" placeholder="tu@correo.com" required autocomplete="email" />
+          <button class="btn" type="submit">Pedir mi carta</button>
+        </form>
         <p class="form-status" id="pedidoStatus" aria-live="polite"></p>
-        <p class="nota">Solo usaré tu dirección para enviarte la carta. Prometido.</p>
-        <p class="nota">Solo a España por ahora.</p>
-      </form>
+      </div>
     </div>
   </section>
 </main>
@@ -973,19 +906,41 @@ function submitForm(form, statusEl, asunto, msgOk) {
   });
 }
 
-document.getElementById('formPedido').addEventListener('submit', function(ev) {
-  ev.preventDefault();
-  if (!document.getElementById('checkPrivacidad').checked) {
-    document.getElementById('pedidoStatus').textContent = 'Tienes que aceptar la política de privacidad para continuar.';
-    return;
-  }
-  submitForm(
-    this,
-    document.getElementById('pedidoStatus'),
-    'Nueva solicitud de carta — by_kirco',
-    '¡Listo! En cuanto pueda te escribo.'
-  );
-});
+(function () {
+  var form = document.getElementById('formPedido');
+  var statusEl = document.getElementById('pedidoStatus');
+  if (!form) return;
+  form.addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    var emailEl = form.querySelector('input[type=email]');
+    if (!emailEl || !emailEl.checkValidity()) {
+      statusEl.textContent = 'Déjame un correo donde encontrarte.';
+      emailEl && emailEl.focus(); return;
+    }
+    var btn = form.querySelector('button[type=submit]');
+    statusEl.textContent = 'Un momento…';
+    if (btn) btn.disabled = true;
+    fetch('https://app.kit.com/forms/9602040/subscriptions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email_address: emailEl.value.trim() })
+    })
+    .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, json: j }; }); })
+    .then(function (res) {
+      if (res.ok) {
+        statusEl.textContent = '¡Listo! Te escribo pronto.';
+        form.reset();
+      } else {
+        statusEl.textContent = 'Algo no fue bien. Prueba de nuevo.';
+        if (btn) btn.disabled = false;
+      }
+    })
+    .catch(function () {
+      statusEl.textContent = 'Sin conexión. Prueba en un rato.';
+      if (btn) btn.disabled = false;
+    });
+  });
+})();
 
 document.getElementById('formAvisos').addEventListener('submit', function(ev) {
   ev.preventDefault();
