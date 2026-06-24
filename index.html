@@ -920,7 +920,7 @@ function submitForm(form, statusEl, asunto, msgOk) {
     var btn = form.querySelector('button[type=submit]');
     statusEl.textContent = 'Un momento…';
     if (btn) btn.disabled = true;
-    fetch('https://app.kit.com/forms/9602040/subscriptions', {
+    fetch('https://app.convertkit.com/forms/9602040/subscriptions', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email_address: emailEl.value.trim() })
