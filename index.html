@@ -396,6 +396,88 @@ header {
 .polaroid .pie img { width: 50px; height: 50px; }
 
 /* ============================================================
+   IMÁN DE LEADS — carta para ti
+   ============================================================ */
+.carta-iman {
+  position: relative;
+  background: var(--kirco-green-tint);
+  padding: 120px 0 130px;
+  overflow: hidden;
+  text-align: center;
+}
+.carta-iman .flor-marca.im1 { width: 480px; height: 480px; top: -100px; right: -140px; transform: rotate(15deg); }
+.carta-iman .flor-marca.im2 { width: 260px; height: 260px; bottom: -60px; left: -70px; transform: rotate(-11deg); }
+.carta-iman .wrap { position: relative; }
+.carta-iman .kicker {
+  font-family: var(--font-mono);
+  font-size: 14px; letter-spacing: var(--track-mono);
+  text-transform: uppercase;
+  color: var(--kirco-green-deep);
+  margin: 0 0 24px;
+}
+.carta-iman h2 {
+  font-family: var(--font-display);
+  font-weight: 800; font-size: clamp(42px, 6vw, 72px);
+  line-height: 1.05;
+  color: var(--kirco-ink);
+  margin: 0;
+}
+.carta-iman .iman-sub {
+  font-size: 20px; line-height: 1.65;
+  color: var(--kirco-ink-soft);
+  max-width: 520px; margin: 24px auto 0;
+}
+.iman-detalle {
+  display: flex; gap: 32px;
+  justify-content: center; flex-wrap: wrap;
+  margin: 40px 0 0;
+}
+.iman-detalle span {
+  font-family: var(--font-mono);
+  font-size: 13px; letter-spacing: var(--track-mono);
+  text-transform: uppercase;
+  color: var(--kirco-green-deep);
+  background: rgba(160,215,107,.22);
+  border-radius: var(--radius-pill);
+  padding: 8px 20px;
+}
+.iman-form {
+  max-width: 440px; margin: 48px auto 0;
+  display: flex; gap: 12px; flex-wrap: wrap;
+  justify-content: center;
+}
+.iman-form input[type="email"] {
+  flex: 1; min-width: 220px;
+  background: var(--kirco-white);
+  border: 2px solid var(--kirco-line);
+  border-radius: var(--radius-pill);
+  padding: 16px 24px;
+  font-size: 17px;
+  color: var(--text-body);
+  outline: none;
+}
+.iman-form input[type="email"]:focus {
+  border-color: var(--kirco-green);
+  box-shadow: var(--shadow-glow-green);
+}
+.iman-form .btn {
+  background: var(--kirco-green-deep);
+  border-color: var(--kirco-green-deep);
+  color: var(--kirco-white);
+  padding: 16px 34px;
+  font-size: 17px;
+}
+.iman-nota {
+  font-size: 14px; color: var(--kirco-ink-soft);
+  margin: 16px 0 0; opacity: 0.8;
+}
+.iman-status {
+  min-height: 1.4em; margin-top: 12px;
+  font-style: italic; font-size: 15px;
+  color: var(--kirco-green-deep);
+}
+
+/* ============================================================
    PEDIDO — form section
    ============================================================ */
 .pedido {
@@ -654,6 +736,14 @@ footer h4 {
   .polaroid { flex: 0 0 auto; width: 100%; max-width: 340px; }
   .polaroid .foto { height: 260px; }
 
+  /* Imán */
+  .carta-iman { padding: 72px 0 80px; }
+  .carta-iman h2 { font-size: 36px; }
+  .carta-iman .iman-sub { font-size: 17px; }
+  .iman-form { flex-direction: column; align-items: stretch; gap: 10px; }
+  .iman-form input[type="email"] { min-width: auto; }
+  .iman-form .btn { width: 100%; }
+
   /* Pedido */
   .pedido { padding: 72px 0 80px; }
   .pedido h2 { font-size: 34px; }
@@ -751,6 +841,36 @@ footer h4 {
         <img class="foto" src="assets/galeria/01-calle.png" alt="Cartita en la calle" />
         <div class="pie"><img src="assets/monograma-verde.png" alt="" /><span>Parabrisas con suerte</span></div>
       </div>
+    </div>
+  </section>
+
+  <!-- ===== IMÁN DE LEADS: UNA CARTA PARA TI ===== -->
+  <!--
+    KIT (ConvertKit) — Instrucciones de conexión:
+    1. En Kit, crea un formulario inline → anota el FORM_ID (número en la URL del formulario).
+    2. En "Settings > Success" del formulario, pon la URL de redirección:
+       https://bykirco.vercel.app/carta-para-ti.html
+    3. Reemplaza FORM_ID_PLACEHOLDER y API_KEY_PLACEHOLDER en el script al final de esta página.
+       (La API key pública la encuentras en Kit → Settings → Advanced → API)
+  -->
+  <section class="carta-iman" id="carta-iman">
+    <div class="flor-marca verde im1"></div>
+    <div class="flor-marca verde im2"></div>
+    <div class="wrap">
+      <p class="kicker">Gratis · Solo para ti</p>
+      <h2>Hay una carta<br />esperándote</h2>
+      <p class="iman-sub">Escrita a mano. Sin conocerte. Solo porque a veces alguien necesita que le digan algo bonito.</p>
+      <div class="iman-detalle">
+        <span>Escrita a mano</span>
+        <span>Solo la lees tú</span>
+        <span>Sin spam</span>
+      </div>
+      <form class="iman-form" id="formIman" novalidate>
+        <input type="email" name="email_address" placeholder="tu@correo.com" required autocomplete="email" />
+        <button class="btn" type="submit">Leer mi carta</button>
+      </form>
+      <p class="iman-status" id="imanStatus" aria-live="polite"></p>
+      <p class="iman-nota">Nada más que la carta. Prometido.</p>
     </div>
   </section>
 
@@ -986,6 +1106,61 @@ document.getElementById('formPedido').addEventListener('submit', function(ev) {
     '¡Listo! En cuanto pueda te escribo.'
   );
 });
+
+/* ---------------------------------------------------------------
+   IMÁN DE LEADS — Kit (ConvertKit)
+   Reemplaza FORM_ID_PLACEHOLDER con tu Form ID de Kit
+   y API_KEY_PLACEHOLDER con tu API key pública
+   (Kit → Settings → Advanced → API key)
+--------------------------------------------------------------- */
+(function () {
+  var KIT_FORM_ID = 'FORM_ID_PLACEHOLDER';
+  var KIT_API_KEY = 'API_KEY_PLACEHOLDER';
+  var KIT_REDIRECT = '/carta-para-ti.html';
+
+  var form = document.getElementById('formIman');
+  var statusEl = document.getElementById('imanStatus');
+  if (!form) return;
+
+  form.addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    var emailEl = form.querySelector('input[type=email]');
+    if (!emailEl || !emailEl.checkValidity()) {
+      statusEl.textContent = 'Déjame un correo donde encontrarte.';
+      emailEl && emailEl.focus();
+      return;
+    }
+
+    if (KIT_FORM_ID === 'FORM_ID_PLACEHOLDER') {
+      /* modo demo sin Form ID real */
+      statusEl.textContent = 'Formulario no configurado aún.';
+      return;
+    }
+
+    var btn = form.querySelector('button[type=submit]');
+    statusEl.textContent = 'Un momento…';
+    if (btn) btn.disabled = true;
+
+    fetch('https://api.convertkit.com/v3/forms/' + KIT_FORM_ID + '/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ api_key: KIT_API_KEY, email: emailEl.value.trim() })
+    })
+    .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, json: j }; }); })
+    .then(function (res) {
+      if (res.ok && res.json.subscription) {
+        window.location.href = KIT_REDIRECT;
+      } else {
+        statusEl.textContent = 'Algo no fue bien. Prueba de nuevo.';
+        if (btn) btn.disabled = false;
+      }
+    })
+    .catch(function () {
+      statusEl.textContent = 'Sin conexión. Prueba en un rato.';
+      if (btn) btn.disabled = false;
+    });
+  });
+})();
 
 document.getElementById('formAvisos').addEventListener('submit', function(ev) {
   ev.preventDefault();
