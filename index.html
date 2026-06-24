@@ -928,15 +928,55 @@ function submitForm(form, statusEl, asunto, msgOk) {
   });
 }
 
-document.getElementById('formPedido').addEventListener('submit', function(ev) {
-  ev.preventDefault();
-  submitForm(
-    this,
-    document.getElementById('pedidoStatus'),
-    'Nueva solicitud de carta — by_kirco',
-    '¡Listo! Te escribo pronto.'
-  );
-});
+(function () {
+  var form = document.getElementById('formPedido');
+  var statusEl = document.getElementById('pedidoStatus');
+  if (!form) return;
+  form.addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    var emailEl  = form.querySelector('input[type=email]');
+    var nombreEl = form.querySelector('input[name=nombre]');
+    var btnEl    = form.querySelector('button[type=submit]');
+    if (!emailEl || !emailEl.checkValidity()) {
+      statusEl.textContent = 'Déjame un correo donde encontrarte.';
+      emailEl && emailEl.focus(); return;
+    }
+    if (nombreEl && !nombreEl.value.trim()) {
+      statusEl.textContent = 'Dime cómo te llamas.';
+      nombreEl.focus(); return;
+    }
+    statusEl.textContent = 'Un momento…';
+    if (btnEl) btnEl.disabled = true;
+
+    var params = new URLSearchParams();
+    params.append('email_address', emailEl.value.trim());
+    if (nombreEl) params.append('first_name', nombreEl.value.trim());
+    var mensajeEl = form.querySelector('textarea[name=mensaje]');
+    if (mensajeEl && mensajeEl.value.trim()) {
+      params.append('fields[mensaje]', mensajeEl.value.trim());
+    }
+
+    fetch('https://app.convertkit.com/forms/9602040/subscriptions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: params.toString()
+    })
+    .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, json: j }; }); })
+    .then(function (res) {
+      if (res.ok || (res.json && res.json.status === 'success')) {
+        statusEl.textContent = '¡Listo! Te escribo pronto.';
+        form.reset();
+      } else {
+        statusEl.textContent = 'Algo no fue bien. Prueba de nuevo.';
+        if (btnEl) btnEl.disabled = false;
+      }
+    })
+    .catch(function () {
+      statusEl.textContent = 'Sin conexión. Prueba en un rato.';
+      if (btnEl) btnEl.disabled = false;
+    });
+  });
+})();
 
 document.getElementById('formAvisos').addEventListener('submit', function(ev) {
   ev.preventDefault();
