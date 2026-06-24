@@ -442,7 +442,8 @@ header {
   gap: 14px;
   width: 100%;
 }
-.pedido-caja input[type="email"] {
+.pedido-caja input[type="email"],
+.pedido-caja input[type="text"] {
   width: 100%;
   font-family: var(--font-body);
   font-size: 17px;
@@ -453,7 +454,26 @@ header {
   padding: 14px 18px;
   outline: none;
 }
-.pedido-caja input[type="email"]:focus {
+.pedido-caja input[type="email"]:focus,
+.pedido-caja input[type="text"]:focus {
+  border-color: var(--kirco-green);
+  box-shadow: var(--shadow-glow-green);
+}
+.pedido-caja textarea {
+  width: 100%;
+  font-family: var(--font-body);
+  font-size: 17px;
+  color: var(--text-body);
+  background: var(--kirco-paper);
+  border: 2px solid var(--kirco-paper);
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+  outline: none;
+  resize: vertical;
+  min-height: 110px;
+  line-height: 1.5;
+}
+.pedido-caja textarea:focus {
   border-color: var(--kirco-green);
   box-shadow: var(--shadow-glow-green);
 }
@@ -729,7 +749,9 @@ footer h4 {
       <p class="sub">Déjame tu correo y me pongo en contacto contigo.</p>
       <div class="pedido-caja">
         <form id="formPedido" novalidate>
-          <input type="email" name="email_address" placeholder="tu@correo.com" required autocomplete="email" />
+          <input type="text" name="nombre" placeholder="Tu nombre" required />
+          <input type="email" name="email" placeholder="tu@correo.com" required autocomplete="email" />
+          <textarea name="mensaje" placeholder="Cuéntame un poco de ti…"></textarea>
           <button class="btn" type="submit">Pedir mi carta</button>
         </form>
         <p class="form-status" id="pedidoStatus" aria-live="polite"></p>
@@ -906,41 +928,15 @@ function submitForm(form, statusEl, asunto, msgOk) {
   });
 }
 
-(function () {
-  var form = document.getElementById('formPedido');
-  var statusEl = document.getElementById('pedidoStatus');
-  if (!form) return;
-  form.addEventListener('submit', function (ev) {
-    ev.preventDefault();
-    var emailEl = form.querySelector('input[type=email]');
-    if (!emailEl || !emailEl.checkValidity()) {
-      statusEl.textContent = 'Déjame un correo donde encontrarte.';
-      emailEl && emailEl.focus(); return;
-    }
-    var btn = form.querySelector('button[type=submit]');
-    statusEl.textContent = 'Un momento…';
-    if (btn) btn.disabled = true;
-    fetch('https://app.convertkit.com/forms/9602040/subscriptions', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email_address: emailEl.value.trim() })
-    })
-    .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, json: j }; }); })
-    .then(function (res) {
-      if (res.ok) {
-        statusEl.textContent = '¡Listo! Te escribo pronto.';
-        form.reset();
-      } else {
-        statusEl.textContent = 'Algo no fue bien. Prueba de nuevo.';
-        if (btn) btn.disabled = false;
-      }
-    })
-    .catch(function () {
-      statusEl.textContent = 'Sin conexión. Prueba en un rato.';
-      if (btn) btn.disabled = false;
-    });
-  });
-})();
+document.getElementById('formPedido').addEventListener('submit', function(ev) {
+  ev.preventDefault();
+  submitForm(
+    this,
+    document.getElementById('pedidoStatus'),
+    'Nueva solicitud de carta — by_kirco',
+    '¡Listo! Te escribo pronto.'
+  );
+});
 
 document.getElementById('formAvisos').addEventListener('submit', function(ev) {
   ev.preventDefault();
