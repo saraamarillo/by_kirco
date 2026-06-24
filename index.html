@@ -1108,14 +1108,10 @@ document.getElementById('formPedido').addEventListener('submit', function(ev) {
 });
 
 /* ---------------------------------------------------------------
-   IMÁN DE LEADS — Kit (ConvertKit)
-   Reemplaza FORM_ID_PLACEHOLDER con tu Form ID de Kit
-   y API_KEY_PLACEHOLDER con tu API key pública
-   (Kit → Settings → Advanced → API key)
+   IMÁN DE LEADS — Kit (ConvertKit) · Form ID 9602040
 --------------------------------------------------------------- */
 (function () {
-  var KIT_FORM_ID = 'FORM_ID_PLACEHOLDER';
-  var KIT_API_KEY = 'API_KEY_PLACEHOLDER';
+  var KIT_FORM_URL = 'https://app.kit.com/forms/9602040/subscriptions';
   var KIT_REDIRECT = '/carta-para-ti.html';
 
   var form = document.getElementById('formIman');
@@ -1131,24 +1127,18 @@ document.getElementById('formPedido').addEventListener('submit', function(ev) {
       return;
     }
 
-    if (KIT_FORM_ID === 'FORM_ID_PLACEHOLDER') {
-      /* modo demo sin Form ID real */
-      statusEl.textContent = 'Formulario no configurado aún.';
-      return;
-    }
-
     var btn = form.querySelector('button[type=submit]');
     statusEl.textContent = 'Un momento…';
     if (btn) btn.disabled = true;
 
-    fetch('https://api.convertkit.com/v3/forms/' + KIT_FORM_ID + '/subscribe', {
+    fetch(KIT_FORM_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ api_key: KIT_API_KEY, email: emailEl.value.trim() })
+      body: JSON.stringify({ email_address: emailEl.value.trim() })
     })
     .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, json: j }; }); })
     .then(function (res) {
-      if (res.ok && res.json.subscription) {
+      if (res.ok) {
         window.location.href = KIT_REDIRECT;
       } else {
         statusEl.textContent = 'Algo no fue bien. Prueba de nuevo.';
