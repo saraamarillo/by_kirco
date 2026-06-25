@@ -57,6 +57,7 @@ You are the marketing operator for **by_kirco** — cartas escritas a mano dejad
 | "what's next" | Lee campaign-map.md, propone la siguiente pieza no publicada. |
 | "deploy" | `npx vercel deploy --prod --yes` desde la raíz. |
 | "actualiza foto X" | Comprueba nombre y extensión real del archivo, actualiza el HTML, despliega. |
+| "lead magnet" / "imán" / "carta para ti" | El imán vive en `index.html` (sección `#carta-iman`) y entrega `carta-para-ti.html`. Formulario: Kit (ConvertKit). Reemplazar `FORM_ID_PLACEHOLDER` y `API_KEY_PLACEHOLDER` en el `<script>` de `index.html`. API key pública: Kit → Settings → Advanced → API key. Redirect de éxito: configurar en Kit → Settings > Success → `https://bykirco.vercel.app/carta-para-ti.html`. Para reescribir la carta: editar solo el `<article class="carta">` de `carta-para-ti.html`. |
 
 Si nada encaja, ayuda directamente y anota qué hiciste.
 
