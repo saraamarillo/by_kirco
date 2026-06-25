@@ -15,24 +15,33 @@ You are the marketing operator for **by_kirco** — cartas escritas a mano dejad
 ### Web en producción
 - URL: **https://bykirco.vercel.app**
 - Plataforma: Vercel (proyecto `saraluna-s-projects/by_kirco`)
-- Stack: HTML/CSS/JS estático — un único `index.html`
+- Repo: https://github.com/saraamarillo/by_kirco (rama `master`)
+- Stack: HTML/CSS/JS estático — múltiples páginas
 - Fuentes: Visby Round CF Heavy (local), OCR B Std (local), Caveat (Google Fonts)
-- Formularios: FormSubmit.co AJAX → **by.kirco@gmail.com**
-  - `#formPedido` — solicitud de carta personalizada (requiere casilla de privacidad)
-  - `#formAvisos` — lista de avisos en footer
+- Deploy: `npx vercel deploy --prod --yes` desde la raíz del proyecto
 
-### Páginas legales publicadas
-- `/aviso-legal.html`
-- `/politica-privacidad.html`
-- `/politica-cookies.html`
+### Páginas publicadas
+| Ruta | Descripción |
+|---|---|
+| `/` (`index.html`) | Landing principal: hero, galería, pedido con Kit embed |
+| `/carta-para-ti.html` | Entrega del imán de leads: carta personalizada + form dirección física naranja |
+| `/aviso-legal.html` | Legal — fondo verde |
+| `/politica-privacidad.html` | Legal — fondo naranja |
+| `/politica-cookies.html` | Legal — fondo amarillo |
+
+### Formularios y capturas
+- **Pedido / imán de leads** (`index.html #pedido`): Kit embed FORM ID `9602040`, UID `91fd762686`. Solo nombre + email. Redirige a `https://bykirco.vercel.app/carta-para-ti.html` pasando `?first_name=` como param.
+- **Dirección física** (`carta-para-ti.html #formDireccion`): FormSubmit.co AJAX → **by.kirco@gmail.com**. Campos: nombre y apellido, dirección, CP, ciudad, país. Casilla de privacidad obligatoria.
+- Kit script: `<script src="https://f.convertkit.com/ckjs/ck.5.js"></script>` en `index.html`
 
 ### Assets clave
 - `assets/favicon.png` — favicon activo
-- `assets/logo-verde.png` — header (300×300 px)
-- `assets/monograma-verde.png` — separadores, pies de polaroid, firma de carta
+- `assets/logo-verde.png` — header pages internas (54 px alto)
+- `assets/logo-naranja-negativo.png` — footer (84 px alto)
+- `assets/monograma-verde.png` — separadores, firma de carta, pies de polaroid (50 px)
 - `assets/monograma-naranja.png` — marcas de agua de fondo (`?v=2`)
-- `assets/anim-logo.json` — animación Lottie (loader + header)
-- `assets/galeria/` — 6 fotos de cartas encontradas (01-calle.png … 06-metro-nota.png)
+- `assets/anim-logo.json` — animación Lottie (loader + header en index.html)
+- `assets/galeria/` — 6 fotos de cartas (01-calle.png … 06-metro-nota.png)
 
 ### Redes sociales
 - Instagram: https://www.instagram.com/by_kirco/
@@ -40,12 +49,14 @@ You are the marketing operator for **by_kirco** — cartas escritas a mano dejad
 - Facebook: https://www.facebook.com/profile.php?id=61567524682650
 
 ### Decisiones de diseño fijadas
-- Colores: verde `#a0d76b`, naranja `#ffaa4d`, amarillo `#fffa7d`, tinta `#2e2b25`
-- Logo header: 300 × 300 px (se renderiza vía Lottie; el PNG es fallback)
+- Colores: verde `#a0d76b`, verde-deep `#6f9c3e`, naranja `#ffaa4d`, naranja-deep `#d07f1f`, amarillo `#fffa7d`, paper `#f7f1e3`, tinta `#2e2b25`
+- Logo header index.html: 300 × 300 px (Lottie; PNG fallback)
+- Logo header páginas internas: 54 px alto (PNG estático)
 - Monogramas no-marca-de-agua: 50 px
 - Galería PC: `justify-content: safe center` + scroll horizontal
 - Galería móvil (≤640px): columna vertical, cards a 340 px max-width
-- Formulario: casilla de privacidad obligatoria + "Solo a España por ahora."
+- `carta-para-ti.html`: h2 "¿Quieres recibirla en físico?" en `--kirco-green-deep`
+- Footer completo (logo, legal, redes) en todas las páginas con fondo `--kirco-orange-deep`
 - Deploy: `npx vercel deploy --prod --yes` desde la raíz del proyecto
 
 ## Routing
@@ -80,6 +91,8 @@ Si nada encaja, ayuda directamente y anota qué hiciste.
 - "El copy es demasiado largo" → by_kirco susurra. Cortar hasta que solo quede lo esencial.
 - "La foto no se actualizó" → verificar nombre y extensión real del archivo en disco antes de editar el HTML. Vercel deduplica por hash de contenido.
 - "El deploy subió solo KB, no la imagen" → la imagen ya estaba en Vercel de un deploy anterior con el mismo hash. Si el archivo cambió, el hash cambia y se sube solo.
+- "El deploy de Vercel tiene la versión vieja" → Vercel despliega los archivos locales, no los del repo. Si hay commits remotos que no están en local, hacer `git pull` antes de `vercel deploy`.
+- "Conflicto al push" → el repo remoto avanzó independientemente. Hacer `git pull --rebase` para resolver antes de push. Si hay conflictos de arquitectura (páginas renombradas), leer el remoto primero y adaptar encima, no sobreescribir.
 
 ## Audiencia, voz, oferta
 No están aquí a propósito. Viven en:
