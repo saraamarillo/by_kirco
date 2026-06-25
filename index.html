@@ -436,9 +436,55 @@ header {
   padding: 48px;
   text-align: center;
 }
-.pedido-caja .seva-form { width: 100%; }
-.pedido-caja .formkit-fields { gap: 14px; }
-.pedido-caja .formkit-powered-by-convertkit-container { display: none; }
+.pedido-caja form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+}
+.pedido-caja input[type="email"],
+.pedido-caja input[type="text"] {
+  width: 100%;
+  font-family: var(--font-body);
+  font-size: 17px;
+  color: var(--text-body);
+  background: var(--kirco-paper);
+  border: 2px solid var(--kirco-paper);
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+  outline: none;
+}
+.pedido-caja input[type="email"]:focus,
+.pedido-caja input[type="text"]:focus {
+  border-color: var(--kirco-green);
+  box-shadow: var(--shadow-glow-green);
+}
+.pedido-caja textarea {
+  width: 100%;
+  font-family: var(--font-body);
+  font-size: 17px;
+  color: var(--text-body);
+  background: var(--kirco-paper);
+  border: 2px solid var(--kirco-paper);
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+  outline: none;
+  resize: vertical;
+  min-height: 110px;
+  line-height: 1.5;
+}
+.pedido-caja textarea:focus {
+  border-color: var(--kirco-green);
+  box-shadow: var(--shadow-glow-green);
+}
+.pedido-caja .btn {
+  width: 100%;
+  background: var(--kirco-paper);
+  border-color: var(--kirco-paper);
+  color: var(--kirco-green-deep);
+  font-size: 18px;
+  padding: 16px;
+}
 .form-status {
   min-height: 1.4em;
   margin-top: 10px;
@@ -447,6 +493,11 @@ header {
   color: var(--kirco-yellow);
   font-size: 15px;
 }
+
+/* Kit form overrides */
+.pedido-caja .seva-form { width: 100%; }
+.pedido-caja .formkit-fields { gap: 14px; }
+.pedido-caja .formkit-powered-by-convertkit-container { display: none; }
 
 /* ============================================================
    FOOTER
@@ -495,6 +546,35 @@ footer h4 {
   transition: transform 150ms ease-out;
 }
 .redes a:hover { transform: translateY(-2px); }
+.footer-avisos {}
+.footer-avisos p.avisos-desc {
+  font-size: 15px; line-height: 1.6;
+  color: var(--kirco-paper); opacity: 0.88;
+  margin: 0 0 16px;
+}
+.avisos-row { display: flex; gap: 10px; flex-wrap: wrap; }
+.footer-avisos input {
+  background: var(--kirco-paper);
+  border-color: var(--kirco-paper); flex: 1; min-width: 160px;
+}
+.footer-avisos input:focus { border-color: var(--kirco-green); box-shadow: none; }
+.btn-mini {
+  font-family: var(--font-display);
+  font-weight: 800; font-size: 16px;
+  color: #ffffff;
+  background: var(--kirco-green);
+  border: 2px solid var(--kirco-green);
+  border-radius: var(--radius-pill);
+  padding: 0 26px; cursor: pointer;
+  transition: transform 150ms ease-out;
+  white-space: nowrap;
+}
+.btn-mini:hover { transform: translateY(-2px); }
+.avisos-status-foot {
+  min-height: 1.2em; margin-top: 10px;
+  font-style: italic; font-size: 14px;
+  color: var(--kirco-paper); opacity: 0.85;
+}
 .legal {
   display: flex; align-items: center;
   justify-content: space-between; gap: 24px;
@@ -568,6 +648,7 @@ footer h4 {
   .pedido h2 { font-size: 34px; }
   .pedido .sub { font-size: 17px; }
   .pedido-caja { padding: 32px 24px; margin-top: 36px; }
+  .pedido-caja .btn { font-size: 17px; }
 
   /* Footer */
   footer { padding: 60px 0 44px; }
@@ -670,9 +751,9 @@ footer h4 {
     <div class="flor-fondo f3"></div>
     <div class="wrap">
       <h2>¿Quieres una carta personalizada?</h2>
-      <p class="sub">Déjame tu correo y te escribo una carta solo para ti.</p>
+      <p class="sub">Déjame tu correo y me pongo en contacto contigo.</p>
       <div class="pedido-caja">
-        <form action="https://app.kit.com/forms/9602040/subscriptions" class="seva-form formkit-form" method="post" data-sv-form="9602040" data-uid="91fd762686" data-format="inline" data-version="5" data-options="{&quot;settings&quot;:{&quot;after_subscribe&quot;:{&quot;action&quot;:&quot;redirect&quot;,&quot;success_message&quot;:&quot;&quot;,&quot;redirect_url&quot;:&quot;https://bykirco.vercel.app/carta-para-ti.html&quot;},&quot;analytics&quot;:{&quot;google&quot;:null,&quot;fathom&quot;:null,&quot;facebook&quot;:null,&quot;segment&quot;:null,&quot;pinterest&quot;:null,&quot;sparkloop&quot;:null,&quot;googletagmanager&quot;:null},&quot;modal&quot;:{&quot;trigger&quot;:&quot;timer&quot;,&quot;scroll_percentage&quot;:null,&quot;timer&quot;:5,&quot;devices&quot;:&quot;all&quot;,&quot;show_once_every&quot;:15},&quot;powered_by&quot;:{&quot;show&quot;:false,&quot;url&quot;:&quot;https://kit.com/features/forms?utm_campaign=poweredby&amp;utm_content=form&amp;utm_medium=referral&amp;utm_source=dynamic&quot;},&quot;recaptcha&quot;:{&quot;enabled&quot;:false},&quot;return_visitor&quot;:{&quot;action&quot;:&quot;show&quot;,&quot;custom_content&quot;:&quot;&quot;},&quot;slide_in&quot;:{&quot;display_in&quot;:&quot;bottom_right&quot;,&quot;trigger&quot;:&quot;timer&quot;,&quot;scroll_percentage&quot;:null,&quot;timer&quot;:5,&quot;devices&quot;:&quot;all&quot;,&quot;show_once_every&quot;:15},&quot;sticky_bar&quot;:{&quot;display_in&quot;:&quot;top&quot;,&quot;trigger&quot;:&quot;timer&quot;,&quot;scroll_percentage&quot;:null,&quot;timer&quot;:5,&quot;devices&quot;:&quot;all&quot;,&quot;show_once_every&quot;:15}},&quot;version&quot;:&quot;5&quot;}" min-width="400 500 600 700 800"><div data-style="clean"><ul class="formkit-alert formkit-alert-error" data-element="errors" data-group="alert"></ul><div data-element="fields" data-stacked="false" class="seva-fields formkit-fields"><div class="formkit-field"><input class="formkit-input" name="email_address" aria-label="Tu correo" placeholder="tu@correo.com" required="" type="email" style="color: rgb(46,43,37); border-color: transparent; border-radius: 16px; font-weight: 400; font-size: 17px; padding: 14px 18px; background: #f7f1e3;"></div><button data-element="submit" class="formkit-submit formkit-submit" style="color: #6f9c3e; background-color: #f7f1e3; border-radius: 999px; font-weight: 800; font-size: 18px; padding: 16px; width: 100%; font-family: inherit;"><div class="formkit-spinner"><div></div><div></div><div></div></div><span class="">Pedir mi carta</span></button></div></div></form>
+        <form action="https://app.kit.com/forms/9602040/subscriptions" class="seva-form formkit-form" method="post" data-sv-form="9602040" data-uid="91fd762686" data-format="inline" data-version="5" data-options="{&quot;settings&quot;:{&quot;after_subscribe&quot;:{&quot;action&quot;:&quot;redirect&quot;,&quot;success_message&quot;:&quot;&quot;,&quot;redirect_url&quot;:&quot;https://bykirco.vercel.app/carta-para-ti.html&quot;},&quot;analytics&quot;:{&quot;google&quot;:null,&quot;fathom&quot;:null,&quot;facebook&quot;:null,&quot;segment&quot;:null,&quot;pinterest&quot;:null,&quot;sparkloop&quot;:null,&quot;googletagmanager&quot;:null},&quot;modal&quot;:{&quot;trigger&quot;:&quot;timer&quot;,&quot;scroll_percentage&quot;:null,&quot;timer&quot;:5,&quot;devices&quot;:&quot;all&quot;,&quot;show_once_every&quot;:15},&quot;powered_by&quot;:{&quot;show&quot;:false,&quot;url&quot;:&quot;https://kit.com/features/forms?utm_campaign=poweredby&amp;utm_content=form&amp;utm_medium=referral&amp;utm_source=dynamic&quot;},&quot;recaptcha&quot;:{&quot;enabled&quot;:false},&quot;return_visitor&quot;:{&quot;action&quot;:&quot;show&quot;,&quot;custom_content&quot;:&quot;&quot;},&quot;slide_in&quot;:{&quot;display_in&quot;:&quot;bottom_right&quot;,&quot;trigger&quot;:&quot;timer&quot;,&quot;scroll_percentage&quot;:null,&quot;timer&quot;:5,&quot;devices&quot;:&quot;all&quot;,&quot;show_once_every&quot;:15},&quot;sticky_bar&quot;:{&quot;display_in&quot;:&quot;top&quot;,&quot;trigger&quot;:&quot;timer&quot;,&quot;scroll_percentage&quot;:null,&quot;timer&quot;:5,&quot;devices&quot;:&quot;all&quot;,&quot;show_once_every&quot;:15}},&quot;version&quot;:&quot;5&quot;}" min-width="400 500 600 700 800"><div data-style="clean"><ul class="formkit-alert formkit-alert-error" data-element="errors" data-group="alert"></ul><div data-element="fields" data-stacked="true" class="seva-fields formkit-fields"><div class="formkit-field"><input class="formkit-input" name="fields[first_name]" aria-label="Tu nombre" placeholder="Tu nombre" required="" type="text" style="color: rgb(46,43,37); border-color: transparent; border-radius: 16px; font-weight: 400; font-size: 17px; padding: 14px 18px; background: #f7f1e3;"></div><div class="formkit-field"><input class="formkit-input" name="email_address" aria-label="Tu correo" placeholder="tu@correo.com" required="" type="email" style="color: rgb(46,43,37); border-color: transparent; border-radius: 16px; font-weight: 400; font-size: 17px; padding: 14px 18px; background: #f7f1e3;"></div><button data-element="submit" class="formkit-submit formkit-submit" style="color: #6f9c3e; background-color: #f7f1e3; border-radius: 999px; font-weight: 800; font-size: 18px; padding: 16px; width: 100%; font-family: inherit;"><div class="formkit-spinner"><div></div><div></div><div></div></div><span class="">Quiero mi carta</span></button></div></div></form>
       </div>
     </div>
   </section>
@@ -785,6 +866,57 @@ footer h4 {
   }, { threshold: 0.25 });
   obs.observe(strip);
 })();
+
+/* ---------------------------------------------------------------
+   FORMULARIOS — FormSubmit.co (envío a by.kirco@gmail.com)
+   Primera vez: FormSubmit.co enviará un email de verificación
+   a by.kirco@gmail.com — haz clic en el enlace y listo.
+--------------------------------------------------------------- */
+var FORMSUBMIT = 'https://formsubmit.co/ajax/by.kirco@gmail.com';
+
+function submitForm(form, statusEl, asunto, msgOk) {
+  var btn = form.querySelector('button[type=submit]');
+  var emailEl = form.querySelector('input[type=email]');
+  if (emailEl && !emailEl.checkValidity()) {
+    statusEl.textContent = 'Déjame un correo donde encontrarte.';
+    emailEl.focus(); return;
+  }
+  var nombreEl = form.querySelector('input[name=nombre]');
+  if (nombreEl && !nombreEl.value.trim()) {
+    statusEl.textContent = 'Dime cómo te llamas.';
+    nombreEl.focus(); return;
+  }
+
+  statusEl.textContent = 'Enviando…';
+  if (btn) btn.disabled = true;
+
+  var data = {};
+  new FormData(form).forEach(function(v, k) {
+    if (k !== '_honey') data[k] = v;
+  });
+  data._subject = asunto;
+  data._captcha = 'false';
+  data._template = 'table';
+
+  fetch(FORMSUBMIT, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify(data)
+  })
+  .then(function(r) { return r.json().then(function(j){ return { ok: r.ok, json: j }; }); })
+  .then(function(res) {
+    statusEl.textContent = res.ok ? msgOk : 'Algo falló. Inténtalo de nuevo.';
+    if (res.ok) form.reset();
+  })
+  .catch(function() {
+    statusEl.textContent = 'Sin conexión. Inténtalo en un rato.';
+  })
+  .finally(function() {
+    if (btn) btn.disabled = false;
+  });
+}
+
+
 </script>
 
 <script src="https://f.convertkit.com/ckjs/ck.5.js"></script>
