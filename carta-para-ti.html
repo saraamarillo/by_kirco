@@ -37,13 +37,13 @@
 *, *::before, *::after { box-sizing: border-box; }
 html { margin: 0; padding: 0; scroll-behavior: smooth; }
 body { margin: 0; padding: 0; background: var(--kirco-paper); color: var(--kirco-ink); font-family: var(--font-body); min-height: 100vh; display: flex; flex-direction: column; }
-.site-header { padding: 28px 40px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
-.site-header .logo { height: 54px; width: auto; }
-.site-header .handle { font-family: var(--font-mono); font-size: 12px; letter-spacing: var(--track-mono); text-transform: uppercase; color: var(--kirco-ink-soft); white-space: nowrap; }
+.site-header { position: absolute; top: 0; left: 0; right: 0; z-index: 10; padding: 22px 40px 48px; background: linear-gradient(to bottom, #6f9c3e 0%, rgba(111,156,62,0) 100%); display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.site-header .logo { height: 54px; width: auto; filter: brightness(0) invert(1); }
+.site-header .handle { font-family: var(--font-mono); font-size: 12px; letter-spacing: var(--track-mono); text-transform: uppercase; color: #FFFDDA; white-space: nowrap; }
 .site-header nav { display: flex; gap: 8px; flex-wrap: wrap; }
-.site-header nav a { font-family: var(--font-mono); font-size: 12px; letter-spacing: var(--track-mono); text-transform: uppercase; color: var(--kirco-ink-soft); text-decoration: none; padding: 6px 14px; border-radius: var(--radius-pill); transition: background 150ms ease-out, color 150ms ease-out; }
-.site-header nav a:hover { background: var(--kirco-green-deep); color: var(--kirco-paper); }
-main { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 48px 24px 80px; }
+.site-header nav a { font-family: var(--font-mono); font-size: 12px; letter-spacing: var(--track-mono); text-transform: uppercase; color: #FFFDDA; text-decoration: none; padding: 6px 14px; border-radius: var(--radius-pill); transition: background 150ms ease-out; }
+.site-header nav a:hover { background: rgba(255,253,218,.28); }
+main { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 100px 24px 80px; }
 .kicker { font-family: var(--font-mono); font-size: 13px; letter-spacing: var(--track-mono); text-transform: uppercase; color: var(--kirco-orange-deep); text-align: center; margin: 0 0 40px; }
 .carta-wrap { position: relative; width: 100%; max-width: 520px; }
 .carta-sombra { position: absolute; inset: 0; background: rgba(46,43,37,.06); border-radius: 18px; transform: rotate(1.8deg) translateY(8px); }

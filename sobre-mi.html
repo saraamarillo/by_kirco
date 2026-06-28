@@ -56,33 +56,33 @@ body::before {
 
 /* ── HEADER ── */
 .site-header {
-  position: relative; z-index: 1;
-  padding: 28px 40px;
+  position: absolute; top: 0; left: 0; right: 0; z-index: 1;
+  padding: 22px 40px 48px;
+  background: linear-gradient(to bottom, #6f9c3e 0%, rgba(111,156,62,0) 100%);
   display: flex; align-items: center; justify-content: space-between;
   gap: 24px;
 }
-.site-header .logo { height: 54px; width: auto; }
+.site-header .logo { height: 54px; width: auto; filter: brightness(0) invert(1); }
 .site-header nav { display: flex; gap: 8px; flex-wrap: wrap; }
 .site-header nav a {
   font-family: var(--font-mono);
   font-size: 12px; font-weight: 400;
   letter-spacing: var(--track-mono);
   text-transform: uppercase;
-  color: var(--kirco-ink-soft);
+  color: #FFFDDA;
   text-decoration: none;
   padding: 6px 14px;
   border-radius: var(--radius-pill);
-  transition: background 150ms ease-out, color 150ms ease-out;
+  transition: background 150ms ease-out;
 }
 .site-header nav a:hover,
 .site-header nav a.activo {
-  background: var(--kirco-green-deep);
-  color: var(--kirco-paper);
+  background: rgba(255,253,218,.28);
 }
 .site-header .handle {
   font-family: var(--font-mono); font-size: 12px;
   letter-spacing: var(--track-mono); text-transform: uppercase;
-  color: var(--kirco-ink-soft);
+  color: #FFFDDA;
   white-space: nowrap;
 }
 
@@ -93,7 +93,7 @@ main {
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  padding: 40px 24px 80px;
+  padding: 110px 24px 80px;
 }
 
 /* ── PAPEL ── */

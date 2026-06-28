@@ -134,9 +134,26 @@ main, footer { position: relative; z-index: 1; }
 /* ============================================================
    HEADER
    ============================================================ */
+/* ── TOP NAV GRADIENTE ── */
+.site-header {
+  position: absolute; top: 0; left: 0; right: 0; z-index: 10;
+  padding: 22px 40px 48px;
+  background: linear-gradient(to bottom, #6f9c3e 0%, rgba(111,156,62,0) 100%);
+  display: flex; align-items: center; justify-content: space-between; gap: 24px;
+}
+.site-header .logo { height: 54px; filter: brightness(0) invert(1); }
+.site-header nav { display: flex; gap: 8px; flex-wrap: wrap; }
+.site-header nav a {
+  font-family: var(--font-mono); font-size: 12px; letter-spacing: var(--track-mono);
+  text-transform: uppercase; color: #FFFDDA; text-decoration: none;
+  padding: 6px 14px; border-radius: var(--radius-pill); transition: background 150ms ease-out;
+}
+.site-header nav a:hover { background: rgba(255,253,218,.28); }
+.site-header .handle { font-family: var(--font-mono); font-size: 13px; letter-spacing: var(--track-mono); color: #FFFDDA; }
+
 header {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 26px 0 0;
+  display: flex; align-items: center; justify-content: center;
+  padding: 80px 0 0;
   position: relative; z-index: 2;
 }
 .logo-anim {
@@ -150,18 +167,6 @@ header {
   letter-spacing: var(--track-mono);
   color: var(--text-muted);
 }
-header nav { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; justify-content: center; }
-header nav a {
-  font-family: var(--font-mono);
-  font-size: 12px; letter-spacing: var(--track-mono);
-  text-transform: uppercase;
-  color: var(--text-muted);
-  text-decoration: none;
-  padding: 6px 14px;
-  border-radius: var(--radius-pill);
-  transition: background 150ms ease-out, color 150ms ease-out;
-}
-header nav a:hover { background: var(--kirco-green-deep); color: var(--kirco-paper); }
 
 /* ============================================================
    GLOBAL BUTTON
@@ -682,17 +687,21 @@ footer h4 {
   <div class="loader-anim" id="loaderAnim"></div>
 </div>
 
+<header class="site-header">
+  <img class="logo" src="assets/logo-verde.png" alt="by_kirco" />
+  <nav>
+    <a href="/sobre-mi.html">Sobre mí</a>
+    <a href="/destinatarios.html">Destinatarios</a>
+  </nav>
+  <span class="handle">@BY_KIRCO</span>
+</header>
+
 <main>
   <div class="wrap">
     <header>
       <div class="logo-anim" id="logoAnim">
         <img class="logo-img" src="assets/logo-verde.png" alt="by_kirco" />
       </div>
-      <nav>
-        <a href="/sobre-mi.html">Sobre mí</a>
-        <a href="/destinatarios.html">Destinatarios</a>
-      </nav>
-      <span class="handle">@BY_KIRCO</span>
     </header>
   </div>
 
