@@ -37,9 +37,12 @@
 *, *::before, *::after { box-sizing: border-box; }
 html { margin: 0; padding: 0; scroll-behavior: smooth; }
 body { margin: 0; padding: 0; background: var(--kirco-paper); color: var(--kirco-ink); font-family: var(--font-body); min-height: 100vh; display: flex; flex-direction: column; }
-.site-header { padding: 28px 40px; display: flex; align-items: center; justify-content: space-between; }
+.site-header { padding: 28px 40px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
 .site-header .logo { height: 54px; width: auto; }
-.site-header .handle { font-family: var(--font-mono); font-size: 12px; letter-spacing: var(--track-mono); text-transform: uppercase; color: var(--kirco-ink-soft); }
+.site-header .handle { font-family: var(--font-mono); font-size: 12px; letter-spacing: var(--track-mono); text-transform: uppercase; color: var(--kirco-ink-soft); white-space: nowrap; }
+.site-header nav { display: flex; gap: 8px; flex-wrap: wrap; }
+.site-header nav a { font-family: var(--font-mono); font-size: 12px; letter-spacing: var(--track-mono); text-transform: uppercase; color: var(--kirco-ink-soft); text-decoration: none; padding: 6px 14px; border-radius: var(--radius-pill); transition: background 150ms ease-out, color 150ms ease-out; }
+.site-header nav a:hover { background: var(--kirco-green-deep); color: var(--kirco-paper); }
 main { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 48px 24px 80px; }
 .kicker { font-family: var(--font-mono); font-size: 13px; letter-spacing: var(--track-mono); text-transform: uppercase; color: var(--kirco-orange-deep); text-align: center; margin: 0 0 40px; }
 .carta-wrap { position: relative; width: 100%; max-width: 520px; }
@@ -168,6 +171,10 @@ footer h4 {
 
 <header class="site-header">
   <img class="logo" src="assets/logo-verde.png" alt="by_kirco" />
+  <nav>
+    <a href="/sobre-mi.html">Sobre mí</a>
+    <a href="/destinatarios.html">Destinatarios</a>
+  </nav>
   <span class="handle">@BY_KIRCO</span>
 </header>
 

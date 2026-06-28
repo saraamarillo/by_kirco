@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sobre mí — by_kirco</title>
+<meta name="description" content="La historia detrás de by_kirco y de las cartitas anónimas escritas a mano." />
+<link rel="icon" type="image/png" href="/assets/favicon.png" />
+<link rel="apple-touch-icon" href="/assets/favicon.png" />
+<style>
+@font-face { font-family: "Visby Round CF"; src: url("fonts/VisbyRoundCF-Heavy.ttf") format("truetype"); font-weight: 800; font-style: normal; font-display: swap; }
+@font-face { font-family: "OCR B Std"; src: url("fonts/OCRBStd.otf") format("opentype"); font-weight: 400; font-style: normal; font-display: swap; }
+:root {
+  --kirco-green:        #a0d76b;
+  --kirco-green-deep:   #6f9c3e;
+  --kirco-orange:       #ffaa4d;
+  --kirco-orange-deep:  #d07f1f;
+  --kirco-yellow:       #fffa7d;
+  --kirco-paper:        #f7f1e3;
+  --kirco-ink:          #2e2b25;
+  --kirco-ink-soft:     #6b6557;
+  --font-display: "Visby Round CF", system-ui, sans-serif;
+  --font-mono:    "OCR B Std", monospace;
+  --font-body:    system-ui, -apple-system, sans-serif;
+  --track-mono:   0.12em;
+  --radius-md:    16px;
+  --radius-lg:    28px;
+  --radius-pill:  999px;
+  --shadow-pop:   0 4px 12px rgba(46,43,37,.10), 0 18px 44px rgba(46,43,37,.14);
+}
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+
+/* ── FONDO ── */
+body {
+  min-height: 100vh;
+  background-color: #fffde8;
+  background-image: url("assets/trama-patron.png");
+  background-repeat: repeat;
+  background-size: 320px 320px;
+  background-position: center center;
+  position: relative;
+  font-family: var(--font-mono);
+  color: var(--kirco-ink-soft);
+  display: flex;
+  flex-direction: column;
+}
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-color: rgba(255, 253, 232, 0.82);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── HEADER ── */
+.site-header {
+  position: relative; z-index: 1;
+  padding: 28px 40px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 24px;
+}
+.site-header .logo { height: 54px; width: auto; }
+.site-header nav { display: flex; gap: 8px; flex-wrap: wrap; }
+.site-header nav a {
+  font-family: var(--font-mono);
+  font-size: 12px; font-weight: 400;
+  letter-spacing: var(--track-mono);
+  text-transform: uppercase;
+  color: var(--kirco-ink-soft);
+  text-decoration: none;
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  transition: background 150ms ease-out, color 150ms ease-out;
+}
+.site-header nav a:hover,
+.site-header nav a.activo {
+  background: var(--kirco-green-deep);
+  color: var(--kirco-paper);
+}
+.site-header .handle {
+  font-family: var(--font-mono); font-size: 12px;
+  letter-spacing: var(--track-mono); text-transform: uppercase;
+  color: var(--kirco-ink-soft);
+  white-space: nowrap;
+}
+
+/* ── MAIN ── */
+main {
+  position: relative; z-index: 1;
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 40px 24px 80px;
+}
+
+/* ── PAPEL ── */
+.papel {
+  background: var(--kirco-paper);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-pop);
+  max-width: 680px;
+  width: 100%;
+  padding: 64px 72px;
+  position: relative;
+  overflow: hidden;
+}
+.papel::before {
+  content: '';
+  position: absolute;
+  inset: 64px 72px 64px;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent, transparent 37px,
+    rgba(107,101,87,.07) 37px, rgba(107,101,87,.07) 38px
+  );
+  pointer-events: none;
+}
+.kicker {
+  font-family: var(--font-mono);
+  font-size: 11px; letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--kirco-orange-deep);
+  margin: 0 0 36px;
+}
+.papel p {
+  font-family: var(--font-mono);
+  font-size: 16px;
+  line-height: 1.85;
+  color: #6b6557;
+  margin: 0 0 24px;
+  position: relative;
+}
+.papel p:last-of-type { margin-bottom: 0; }
+
+/* frase destacada */
+.destacado {
+  background: var(--kirco-yellow);
+  text-decoration: underline;
+  text-decoration-color: var(--kirco-orange);
+  text-underline-offset: 3px;
+  padding: 0 2px;
+  border-radius: 3px;
+}
+
+/* ── FIRMA ── */
+.firma-seccion {
+  margin-top: 48px;
+  padding-top: 32px;
+  border-top: 1px solid rgba(107,101,87,.15);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+.firma-seccion img {
+  height: 80px;
+  width: auto;
+  opacity: 0.92;
+}
+
+/* ── FOOTER ── */
+footer {
+  position: relative; z-index: 1;
+  background: var(--kirco-orange-deep);
+  padding: 72px 0 52px;
+  color: var(--kirco-paper);
+}
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 40px; }
+.footer-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 64px; align-items: start; }
+.logo-foot { height: 84px; }
+footer .claim { font-size: 15px; line-height: 1.6; color: var(--kirco-paper); opacity: 0.92; margin: 18px 0 0; max-width: 280px; }
+footer h4 { font-family: var(--font-mono); font-size: 11px; font-weight: 400; letter-spacing: 0.14em; text-transform: uppercase; color: var(--kirco-paper); opacity: 0.8; margin: 0 0 18px; }
+.foot-links { display: flex; flex-direction: column; gap: 12px; }
+.foot-links a { font-family: var(--font-display); font-weight: 800; font-size: 16px; color: var(--kirco-paper); text-decoration: none; transition: opacity 150ms; }
+.foot-links a:hover { opacity: 0.75; }
+.redes { display: flex; gap: 10px; margin-top: 6px; flex-wrap: wrap; }
+.redes a { font-family: var(--font-display); font-weight: 800; font-size: 15px; color: var(--kirco-orange-deep); background: var(--kirco-paper); border-radius: var(--radius-pill); padding: 10px 22px; text-decoration: none; transition: transform 150ms ease-out; }
+.redes a:hover { transform: translateY(-2px); }
+.legal { display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; border-top: 2px solid rgba(247,241,227,.35); margin-top: 64px; padding-top: 28px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--kirco-paper); }
+.legal a { color: var(--kirco-paper); text-decoration: none; }
+.legal a:hover { text-decoration: underline; }
+.legal .legal-links { display: flex; gap: 20px; }
+.flor-legal { width: 44px; height: 44px; vertical-align: -3px; }
+
+@media (max-width: 760px) {
+  .site-header { padding: 20px 24px; flex-wrap: wrap; }
+  .site-header .handle { display: none; }
+  .papel { padding: 40px 28px; }
+  .papel::before { inset: 40px 28px 40px; }
+  .footer-grid { grid-template-columns: 1fr; gap: 40px; }
+  .wrap { padding: 0 24px; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <img class="logo" src="assets/logo-verde.png" alt="by_kirco" />
+  <nav>
+    <a href="/sobre-mi.html" class="activo">Sobre mí</a>
+    <a href="/destinatarios.html">Destinatarios</a>
+  </nav>
+  <span class="handle">@BY_KIRCO</span>
+</header>
+
+<main>
+  <div class="papel">
+    <p class="kicker">La historia detrás de las cartitas</p>
+
+    <p>Un 13 de abril de 2021 abrí una cuenta de Instagram con la idea de publicar frases bonitas. De esas que se guardan en favoritos y se comparten en las historias. Pero algo no encajaba. Las frases estaban bien, pero faltaba algo real, algo que llegara de verdad.</p>
+
+    <p>Y entonces empecé a escribir cartitas. Sin destinatario. Sin remitente. <span class="destacado">Solo papel, bolígrafo y la sensación de que alguien, en algún lugar de Madrid, quizás las necesitaba.</span> Las dejé en bancos de parques, en asientos de metro o entre los libros de una biblioteca. Y desde ese día comenzó nuestra historia: Queridos Desconocidos.</p>
+
+    <p>La primavera del 2022 fui un pasito más allá. Si alguien hacía algo por mí —darme una tirita, ayudarme a llegar a algún sitio— le entregaba una cartita de agradecimiento escrita a mano. Porque si un desconocido hacía algo por mí, merecía algo más que un simple "gracias". Algo así como una cadena de favores.</p>
+
+    <p>Escribir es mi manera de relajarme y de poner en palabras lo que a veces no sé cómo decir de otra forma. Aunque es un proyecto que me apasiona, hay días en que la rutina lo complica todo y no tengo tiempo de dejarte una cartita. Pero entonces releo vuestros mensajes cuando encontráis alguna de las mías, y la ilusión vuelve de golpe. Eso es lo que me mantiene aquí.</p>
+
+    <p>Si tú encontraste una de mis cartitas, espero que en ese momento hayas sentido lo mismo que yo imagino: curiosidad primero, y luego esa sensación pequeña y bonita de que alguien pensó en ti sin conocerte. <span class="destacado">Porque de eso va todo esto.</span></p>
+
+    <div class="firma-seccion">
+      <img src="assets/logo-firma.png" alt="by_kirco" />
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <img class="logo-foot" src="assets/logo-naranja-negativo.png" alt="by_kirco" />
+        <p class="claim">Cartas anónimas escritas a mano, repartidas por España para quien las necesite.</p>
+      </div>
+      <div>
+        <h4>Legal</h4>
+        <div class="foot-links">
+          <a href="/aviso-legal.html">Aviso legal</a>
+          <a href="/politica-privacidad.html">Política de privacidad</a>
+          <a href="/politica-cookies.html">Cookies</a>
+        </div>
+        <h4 style="margin-top:28px">Sígueme para enterarte dónde dejo la próxima cartita</h4>
+        <div class="redes">
+          <a href="https://www.instagram.com/by_kirco/" target="_blank" rel="noopener">Instagram</a>
+          <a href="https://www.tiktok.com/@by_kirco" target="_blank" rel="noopener">TikTok</a>
+          <a href="https://www.facebook.com/profile.php?id=61567524682650" target="_blank" rel="noopener">Facebook</a>
+        </div>
+      </div>
+    </div>
+    <div class="legal">
+      <span>
+        © 2026 by_kirco
+        <img class="flor-legal" src="assets/monograma-verde.png" alt=""
+             style="filter:brightness(0) invert(1);opacity:.85" aria-hidden="true" />
+        Cartas con cariño
+      </span>
+      <span class="legal-links"><a href="#">@BY_KIRCO</a></span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
