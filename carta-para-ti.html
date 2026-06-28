@@ -63,18 +63,89 @@ main { flex: 1; display: flex; flex-direction: column; align-items: center; padd
 .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .select-wrap { position: relative; }
 .select-wrap::after { content: '▾'; position: absolute; right: 16px; top: 50%; transform: translateY(-50%); color: var(--kirco-ink-soft); pointer-events: none; font-size: 14px; }
-.check-privacidad { display: flex; align-items: flex-start; gap: 10px; cursor: pointer; color: var(--kirco-paper); font-size: 13px; line-height: 1.55; margin-top: 4px; }
-.check-privacidad input[type="checkbox"] { width: 18px; height: 18px; min-width: 18px; margin-top: 1px; accent-color: var(--kirco-orange); cursor: pointer; }
+.check-privacidad { position: relative; display: flex; align-items: flex-start; gap: 10px; color: var(--kirco-paper); font-size: 13px; line-height: 1.55; margin-top: 4px; }
+.check-privacidad input[type="checkbox"] { position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none; }
+.check-privacidad label { cursor: pointer; display: flex; align-items: flex-start; gap: 10px; }
+.check-box { width: 20px; height: 20px; min-width: 20px; margin-top: 1px; background: var(--kirco-paper); border-radius: 5px; border: 2px solid rgba(247,241,227,0.45); display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background 140ms ease, border-color 140ms ease, box-shadow 140ms ease; }
+.check-privacidad input[type="checkbox"]:checked + label .check-box { background: var(--kirco-orange); border-color: var(--kirco-orange); box-shadow: 0 0 0 3px rgba(255,170,77,.28); }
+.check-privacidad input[type="checkbox"]:checked + label .check-box::after { content: ''; display: block; width: 10px; height: 6px; border-left: 2.5px solid #fff; border-bottom: 2.5px solid #fff; transform: rotate(-45deg) translateY(-1px); }
 .check-privacidad a { color: var(--kirco-yellow); text-decoration: underline; text-underline-offset: 2px; }
 .btn-cartita { display: block; width: 100%; font-family: var(--font-display); font-weight: 800; font-size: 18px; color: var(--kirco-orange-deep); background: var(--kirco-paper); border: none; border-radius: var(--radius-pill); padding: 16px; cursor: pointer; transition: transform 180ms ease-out, filter 180ms ease-out; margin-top: 6px; }
 .btn-cartita:hover { transform: translateY(-2px); filter: brightness(0.97); }
 .btn-cartita:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 .solo-espanya { text-align: center; font-size: 11px; color: var(--kirco-paper); opacity: 0.65; margin: 6px 0 0; font-family: var(--font-mono); letter-spacing: var(--track-mono); text-transform: uppercase; }
 .form-status-dir { min-height: 1.2em; margin-top: 12px; text-align: center; font-style: italic; font-size: 14px; color: var(--kirco-paper); }
-.site-footer { padding: 32px 40px; border-top: 1px solid var(--kirco-line); display: flex; align-items: center; justify-content: center; gap: 10px; font-family: var(--font-mono); font-size: 12px; letter-spacing: var(--track-mono); text-transform: uppercase; color: var(--kirco-ink-soft); }
-.site-footer img { width: 32px; height: 32px; opacity: 0.5; }
-.site-footer a { color: var(--kirco-ink-soft); text-decoration: none; }
-.site-footer a:hover { text-decoration: underline; }
+.direccion-titulo {
+  font-family: var(--font-display);
+  font-weight: 800; font-size: 26px;
+  color: var(--kirco-green-deep);
+  margin: 0 0 10px; text-align: center;
+}
+.direccion-intro p { font-size: 17px; line-height: 1.65; color: var(--kirco-ink-soft); margin: 0; text-align: center; }
+footer {
+  background: var(--kirco-orange-deep);
+  padding: 90px 0 60px;
+  color: var(--kirco-paper);
+}
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 40px; }
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 64px; align-items: start;
+}
+.logo-foot { height: 84px; }
+footer .claim {
+  font-size: 16px; line-height: 1.6;
+  color: var(--kirco-paper); opacity: 0.92;
+  margin: 18px 0 0; max-width: 280px;
+}
+footer h4 {
+  font-family: var(--font-mono);
+  font-size: 12px; font-weight: 400;
+  letter-spacing: var(--track-mono);
+  text-transform: uppercase;
+  color: var(--kirco-paper); opacity: 0.8;
+  margin: 0 0 20px;
+}
+.foot-links { display: flex; flex-direction: column; gap: 12px; }
+.foot-links a {
+  font-family: var(--font-display);
+  font-weight: 800; font-size: 17px;
+  color: var(--kirco-paper); text-decoration: none;
+  transition: transform 150ms ease-out, opacity 150ms ease-out;
+}
+.foot-links a:hover { transform: translateX(3px); opacity: 0.85; }
+.redes { display: flex; gap: 12px; margin-top: 6px; flex-wrap: wrap; }
+.redes a {
+  font-family: var(--font-display);
+  font-weight: 800; font-size: 16px;
+  color: var(--kirco-orange-deep);
+  background: var(--kirco-paper);
+  border-radius: var(--radius-pill);
+  padding: 11px 24px;
+  text-decoration: none;
+  transition: transform 150ms ease-out;
+}
+.redes a:hover { transform: translateY(-2px); }
+.legal {
+  display: flex; align-items: center;
+  justify-content: space-between; gap: 24px;
+  flex-wrap: wrap;
+  border-top: 2px solid rgba(247,241,227,.35);
+  margin-top: 70px; padding-top: 28px;
+  font-family: var(--font-mono);
+  font-size: 12px; letter-spacing: var(--track-mono);
+  text-transform: uppercase;
+  color: var(--kirco-paper);
+}
+.legal a { color: var(--kirco-paper); text-decoration: none; }
+.legal a:hover { text-decoration: underline; }
+.legal .legal-links { display: flex; gap: 22px; }
+.flor-legal { width: 50px; height: 50px; vertical-align: -3px; }
+@media (max-width: 900px) {
+  .footer-grid { grid-template-columns: 1fr; gap: 44px; }
+  .wrap { padding: 0 28px; }
+}
 @media (max-width: 600px) {
   .site-header { padding: 20px 24px; }
   .site-header .logo { height: 42px; }
@@ -84,6 +155,8 @@ main { flex: 1; display: flex; flex-direction: column; align-items: center; padd
   main { padding: 32px 20px 60px; }
   .direccion-caja { padding: 28px 20px; }
   .row-2 { grid-template-columns: 1fr; }
+  footer { padding: 60px 0 44px; }
+  .legal { flex-direction: column; align-items: flex-start; gap: 14px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .carta { animation: none; opacity: 1; transform: rotate(-0.6deg); }
@@ -104,9 +177,9 @@ main { flex: 1; display: flex; flex-direction: column; align-items: center; padd
   <div class="carta-wrap">
     <div class="carta-sombra" aria-hidden="true"></div>
     <article class="carta">
-      <p class="saludo" id="saludo">Querido desconocido,</p>
-      <p>estoy escribiendo un mensaje para ti.</p>
-      <p>Estate atento a tu correo que pronto te mandaré tu carta personalizada.</p>
+      <p class="saludo" id="saludo">Querido/a desconocido/a,</p>
+      <p>Gracias por contarme un poco de ti.</p>
+      <p>Estate atento/a a tu correo que pronto te mandaré tu carta personalizada con mucho cariño.</p>
       <div class="firma">
         <img class="firma-logo" src="assets/monograma-verde.png" alt="" aria-hidden="true" />
         <span class="firma-texto">by_kirco</span>
@@ -115,13 +188,13 @@ main { flex: 1; display: flex; flex-direction: column; align-items: center; padd
   </div>
 
   <div class="direccion-section">
-    <p class="direccion-intro">
-      Si lo prefieres también te la puedo mandar a casa.<br>
-      Déjame tu dirección.
-    </p>
+    <div class="direccion-intro">
+      <h2 class="direccion-titulo">¿Quieres recibirla en físico?</h2>
+      <p>Si lo prefieres también te la puedo mandar a casa. Déjame tu dirección.</p>
+    </div>
     <div class="direccion-caja">
       <form id="formDireccion" novalidate>
-        <input type="text" name="nombre" id="fieldNombre" placeholder="Tu nombre" required />
+        <input type="text" name="nombre" id="fieldNombre" placeholder="Nombre y apellido" required />
         <input type="text" name="direccion" placeholder="Dirección" required />
         <div class="row-2">
           <input type="text" name="codigo_postal" placeholder="Código Postal" required />
@@ -132,10 +205,10 @@ main { flex: 1; display: flex; flex-direction: column; align-items: center; padd
             <option value="España" selected>España</option>
           </select>
         </div>
-        <label class="check-privacidad">
-          <input type="checkbox" name="privacidad" required />
-          <span>He leído y acepto la <a href="/politica-privacidad.html" target="_blank" rel="noopener">política de privacidad</a></span>
-        </label>
+        <div class="check-privacidad">
+          <input type="checkbox" name="privacidad" id="privacidadCheck" required />
+          <label for="privacidadCheck"><span class="check-box" aria-hidden="true"></span>He leído y acepto la <a href="/politica-privacidad.html" target="_blank" rel="noopener">política de privacidad</a></label>
+        </div>
         <button class="btn-cartita" type="submit">Envíame mi cartita</button>
         <p class="solo-espanya">Solo España, por ahora</p>
       </form>
@@ -144,9 +217,38 @@ main { flex: 1; display: flex; flex-direction: column; align-items: center; padd
   </div>
 </main>
 
-<footer class="site-footer">
-  <img src="assets/monograma-verde.png" alt="" aria-hidden="true" />
-  <span>© 2026 by_kirco · <a href="/politica-privacidad.html">Privacidad</a></span>
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <img class="logo-foot" src="assets/logo-naranja-negativo.png" alt="by_kirco" />
+        <p class="claim">Cartas anónimas escritas a mano, repartidas por España para quien las necesite.</p>
+      </div>
+      <div>
+        <h4>Legal</h4>
+        <div class="foot-links">
+          <a href="/aviso-legal.html">Aviso legal</a>
+          <a href="/politica-privacidad.html">Política de privacidad</a>
+          <a href="/politica-cookies.html">Cookies</a>
+        </div>
+        <h4 style="margin-top:32px">Sígueme para enterarte dónde dejo la próxima cartita</h4>
+        <div class="redes">
+          <a href="https://www.instagram.com/by_kirco/" target="_blank" rel="noopener">Instagram</a>
+          <a href="https://www.tiktok.com/@by_kirco" target="_blank" rel="noopener">TikTok</a>
+          <a href="https://www.facebook.com/profile.php?id=61567524682650" target="_blank" rel="noopener">Facebook</a>
+        </div>
+      </div>
+    </div>
+    <div class="legal">
+      <span>
+        © 2026 by_kirco
+        <img class="flor-legal" src="assets/monograma-verde.png" alt=""
+             style="filter:brightness(0) invert(1);opacity:.85" aria-hidden="true" />
+        Cartas con cariño
+      </span>
+      <span class="legal-links"><a href="#">@BY_KIRCO</a></span>
+    </div>
+  </div>
 </footer>
 
 <script>
@@ -154,7 +256,7 @@ main { flex: 1; display: flex; flex-direction: column; align-items: center; padd
   var params = new URLSearchParams(window.location.search);
   var nombre = params.get('first_name');
   if (nombre && nombre.trim()) {
-    document.getElementById('saludo').textContent = 'Querido ' + nombre.trim() + ',';
+    document.getElementById('saludo').textContent = 'Querido/a ' + nombre.trim() + ',';
     var campoNombre = document.getElementById('fieldNombre');
     if (campoNombre) campoNombre.value = nombre.trim();
   }
