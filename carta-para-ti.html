@@ -63,9 +63,12 @@ main { flex: 1; display: flex; flex-direction: column; align-items: center; padd
 .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .select-wrap { position: relative; }
 .select-wrap::after { content: '▾'; position: absolute; right: 16px; top: 50%; transform: translateY(-50%); color: var(--kirco-ink-soft); pointer-events: none; font-size: 14px; }
-.check-privacidad { display: flex; align-items: flex-start; gap: 10px; color: var(--kirco-paper); font-size: 13px; line-height: 1.55; margin-top: 4px; }
-.check-privacidad input[type="checkbox"] { width: 20px; height: 20px; min-width: 20px; margin-top: 1px; accent-color: var(--kirco-orange); cursor: pointer; position: relative; z-index: 1; }
-.check-privacidad label { cursor: pointer; }
+.check-privacidad { position: relative; display: flex; align-items: flex-start; gap: 10px; color: var(--kirco-paper); font-size: 13px; line-height: 1.55; margin-top: 4px; }
+.check-privacidad input[type="checkbox"] { position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none; }
+.check-privacidad label { cursor: pointer; display: flex; align-items: flex-start; gap: 10px; }
+.check-box { width: 20px; height: 20px; min-width: 20px; margin-top: 1px; background: var(--kirco-paper); border-radius: 5px; border: 2px solid rgba(247,241,227,0.45); display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background 140ms ease, border-color 140ms ease, box-shadow 140ms ease; }
+.check-privacidad input[type="checkbox"]:checked + label .check-box { background: var(--kirco-orange); border-color: var(--kirco-orange); box-shadow: 0 0 0 3px rgba(255,170,77,.28); }
+.check-privacidad input[type="checkbox"]:checked + label .check-box::after { content: ''; display: block; width: 10px; height: 6px; border-left: 2.5px solid #fff; border-bottom: 2.5px solid #fff; transform: rotate(-45deg) translateY(-1px); }
 .check-privacidad a { color: var(--kirco-yellow); text-decoration: underline; text-underline-offset: 2px; }
 .btn-cartita { display: block; width: 100%; font-family: var(--font-display); font-weight: 800; font-size: 18px; color: var(--kirco-orange-deep); background: var(--kirco-paper); border: none; border-radius: var(--radius-pill); padding: 16px; cursor: pointer; transition: transform 180ms ease-out, filter 180ms ease-out; margin-top: 6px; }
 .btn-cartita:hover { transform: translateY(-2px); filter: brightness(0.97); }
@@ -204,7 +207,7 @@ footer h4 {
         </div>
         <div class="check-privacidad">
           <input type="checkbox" name="privacidad" id="privacidadCheck" required />
-          <label for="privacidadCheck">He leído y acepto la <a href="/politica-privacidad.html" target="_blank" rel="noopener">política de privacidad</a></label>
+          <label for="privacidadCheck"><span class="check-box" aria-hidden="true"></span>He leído y acepto la <a href="/politica-privacidad.html" target="_blank" rel="noopener">política de privacidad</a></label>
         </div>
         <button class="btn-cartita" type="submit">Envíame mi cartita</button>
         <p class="solo-espanya">Solo España, por ahora</p>
