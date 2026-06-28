@@ -752,6 +752,7 @@ footer h4 {
         <form id="formPedido">
           <input type="text" name="first_name" placeholder="Tu nombre" required />
           <input type="email" name="email_address" placeholder="tu@correo.com" required />
+          <textarea name="sobre_ti" placeholder="Cuéntame un poco de ti" rows="4"></textarea>
           <button type="submit" class="btn">Quiero mi carta</button>
           <p class="form-status" id="statusPedido"></p>
         </form>
@@ -926,11 +927,13 @@ function submitForm(form, statusEl, asunto, msgOk) {
   if (!form) return;
   form.addEventListener('submit', function (e) {
     e.preventDefault();
-    var nombre = form.querySelector('[name="first_name"]').value.trim();
-    var email  = form.querySelector('[name="email_address"]').value.trim();
+    var nombre   = form.querySelector('[name="first_name"]').value.trim();
+    var email    = form.querySelector('[name="email_address"]').value.trim();
+    var sobreTi  = form.querySelector('[name="sobre_ti"]').value.trim();
     var body = new URLSearchParams();
     body.append('email_address', email);
     body.append('fields[first_name]', nombre);
+    if (sobreTi) body.append('fields[sobre_ti]', sobreTi);
     fetch('https://app.kit.com/forms/9602040/subscriptions', {
       method: 'POST',
       mode: 'no-cors',
