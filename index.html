@@ -637,7 +637,6 @@ footer h4 {
   margin: 0 auto 48px;
   text-align: left;
 }
-.dest-prev-burbuja { display: flex; flex-direction: column; gap: 12px; }
 .prev-nube {
   border-radius: 16px 16px 16px 4px;
   padding: 20px 22px;
@@ -647,21 +646,33 @@ footer h4 {
   color: var(--kirco-ink);
   box-shadow: 0 2px 10px rgba(46,43,37,.08);
 }
-.prev-nube.verde   { background: var(--kirco-green-tint); }
-.prev-nube.naranja { background: var(--kirco-orange-tint); }
-.prev-nube p { margin: 0; }
+.prev-nube.verde   { background: #A0D76B; }
+.prev-nube.naranja { background: #FFAA4D; }
+.prev-nube p { margin: 0; color: #fff; }
 .prev-firma { display: flex; align-items: center; gap: 10px; padding: 0 4px; }
-.prev-flor { width: 34px; height: 34px; flex-shrink: 0; }
-.prev-flor.verde { filter: hue-rotate(70deg) saturate(0.55) brightness(0.78); }
+.prev-flor { width: 34px; height: 34px; flex-shrink: 0; filter: brightness(0) invert(1); }
 .prev-nombre {
   font-family: var(--font-display); font-weight: 800; font-size: 13px;
-  display: block;
+  display: block; color: var(--kirco-ink);
 }
-.prev-nombre.verde   { color: var(--kirco-green-deep); }
-.prev-nombre.naranja { color: var(--kirco-orange-deep); }
 .prev-fecha {
   font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em;
   color: var(--kirco-ink-soft); display: block;
+}
+/* animación de entrada */
+.dest-prev-burbuja {
+  display: flex; flex-direction: column; gap: 12px;
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 560ms ease-out, transform 560ms ease-out;
+}
+.dest-prev-burbuja.in-view { opacity: 1; transform: none; }
+.dest-prev-burbuja:nth-child(2) { transition-delay: 130ms; }
+.dest-prev-burbuja:nth-child(3) { transition-delay: 260ms; }
+.dest-preview-leyenda {
+  font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--kirco-ink-soft);
+  margin: -40px 0 44px;
 }
 .btn-dest {
   background: transparent;
@@ -803,6 +814,7 @@ footer h4 {
   <section class="dest-preview">
     <div class="wrap">
       <h2 class="dest-preview-h">Destinatarios</h2>
+      <p class="dest-preview-leyenda">De mis cartitas</p>
       <div class="dest-preview-grid">
 
         <div class="dest-prev-burbuja">
@@ -1062,6 +1074,18 @@ function submitForm(form, statusEl, asunto, msgOk) {
   });
 }
 
+
+/* ---------------------------------------------------------------
+   DESTINATARIOS PREVIEW — animación de entrada
+--------------------------------------------------------------- */
+(function () {
+  var obs = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { e.target.classList.add('in-view'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.dest-prev-burbuja').forEach(function (el) { obs.observe(el); });
+})();
 
 /* ---------------------------------------------------------------
    PEDIDO — fire-and-redirect a Kit (FORM ID 9602040)

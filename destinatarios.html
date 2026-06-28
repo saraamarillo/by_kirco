@@ -19,8 +19,6 @@
   --cream:        #fffde8;
   --ink:          #2e2b25;
   --ink-soft:     #6b6557;
-  --bubble-verde:   #ECF7DF;
-  --bubble-naranja: #FFF2E2;
   --font-display: "Visby Round CF", system-ui, sans-serif;
   --font-mono:    "OCR B Std", monospace;
   --radius-pill:  999px;
@@ -78,7 +76,7 @@ body { font-family: var(--font-mono); color: var(--ink); display: flex; flex-dir
   border-color: rgba(255,242,226,0.9);
 }
 
-/* ── SECCIÓN MENSAJES fondo papel + marca de agua ── */
+/* ── SECCIÓN MENSAJES ── */
 .dest-mensajes {
   background: var(--paper);
   padding: 56px 40px 80px;
@@ -96,67 +94,49 @@ body { font-family: var(--font-mono); color: var(--ink); display: flex; flex-dir
   pointer-events: none;
 }
 
-/* ── GRID MASONRY ── */
+/* ── GRID ── */
 .burbujas-grid {
   position: relative; z-index: 1;
   max-width: 1100px; margin: 0 auto;
-  columns: 280px 3;
-  column-gap: 24px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
 }
 
 /* ── BURBUJA ── */
 .burbuja {
-  break-inside: avoid;
-  display: inline-block;
-  width: 100%;
-  margin-bottom: 36px;
   opacity: 0;
-  transition: opacity 500ms ease-out;
+  transform: translateY(20px);
+  transition: opacity 480ms ease-out, transform 480ms ease-out;
 }
-.burbuja.visible { opacity: 1; }
+.burbuja.visible { opacity: 1; transform: none; }
 
 .burbuja-nube {
   border-radius: 18px 18px 18px 4px;
   padding: 20px 22px;
   font-family: var(--font-mono); font-size: 14px; line-height: 1.75;
-  color: var(--ink);
-  box-shadow: 0 2px 10px rgba(46,43,37,.08);
+  color: #fff;
+  box-shadow: 0 2px 10px rgba(46,43,37,.12);
 }
-.burbuja-nube.verde   { background: var(--bubble-verde); }
-.burbuja-nube.naranja { background: var(--bubble-naranja); }
+.burbuja-nube.verde   { background: #A0D76B; }
+.burbuja-nube.naranja { background: #FFAA4D; }
 .burbuja-nube p { margin: 0; }
 
 .burbuja-firma {
   display: flex; align-items: center; gap: 12px;
-  padding: 12px 4px 0;
+  padding: 10px 4px 0;
 }
-
-/* Icono flor: sin círculo */
 .burbuja-foto {
-  width: 38px; height: 38px; min-width: 38px;
+  width: 36px; height: 36px; min-width: 36px;
   display: flex; align-items: center; justify-content: center;
 }
-.burbuja-foto img { width: 38px; height: 38px; }
-.burbuja-foto img.verde {
-  filter: hue-rotate(70deg) saturate(0.55) brightness(0.78);
-}
-/* naranja: color nativo del SVG, sin filter */
-
+.burbuja-foto img { width: 36px; height: 36px; }
 .burbuja-info { display: flex; flex-direction: column; gap: 2px; }
-.burbuja-nombre { font-family: var(--font-display); font-weight: 800; font-size: 14px; }
-.burbuja-nombre.verde   { color: var(--green-deep); }
-.burbuja-nombre.naranja { color: var(--orange-deep); }
-.burbuja-fecha {
-  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em;
-  color: var(--ink-soft);
-}
+.burbuja-nombre { font-family: var(--font-display); font-weight: 800; font-size: 14px; color: var(--ink); }
+.burbuja-fecha { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em; color: var(--ink-soft); }
 
 /* ── FOOTER ── */
-footer {
-  background: var(--orange-deep);
-  padding: 72px 0 52px;
-  color: var(--paper);
-}
+footer { background: var(--orange-deep); padding: 72px 0 52px; color: var(--paper); }
 .wrap { max-width: 1120px; margin: 0 auto; padding: 0 40px; }
 .footer-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 64px; align-items: start; }
 .logo-foot { height: 84px; }
@@ -176,6 +156,7 @@ footer h4 { font-family: var(--font-mono); font-size: 11px; font-weight: 400; le
 
 @media (max-width: 900px) {
   .dest-titulo { font-size: 52px; }
+  .burbujas-grid { grid-template-columns: repeat(2, 1fr); }
   .footer-grid { grid-template-columns: 1fr; gap: 40px; }
 }
 @media (max-width: 600px) {
@@ -184,7 +165,7 @@ footer h4 { font-family: var(--font-mono); font-size: 11px; font-weight: 400; le
   .dest-header { padding: 90px 24px 44px; }
   .dest-titulo { font-size: 38px; }
   .dest-mensajes { padding: 36px 20px 56px; }
-  .burbujas-grid { columns: 1; }
+  .burbujas-grid { grid-template-columns: 1fr; }
   .wrap { padding: 0 24px; }
 }
 </style>
@@ -248,6 +229,7 @@ footer h4 { font-family: var(--font-mono); font-size: 11px; font-weight: 400; le
 
 <script>
 var mensajes = [
+  /* Recientes: 2024 en adelante o sin fecha */
   { fecha: "26/08/2025", hora: "07:19", nombre: "Desconocido",   mensaje: "J ai trouvé dans une plage une petite bouteille en verre dedans un petit papier avec un beau message signé par By-kirco. J ai décidé de rentrer en contact avec cette personne pour la remercier. Est ce que c est vous By-kirco ? Thank u" },
   { fecha: "18/04/2025", hora: "16:24", nombre: "Nerea",          mensaje: "Holaa! El sábado paseando por El Retiro me encontré una de vuestras cartitas en un banco y me atreví a abrirla. ¡Me hizo muchísima ilusión! Gracias desde Badajoz ❤️ 🫶🏼" },
   { fecha: "21/02/2025", hora: "08:45", nombre: "Llaima",         mensaje: "Hola encontré tu mejor historia 🙂 en metro prosperidad. Mil gracias 😊!!! Y sabes justo iba a una clase de teatro y compartí esto al principio de la clase con todos porque me pareció muy bonito y todos encantados con la idea, tipo cadena de favores. Me ha encantado el texto y a mano. Cuando sea nuestra obra de fin de curso te invitaré hihi buen finde!!!" },
@@ -259,6 +241,7 @@ var mensajes = [
   { fecha: null,         hora: "14:36", nombre: "Lili",           mensaje: "Hola acabo de encontrar una de tus cartas, y la verdad es que estoy en una etapa de mi vida en la que el mensaje me hace fuerte, y sobre todo me quita las ganas de dejar de luchar.\nGracias a ti por dar la gotita de esperanza que a veces cambia el mundo de alguien" },
   { fecha: "03/10/2024", hora: "19:48", nombre: "Alejandra",      mensaje: "Me ha llegado la cartita y me ha encantado. Me alegraste el día 🥰. ¡Gracias!" },
   { fecha: "12/01/2024", hora: "00:23", nombre: "Noa",            mensaje: "Holiii, encontré tu tarjetita de la rosa, me hizo mucha ilu 🥰" },
+  /* Antiguos: hasta 2023 */
   { fecha: "07/06/2023", hora: "14:43", nombre: "Álvaro",         mensaje: "Me encontré uno de tus mensajes 😚\nMe animó mucho 🙂\nDespués de una situación complicada en el trabajo la semana pasada\nParece que fue el destinooo jeje" },
   { fecha: "10/01/2023", hora: "21:22", nombre: "Elena",          mensaje: "Me quedé con el mensaje y dejé la nota otra vez para que así tú y tu bonito acto lleguen a más personas" },
   { fecha: "14/09/2021", hora: "21:59", nombre: "Andrea",         mensaje: "¡Hola! Paseando por la Zenia Boulevard he encontrado una cartita, tras dudarlo unos segundos he decidido abrirla y me he alegrado un montón. Quería agradecerte por tomarte un momento y escribir a gente desconocida cosas tan bonitas. Ha sido todo un placer" },
@@ -267,22 +250,27 @@ var mensajes = [
   { fecha: "21/08/2021", hora: "18:24", nombre: "Kimera",         mensaje: "Holaaa me he encontrado tu cartita en Quevedo!!\nIba a trabajar súper amargada y me has cambiado un poco la mañana, gracias!" },
   { fecha: "07/05/2021", hora: "18:55", nombre: "Viryi",          mensaje: "Hola, ayer en un banco del metro de Canillas encontré tu mensaje. Fue de casualidad, me dieron una mala noticia en mi trabajo, iba tan sumida en mis pensamientos que me pasé de parada y así fue como esperando al metro encontré tu mensaje. Me dio un subidón tremendo y me dije: justo lo que necesitaba leer. Gracias, seguiré tu consejo: no viviré mi vida esperando, dejaré fluir. Un saludo" },
   { fecha: "22/04/2021", hora: "15:38", nombre: "Tammy",          mensaje: "Me has hecho el día\nEs una carta súper bonita" },
-  { fecha: null,         hora: "20:18", nombre: "Diana",          mensaje: "Hola. Quería decirte que he encontrado esta tarde la tarjeta amarilla que has dejado en la estación de Colombia. Me ha parecido una idea muy chula que puede ser útil a mucha gente. Quería, por último, pedirte permiso para compartir las fotografías en mis stories mencionándote 😛" },
+  { fecha: "22/04/2021", hora: "20:18", nombre: "Diana",          mensaje: "Hola. Quería decirte que he encontrado esta tarde la tarjeta amarilla que has dejado en la estación de Colombia. Me ha parecido una idea muy chula que puede ser útil a mucha gente. Quería, por último, pedirte permiso para compartir las fotografías en mis stories mencionándote 😛" },
   { fecha: "21/04/2021", hora: "22:45", nombre: "Laura",          mensaje: "Hola te escribo porque he encontrado tu carta esta tarde, me ha parecido algo precioso ☺️ y bueno, quería darte las gracias por hacer estas cosas tan bonitas ❤️" }
 ];
 
+var vista = 'recientes';
+
+function isReciente(m) {
+  if (!m.fecha) return true;
+  return parseInt(m.fecha.split('/')[2]) >= 2024;
+}
+
 function parseFecha(f) {
-  if (!f) return null;
+  if (!f) return new Date(0); /* sin fecha → más antiguo, queda al final en orden descendente */
   var p = f.split('/');
   return new Date(+p[2], +p[1] - 1, +p[0]);
 }
 
-var orden = 'recientes';
-
-function filtrar(o) {
-  orden = o;
-  document.getElementById('btnRecientes').classList.toggle('activo', o === 'recientes');
-  document.getElementById('btnAntiguos').classList.toggle('activo', o === 'antiguos');
+function filtrar(v) {
+  vista = v;
+  document.getElementById('btnRecientes').classList.toggle('activo', v === 'recientes');
+  document.getElementById('btnAntiguos').classList.toggle('activo', v === 'antiguos');
   renderizar();
 }
 
@@ -292,25 +280,25 @@ function esc(s) {
 
 function renderizar() {
   var grid = document.getElementById('burbujasGrid');
-  var sorted = mensajes.slice().sort(function(a, b) {
-    var da = parseFecha(a.fecha), db = parseFecha(b.fecha);
-    if (!da && !db) return 0;
-    if (!da) return 1;
-    if (!db) return -1;
-    return orden === 'recientes' ? db - da : da - db;
+
+  var subset = mensajes.filter(function(m) {
+    return vista === 'recientes' ? isReciente(m) : !isReciente(m);
   });
 
-  grid.innerHTML = sorted.map(function(m, i) {
+  subset.sort(function(a, b) {
+    var da = parseFecha(a.fecha), db = parseFecha(b.fecha);
+    return vista === 'recientes' ? db - da : da - db;
+  });
+
+  grid.innerHTML = subset.map(function(m, i) {
     var alt = i % 2 === 0 ? 'verde' : 'naranja';
     var fecha = m.fecha ? m.fecha + ' · ' + m.hora : m.hora;
     return '<div class="burbuja" style="transition-delay:' + (i * 55) + 'ms">' +
       '<div class="burbuja-nube ' + alt + '"><p>' + esc(m.mensaje) + '</p></div>' +
       '<div class="burbuja-firma">' +
-        '<div class="burbuja-foto">' +
-          '<img src="assets/flor.svg" class="' + alt + '" alt="" />' +
-        '</div>' +
+        '<div class="burbuja-foto"><img src="assets/flor.svg" alt="" /></div>' +
         '<div class="burbuja-info">' +
-          '<span class="burbuja-nombre ' + alt + '">' + m.nombre + '</span>' +
+          '<span class="burbuja-nombre">' + m.nombre + '</span>' +
           '<span class="burbuja-fecha">' + fecha + '</span>' +
         '</div>' +
       '</div>' +
