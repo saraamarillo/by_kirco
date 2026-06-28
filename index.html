@@ -149,7 +149,7 @@ main, footer { position: relative; z-index: 1; }
   text-transform: uppercase; color: #FFFDDA; text-decoration: none;
   padding: 6px 14px; border-radius: var(--radius-pill); transition: background 150ms ease-out, color 150ms ease-out;
 }
-.site-header nav a:hover { background: rgba(255,255,255,0.82); color: #3a5520; }
+.site-header nav a:hover { background: rgba(255,255,255,0.82); color: #6F9C3E; }
 
 header {
   display: flex; align-items: center; justify-content: center;
@@ -614,74 +614,53 @@ footer h4 {
 .flor-legal { width: 50px; height: 50px; vertical-align: -3px; }
 
 /* ============================================================
-   DESTINATARIOS PREVIEW
+   GALERÍA BURBUJAS
    ============================================================ */
-.dest-preview {
-  background: var(--kirco-paper);
-  padding: 100px 0 120px;
-  text-align: center;
-}
-.dest-preview-h {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: clamp(44px, 7vw, 72px);
-  color: var(--kirco-green-deep);
-  margin: 0 0 52px;
-  line-height: 1.1;
-}
-.dest-preview-grid {
+.gal-burbujas {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 24px;
   max-width: 920px;
-  margin: 0 auto 48px;
+  margin: 52px auto 0;
   text-align: left;
+  padding: 0 40px;
 }
-.prev-nube {
-  border-radius: 16px 16px 16px 4px;
-  padding: 20px 22px;
-  font-family: var(--font-mono);
-  font-size: 14px;
-  line-height: 1.75;
-  color: var(--kirco-ink);
-  box-shadow: 0 2px 10px rgba(46,43,37,.08);
-}
-.prev-nube.verde   { background: #A0D76B; }
-.prev-nube.naranja { background: #FFAA4D; }
-.prev-nube p { margin: 0; color: #fff; }
-.prev-firma { display: flex; align-items: center; gap: 10px; padding: 0 4px; }
-.prev-flor { width: 34px; height: 34px; flex-shrink: 0; filter: brightness(0) invert(1); }
-.prev-nombre {
-  font-family: var(--font-display); font-weight: 800; font-size: 13px;
-  display: block; color: var(--kirco-ink);
-}
-.prev-fecha {
-  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em;
-  color: var(--kirco-ink-soft); display: block;
-}
-/* animación de entrada */
-.dest-prev-burbuja {
+.gal-burbuja {
   display: flex; flex-direction: column; gap: 12px;
   opacity: 0;
   transform: translateY(28px);
   transition: opacity 560ms ease-out, transform 560ms ease-out;
 }
-.dest-prev-burbuja.in-view { opacity: 1; transform: none; }
-.dest-prev-burbuja:nth-child(2) { transition-delay: 130ms; }
-.dest-prev-burbuja:nth-child(3) { transition-delay: 260ms; }
-.dest-preview-leyenda {
-  font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.14em;
-  text-transform: uppercase; color: var(--kirco-ink-soft);
-  margin: -40px 0 44px;
+.gal-burbuja.in-view { opacity: 1; transform: none; }
+.gal-burbuja:nth-child(2) { transition-delay: 130ms; }
+.gal-burbuja:nth-child(3) { transition-delay: 260ms; }
+.gal-nube {
+  border-radius: 16px 16px 16px 4px;
+  padding: 20px 22px;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1.75;
+  box-shadow: 0 2px 10px rgba(46,43,37,.08);
 }
-.btn-dest {
-  background: transparent;
-  color: var(--kirco-green-deep);
-  border-color: var(--kirco-green-deep);
+.gal-nube.verde   { background: #6F9C3E; }
+.gal-nube.naranja { background: #D07F1F; }
+.gal-nube p { margin: 0; color: #fff; }
+.gal-firma { display: flex; align-items: center; gap: 10px; padding: 0 4px; }
+.gal-flor { width: 34px; height: 34px; flex-shrink: 0; }
+.gal-flor.verde   { filter: hue-rotate(64deg) saturate(0.42) brightness(0.65); }
+.gal-flor.naranja { filter: hue-rotate(4deg) saturate(0.75) brightness(0.71); }
+.gal-nombre {
+  font-family: var(--font-display); font-weight: 800; font-size: 13px;
+  display: block;
 }
-.btn-dest:hover { background: var(--kirco-green-deep); color: var(--kirco-paper); filter: none; }
+.gal-nombre.verde   { color: #6F9C3E; }
+.gal-nombre.naranja { color: #D07F1F; }
+.gal-fecha {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em;
+  color: var(--kirco-ink-soft); display: block;
+}
 @media (max-width: 700px) {
-  .dest-preview-grid { grid-template-columns: 1fr; max-width: 380px; }
+  .gal-burbujas { grid-template-columns: 1fr; max-width: 380px; padding: 0 24px; }
 }
 
 /* ============================================================
@@ -810,63 +789,12 @@ footer h4 {
     </div>
   </section>
 
-  <!-- ===== DESTINATARIOS PREVIEW ===== -->
-  <section class="dest-preview">
-    <div class="wrap">
-      <h2 class="dest-preview-h">Destinatarios</h2>
-      <p class="dest-preview-leyenda">De mis cartitas</p>
-      <div class="dest-preview-grid">
-
-        <div class="dest-prev-burbuja">
-          <div class="prev-nube verde">
-            <p>Hola! Lo he encontrado yo, muchas gracias! Necesitaba leer algo así</p>
-          </div>
-          <div class="prev-firma">
-            <img class="prev-flor verde" src="assets/flor.svg" alt="" />
-            <div>
-              <span class="prev-nombre verde">Sara</span>
-              <span class="prev-fecha">12/01/2025</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="dest-prev-burbuja">
-          <div class="prev-nube naranja">
-            <p>Holiii, encontré tu tarjetita de la rosa, me hizo mucha ilu 🥰</p>
-          </div>
-          <div class="prev-firma">
-            <img class="prev-flor naranja" src="assets/flor.svg" alt="" />
-            <div>
-              <span class="prev-nombre naranja">Noa</span>
-              <span class="prev-fecha">12/01/2024</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="dest-prev-burbuja">
-          <div class="prev-nube verde">
-            <p>Me ha llegado la cartita y me ha encantado. Me alegraste el día 🥰. ¡Gracias!</p>
-          </div>
-          <div class="prev-firma">
-            <img class="prev-flor verde" src="assets/flor.svg" alt="" />
-            <div>
-              <span class="prev-nombre verde">Alejandra</span>
-              <span class="prev-fecha">03/10/2024</span>
-            </div>
-          </div>
-        </div>
-
-      </div>
-      <a href="/destinatarios.html" class="btn btn-dest">Ver más</a>
-    </div>
-  </section>
-
   <!-- ===== GALERÍA ===== -->
   <section class="galeria">
     <div class="flor-marca verde g1f"></div>
     <div class="flor-marca verde g2f"></div>
     <h2>Cartitas que ya encontraron a alguien</h2>
-    <p class="gal-sub">Dejadas por ahí, con cariño</p>
+    <p class="gal-sub">Con cariño, para ti.</p>
     <div class="gal-strip" id="galStrip">
       <div class="polaroid" style="--i:0">
         <img class="foto" src="assets/galeria/02-naturaleza.png" alt="Cartita naranja entre la hierba" />
@@ -892,6 +820,48 @@ footer h4 {
         <img class="foto" src="assets/galeria/01-calle.png" alt="Cartita en la calle" />
         <div class="pie"><img src="assets/monograma-verde.png" alt="" /><span>Parabrisas con suerte</span></div>
       </div>
+    </div>
+    <div class="gal-burbujas">
+
+      <div class="gal-burbuja">
+        <div class="gal-nube verde">
+          <p>Hola! Lo he encontrado yo, muchas gracias! Necesitaba leer algo así</p>
+        </div>
+        <div class="gal-firma">
+          <img class="gal-flor verde" src="assets/flor.svg" alt="" />
+          <div>
+            <span class="gal-nombre verde">Sara</span>
+            <span class="gal-fecha">12/01/2025</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="gal-burbuja">
+        <div class="gal-nube naranja">
+          <p>Holiii, encontré tu tarjetita de la rosa, me hizo mucha ilu 🥰</p>
+        </div>
+        <div class="gal-firma">
+          <img class="gal-flor naranja" src="assets/flor.svg" alt="" />
+          <div>
+            <span class="gal-nombre naranja">Noa</span>
+            <span class="gal-fecha">12/01/2024</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="gal-burbuja">
+        <div class="gal-nube verde">
+          <p>Me ha llegado la cartita y me ha encantado. Me alegraste el día 🥰. ¡Gracias!</p>
+        </div>
+        <div class="gal-firma">
+          <img class="gal-flor verde" src="assets/flor.svg" alt="" />
+          <div>
+            <span class="gal-nombre verde">Alejandra</span>
+            <span class="gal-fecha">03/10/2024</span>
+          </div>
+        </div>
+      </div>
+
     </div>
   </section>
 
@@ -943,7 +913,7 @@ footer h4 {
     <div class="legal">
       <span>
         © 2026 by_kirco
-        <img class="flor-legal" src="assets/monograma-verde.png" alt=""
+        <img class="flor-legal" src="assets/flor.svg" alt=""
              style="filter:brightness(0) invert(1);opacity:.85" aria-hidden="true" />
         Cartas con cariño
       </span>
@@ -1084,7 +1054,7 @@ function submitForm(form, statusEl, asunto, msgOk) {
       if (e.isIntersecting) { e.target.classList.add('in-view'); obs.unobserve(e.target); }
     });
   }, { threshold: 0.12 });
-  document.querySelectorAll('.dest-prev-burbuja').forEach(function (el) { obs.observe(el); });
+  document.querySelectorAll('.gal-burbuja').forEach(function (el) { obs.observe(el); });
 })();
 
 /* ---------------------------------------------------------------
