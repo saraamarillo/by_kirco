@@ -39,10 +39,10 @@ html { margin: 0; padding: 0; scroll-behavior: smooth; }
 body { margin: 0; padding: 0; background: var(--kirco-paper); color: var(--kirco-ink); font-family: var(--font-body); min-height: 100vh; display: flex; flex-direction: column; }
 .site-header { position: absolute; top: 0; left: 0; right: 0; z-index: 10; padding: 18px 40px 44px; background: linear-gradient(to bottom, rgba(111,156,62,0.5) 0%, transparent 100%); display: flex; align-items: center; justify-content: space-between; gap: 24px; }
 .site-header .logo-link { flex-shrink: 0; display: flex; align-items: center; }
-.site-header .logo { height: 52px; width: auto; }
+.site-header .logo { height: 64px; width: auto; }
 .site-header nav { display: flex; gap: 8px; flex-wrap: wrap; }
-.site-header nav a { font-family: var(--font-mono); font-size: 12px; letter-spacing: var(--track-mono); text-transform: uppercase; color: #FFFDDA; text-decoration: none; padding: 6px 14px; border-radius: var(--radius-pill); transition: background 150ms ease-out; }
-.site-header nav a:hover { background: rgba(255,253,218,.25); }
+.site-header nav a { font-family: var(--font-mono); font-size: 12px; letter-spacing: var(--track-mono); text-transform: uppercase; color: #FFFDDA; text-decoration: none; padding: 6px 14px; border-radius: var(--radius-pill); transition: background 150ms ease-out, color 150ms ease-out; }
+.site-header nav a:hover { background: rgba(255,255,255,0.82); color: #3a5520; }
 main { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 100px 24px 80px; }
 .kicker { font-family: var(--font-mono); font-size: 13px; letter-spacing: var(--track-mono); text-transform: uppercase; color: var(--kirco-orange-deep); text-align: center; margin: 0 0 40px; }
 .carta-wrap { position: relative; width: 100%; max-width: 520px; }

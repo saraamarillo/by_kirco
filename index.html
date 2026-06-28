@@ -142,14 +142,14 @@ main, footer { position: relative; z-index: 1; }
   display: flex; align-items: center; justify-content: space-between; gap: 24px;
 }
 .site-header .logo-link { flex-shrink: 0; display: flex; align-items: center; }
-.site-header .logo { height: 52px; }
+.site-header .logo { height: 64px; }
 .site-header nav { display: flex; gap: 8px; flex-wrap: wrap; }
 .site-header nav a {
   font-family: var(--font-mono); font-size: 12px; letter-spacing: var(--track-mono);
   text-transform: uppercase; color: #FFFDDA; text-decoration: none;
-  padding: 6px 14px; border-radius: var(--radius-pill); transition: background 150ms ease-out;
+  padding: 6px 14px; border-radius: var(--radius-pill); transition: background 150ms ease-out, color 150ms ease-out;
 }
-.site-header nav a:hover { background: rgba(255,253,218,.25); }
+.site-header nav a:hover { background: rgba(255,255,255,0.82); color: #3a5520; }
 
 header {
   display: flex; align-items: center; justify-content: center;
@@ -614,6 +614,66 @@ footer h4 {
 .flor-legal { width: 50px; height: 50px; vertical-align: -3px; }
 
 /* ============================================================
+   DESTINATARIOS PREVIEW
+   ============================================================ */
+.dest-preview {
+  background: var(--kirco-paper);
+  padding: 100px 0 120px;
+  text-align: center;
+}
+.dest-preview-h {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(44px, 7vw, 72px);
+  color: var(--kirco-green-deep);
+  margin: 0 0 52px;
+  line-height: 1.1;
+}
+.dest-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  max-width: 920px;
+  margin: 0 auto 48px;
+  text-align: left;
+}
+.dest-prev-burbuja { display: flex; flex-direction: column; gap: 12px; }
+.prev-nube {
+  border-radius: 16px 16px 16px 4px;
+  padding: 20px 22px;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--kirco-ink);
+  box-shadow: 0 2px 10px rgba(46,43,37,.08);
+}
+.prev-nube.verde   { background: var(--kirco-green-tint); }
+.prev-nube.naranja { background: var(--kirco-orange-tint); }
+.prev-nube p { margin: 0; }
+.prev-firma { display: flex; align-items: center; gap: 10px; padding: 0 4px; }
+.prev-flor { width: 34px; height: 34px; flex-shrink: 0; }
+.prev-flor.verde { filter: hue-rotate(70deg) saturate(0.55) brightness(0.78); }
+.prev-nombre {
+  font-family: var(--font-display); font-weight: 800; font-size: 13px;
+  display: block;
+}
+.prev-nombre.verde   { color: var(--kirco-green-deep); }
+.prev-nombre.naranja { color: var(--kirco-orange-deep); }
+.prev-fecha {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em;
+  color: var(--kirco-ink-soft); display: block;
+}
+.btn-dest {
+  background: transparent;
+  color: var(--kirco-green-deep);
+  border-color: var(--kirco-green-deep);
+}
+.btn-dest:hover { background: var(--kirco-green-deep); color: var(--kirco-paper); filter: none; }
+@media (max-width: 700px) {
+  .dest-preview-grid { grid-template-columns: 1fr; max-width: 380px; }
+}
+
+/* ============================================================
    RESPONSIVE
    ============================================================ */
 /* ---- Tablet ---- */
@@ -736,6 +796,56 @@ footer h4 {
         </div>
         <div class="env-flap"></div>
       </div>
+    </div>
+  </section>
+
+  <!-- ===== DESTINATARIOS PREVIEW ===== -->
+  <section class="dest-preview">
+    <div class="wrap">
+      <h2 class="dest-preview-h">Destinatarios</h2>
+      <div class="dest-preview-grid">
+
+        <div class="dest-prev-burbuja">
+          <div class="prev-nube verde">
+            <p>Hola! Lo he encontrado yo, muchas gracias! Necesitaba leer algo así</p>
+          </div>
+          <div class="prev-firma">
+            <img class="prev-flor verde" src="assets/flor.svg" alt="" />
+            <div>
+              <span class="prev-nombre verde">Sara</span>
+              <span class="prev-fecha">12/01/2025</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="dest-prev-burbuja">
+          <div class="prev-nube naranja">
+            <p>Holiii, encontré tu tarjetita de la rosa, me hizo mucha ilu 🥰</p>
+          </div>
+          <div class="prev-firma">
+            <img class="prev-flor naranja" src="assets/flor.svg" alt="" />
+            <div>
+              <span class="prev-nombre naranja">Noa</span>
+              <span class="prev-fecha">12/01/2024</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="dest-prev-burbuja">
+          <div class="prev-nube verde">
+            <p>Me ha llegado la cartita y me ha encantado. Me alegraste el día 🥰. ¡Gracias!</p>
+          </div>
+          <div class="prev-firma">
+            <img class="prev-flor verde" src="assets/flor.svg" alt="" />
+            <div>
+              <span class="prev-nombre verde">Alejandra</span>
+              <span class="prev-fecha">03/10/2024</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <a href="/destinatarios.html" class="btn btn-dest">Ver más</a>
     </div>
   </section>
 

@@ -15,12 +15,12 @@
   --green-deep:   #6f9c3e;
   --orange:       #ffaa4d;
   --orange-deep:  #d07f1f;
-  --yellow:       #fffa7d;
   --paper:        #f7f1e3;
   --cream:        #fffde8;
   --ink:          #2e2b25;
   --ink-soft:     #6b6557;
-  --bubble:       #ECF7DF;
+  --bubble-verde:   #ECF7DF;
+  --bubble-naranja: #FFF2E2;
   --font-display: "Visby Round CF", system-ui, sans-serif;
   --font-mono:    "OCR B Std", monospace;
   --radius-pill:  999px;
@@ -38,46 +38,45 @@ body { font-family: var(--font-mono); color: var(--ink); display: flex; flex-dir
   display: flex; align-items: center; justify-content: space-between; gap: 24px;
 }
 .site-header .logo-link { flex-shrink: 0; display: flex; align-items: center; }
-.site-header .logo { height: 52px; width: auto; }
+.site-header .logo { height: 64px; width: auto; }
 .site-header nav { display: flex; gap: 6px; flex-wrap: wrap; }
 .site-header nav a {
   font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.14em;
   text-transform: uppercase; color: #FFFDDA; text-decoration: none;
   padding: 6px 14px; border-radius: var(--radius-pill);
-  transition: background 150ms ease-out;
+  transition: background 150ms ease-out, color 150ms ease-out;
 }
-.site-header nav a:hover { background: rgba(255,253,218,.25); }
-.site-header nav a.activo { background: rgba(255,253,218,.30); }
+.site-header nav a:hover,
+.site-header nav a.activo { background: rgba(255,255,255,0.82); color: #3a5520; }
 
-/* ── CABECERA CREMA ── */
+/* ── CABECERA VERDE OSCURO ── */
 .dest-header {
-  background: var(--cream);
-  padding: 110px 40px 48px;
+  background: var(--green-deep);
+  padding: 110px 40px 52px;
   text-align: center;
 }
 .kicker {
   font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em;
-  text-transform: uppercase; color: var(--orange-deep); margin: 0 0 14px;
+  text-transform: uppercase; color: rgba(255,242,226,0.65); margin: 0 0 14px;
 }
 .dest-titulo {
-  font-family: var(--font-display); font-weight: 800; font-size: 56px;
-  color: var(--green-deep); margin: 0 0 10px; line-height: 1.1;
-}
-.dest-sub {
-  font-family: var(--font-mono); font-size: 14px; line-height: 1.7;
-  color: var(--ink-soft); max-width: 440px; margin: 0 auto 36px;
+  font-family: var(--font-display); font-weight: 800; font-size: 72px;
+  color: #FFF2E2; margin: 0 0 40px; line-height: 1.0;
 }
 
 /* ── FILTROS ── */
 .filtros { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
 .filtro {
   font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.14em;
-  text-transform: uppercase; color: var(--green-deep);
-  background: transparent; border: 2px solid var(--green-deep);
+  text-transform: uppercase; color: #FFF2E2;
+  background: transparent; border: 2px solid rgba(255,242,226,0.45);
   border-radius: var(--radius-pill); padding: 8px 20px;
-  cursor: pointer; transition: background 150ms ease-out, color 150ms ease-out;
+  cursor: pointer; transition: background 150ms ease-out, border-color 150ms ease-out;
 }
-.filtro.activo, .filtro:hover { background: var(--green-deep); color: var(--paper); }
+.filtro.activo, .filtro:hover {
+  background: rgba(255,242,226,0.18);
+  border-color: rgba(255,242,226,0.9);
+}
 
 /* ── SECCIÓN MENSAJES fondo papel + marca de agua ── */
 .dest-mensajes {
@@ -110,20 +109,21 @@ body { font-family: var(--font-mono); color: var(--ink); display: flex; flex-dir
   break-inside: avoid;
   display: inline-block;
   width: 100%;
-  margin-bottom: 24px;
+  margin-bottom: 36px;
   opacity: 0;
   transition: opacity 500ms ease-out;
 }
 .burbuja.visible { opacity: 1; }
 
 .burbuja-nube {
-  background: var(--bubble);
   border-radius: 18px 18px 18px 4px;
   padding: 20px 22px;
   font-family: var(--font-mono); font-size: 14px; line-height: 1.75;
   color: var(--ink);
   box-shadow: 0 2px 10px rgba(46,43,37,.08);
 }
+.burbuja-nube.verde   { background: var(--bubble-verde); }
+.burbuja-nube.naranja { background: var(--bubble-naranja); }
 .burbuja-nube p { margin: 0; }
 
 .burbuja-firma {
@@ -131,23 +131,21 @@ body { font-family: var(--font-mono); color: var(--ink); display: flex; flex-dir
   padding: 12px 4px 0;
 }
 
+/* Icono flor: sin círculo */
 .burbuja-foto {
-  width: 48px; height: 48px; min-width: 48px;
-  background: var(--green-deep);
-  border-radius: 50%;
+  width: 38px; height: 38px; min-width: 38px;
   display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 2px 8px rgba(111,156,62,.28);
 }
-.burbuja-foto img {
-  width: 30px; height: 30px;
-  filter: brightness(0) invert(1);
+.burbuja-foto img { width: 38px; height: 38px; }
+.burbuja-foto img.verde {
+  filter: hue-rotate(70deg) saturate(0.55) brightness(0.78);
 }
+/* naranja: color nativo del SVG, sin filter */
 
 .burbuja-info { display: flex; flex-direction: column; gap: 2px; }
-.burbuja-nombre {
-  font-family: var(--font-display); font-weight: 800; font-size: 14px;
-  color: var(--green-deep);
-}
+.burbuja-nombre { font-family: var(--font-display); font-weight: 800; font-size: 14px; }
+.burbuja-nombre.verde   { color: var(--green-deep); }
+.burbuja-nombre.naranja { color: var(--orange-deep); }
 .burbuja-fecha {
   font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em;
   color: var(--ink-soft);
@@ -174,16 +172,17 @@ footer h4 { font-family: var(--font-mono); font-size: 11px; font-weight: 400; le
 .legal a { color: var(--paper); text-decoration: none; }
 .legal a:hover { text-decoration: underline; }
 .legal .legal-links { display: flex; gap: 20px; }
-.flor-legal { width: 44px; height: 44px; vertical-align: -3px; filter: brightness(0) invert(1); opacity: .85; }
+.flor-legal { width: 44px; height: 44px; vertical-align: -3px; opacity: .85; }
 
 @media (max-width: 900px) {
-  .dest-titulo { font-size: 42px; }
+  .dest-titulo { font-size: 52px; }
   .footer-grid { grid-template-columns: 1fr; gap: 40px; }
 }
 @media (max-width: 600px) {
   .site-header { padding: 16px 20px 40px; }
-  .dest-header { padding: 90px 24px 40px; }
-  .dest-titulo { font-size: 34px; }
+  .site-header .logo { height: 52px; }
+  .dest-header { padding: 90px 24px 44px; }
+  .dest-titulo { font-size: 38px; }
   .dest-mensajes { padding: 36px 20px 56px; }
   .burbujas-grid { columns: 1; }
   .wrap { padding: 0 24px; }
@@ -203,7 +202,6 @@ footer h4 { font-family: var(--font-mono); font-size: 11px; font-weight: 400; le
 <section class="dest-header">
   <p class="kicker">Mensajes de quienes encontraron una cartita</p>
   <h1 class="dest-titulo">Destinatarios</h1>
-  <p class="dest-sub">Cada vez que alguien me escribe, guardo sus palabras aquí.</p>
   <div class="filtros">
     <button id="btnRecientes" class="filtro activo" onclick="filtrar('recientes')">Más recientes</button>
     <button id="btnAntiguos"  class="filtro"        onclick="filtrar('antiguos')">Más antiguos</button>
@@ -240,7 +238,7 @@ footer h4 { font-family: var(--font-mono); font-size: 11px; font-weight: 400; le
     <div class="legal">
       <span>
         © 2026 by_kirco
-        <img class="flor-legal" src="assets/monograma-verde.png" alt="" aria-hidden="true" />
+        <img class="flor-legal" src="assets/flor.svg" alt="" aria-hidden="true" />
         Cartas con cariño
       </span>
       <span class="legal-links"><a href="/aviso-legal.html">Aviso legal</a><a href="/politica-privacidad.html">Privacidad</a></span>
@@ -303,13 +301,16 @@ function renderizar() {
   });
 
   grid.innerHTML = sorted.map(function(m, i) {
+    var alt = i % 2 === 0 ? 'verde' : 'naranja';
     var fecha = m.fecha ? m.fecha + ' · ' + m.hora : m.hora;
     return '<div class="burbuja" style="transition-delay:' + (i * 55) + 'ms">' +
-      '<div class="burbuja-nube"><p>' + esc(m.mensaje) + '</p></div>' +
+      '<div class="burbuja-nube ' + alt + '"><p>' + esc(m.mensaje) + '</p></div>' +
       '<div class="burbuja-firma">' +
-        '<div class="burbuja-foto"><img src="assets/monograma-verde.png" alt="" /></div>' +
+        '<div class="burbuja-foto">' +
+          '<img src="assets/flor.svg" class="' + alt + '" alt="" />' +
+        '</div>' +
         '<div class="burbuja-info">' +
-          '<span class="burbuja-nombre">' + m.nombre + '</span>' +
+          '<span class="burbuja-nombre ' + alt + '">' + m.nombre + '</span>' +
           '<span class="burbuja-fecha">' + fecha + '</span>' +
         '</div>' +
       '</div>' +

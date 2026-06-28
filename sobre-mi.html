@@ -56,16 +56,16 @@ body {
   display: flex; align-items: center; justify-content: space-between; gap: 24px;
 }
 .site-header .logo-link { flex-shrink: 0; display: flex; align-items: center; }
-.site-header .logo { height: 52px; width: auto; }
+.site-header .logo { height: 64px; width: auto; }
 .site-header nav { display: flex; gap: 6px; flex-wrap: wrap; }
 .site-header nav a {
   font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.14em;
   text-transform: uppercase; color: #FFFDDA; text-decoration: none;
   padding: 6px 14px; border-radius: var(--radius-pill);
-  transition: background 150ms ease-out;
+  transition: background 150ms ease-out, color 150ms ease-out;
 }
-.site-header nav a:hover { background: rgba(255,253,218,.25); }
-.site-header nav a.activo { background: rgba(255,253,218,.30); }
+.site-header nav a:hover,
+.site-header nav a.activo { background: rgba(255,255,255,0.82); color: #3a5520; }
 
 /* ── MAIN ── */
 main {
@@ -138,6 +138,25 @@ footer h4 { font-family: var(--font-mono); font-size: 11px; font-weight: 400; le
 .legal .legal-links { display: flex; gap: 20px; }
 .flor-legal { width: 44px; height: 44px; vertical-align: -3px; filter: brightness(0) invert(1); opacity: .85; }
 
+/* ── STICKERS ── */
+.sticker {
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.88;
+}
+.sticker-margarita {
+  left: -60px; top: 50%;
+  transform: translateY(-50%) rotate(-8deg);
+  width: 200px;
+}
+.sticker-carta {
+  right: -40px; bottom: 100px;
+  transform: rotate(10deg);
+  width: 170px;
+}
+
+@media (max-width: 1100px) { .sticker { display: none; } }
 @media (max-width: 760px) {
   .site-header { padding: 16px 20px 40px; }
   main { padding: 100px 24px 60px; }
@@ -162,6 +181,8 @@ footer h4 { font-family: var(--font-mono); font-size: 11px; font-weight: 400; le
 </header>
 
 <main>
+  <img class="sticker sticker-margarita" src="assets/sobre-mi/margarita_sticker.png" alt="" aria-hidden="true" />
+  <img class="sticker sticker-carta" src="assets/sobre-mi/carta-sticker.png" alt="" aria-hidden="true" />
   <div class="contenido">
     <p class="kicker">La historia detrás de las cartitas</p>
     <div class="texto-area" id="textoArea">
