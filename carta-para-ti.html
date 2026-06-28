@@ -63,8 +63,9 @@ main { flex: 1; display: flex; flex-direction: column; align-items: center; padd
 .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .select-wrap { position: relative; }
 .select-wrap::after { content: '▾'; position: absolute; right: 16px; top: 50%; transform: translateY(-50%); color: var(--kirco-ink-soft); pointer-events: none; font-size: 14px; }
-.check-privacidad { display: flex; align-items: flex-start; gap: 10px; cursor: pointer; color: var(--kirco-paper); font-size: 13px; line-height: 1.55; margin-top: 4px; }
-.check-privacidad input[type="checkbox"] { width: 18px; height: 18px; min-width: 18px; margin-top: 1px; accent-color: var(--kirco-orange); cursor: pointer; }
+.check-privacidad { display: flex; align-items: flex-start; gap: 10px; color: var(--kirco-paper); font-size: 13px; line-height: 1.55; margin-top: 4px; }
+.check-privacidad input[type="checkbox"] { width: 20px; height: 20px; min-width: 20px; margin-top: 1px; accent-color: var(--kirco-orange); cursor: pointer; position: relative; z-index: 1; }
+.check-privacidad label { cursor: pointer; }
 .check-privacidad a { color: var(--kirco-yellow); text-decoration: underline; text-underline-offset: 2px; }
 .btn-cartita { display: block; width: 100%; font-family: var(--font-display); font-weight: 800; font-size: 18px; color: var(--kirco-orange-deep); background: var(--kirco-paper); border: none; border-radius: var(--radius-pill); padding: 16px; cursor: pointer; transition: transform 180ms ease-out, filter 180ms ease-out; margin-top: 6px; }
 .btn-cartita:hover { transform: translateY(-2px); filter: brightness(0.97); }
@@ -174,8 +175,8 @@ footer h4 {
     <div class="carta-sombra" aria-hidden="true"></div>
     <article class="carta">
       <p class="saludo" id="saludo">Querido/a desconocido/a,</p>
-      <p>estoy escribiendo un mensaje para ti.</p>
-      <p>Estate atento/a a tu correo que pronto te mandaré tu carta personalizada.</p>
+      <p>Gracias por contarme un poco de ti.</p>
+      <p>Estate atento/a a tu correo que pronto te mandaré tu carta personalizada con mucho cariño.</p>
       <div class="firma">
         <img class="firma-logo" src="assets/monograma-verde.png" alt="" aria-hidden="true" />
         <span class="firma-texto">by_kirco</span>
@@ -201,10 +202,10 @@ footer h4 {
             <option value="España" selected>España</option>
           </select>
         </div>
-        <label class="check-privacidad">
-          <input type="checkbox" name="privacidad" required />
-          <span>He leído y acepto la <a href="/politica-privacidad.html" target="_blank" rel="noopener">política de privacidad</a></span>
-        </label>
+        <div class="check-privacidad">
+          <input type="checkbox" name="privacidad" id="privacidadCheck" required />
+          <label for="privacidadCheck">He leído y acepto la <a href="/politica-privacidad.html" target="_blank" rel="noopener">política de privacidad</a></label>
+        </div>
         <button class="btn-cartita" type="submit">Envíame mi cartita</button>
         <p class="solo-espanya">Solo España, por ahora</p>
       </form>
