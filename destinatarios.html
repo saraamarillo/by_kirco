@@ -21,42 +21,38 @@
   --ink:          #2e2b25;
   --ink-soft:     #6b6557;
   --bubble:       #ECF7DF;
-  --nav-text:     #FFFDDA;
   --font-display: "Visby Round CF", system-ui, sans-serif;
   --font-mono:    "OCR B Std", monospace;
-  --radius-md:    16px;
-  --radius-lg:    28px;
   --radius-pill:  999px;
-  --shadow:       0 4px 12px rgba(46,43,37,.10), 0 18px 44px rgba(46,43,37,.14);
-  --track:        0.10em;
+  --radius-lg:    28px;
 }
 *, *::before, *::after { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
 body { font-family: var(--font-mono); color: var(--ink); display: flex; flex-direction: column; min-height: 100vh; }
 
-/* ── NAV GRADIENTE ── */
+/* ── HEADER NAV ── */
 .site-header {
   position: absolute; top: 0; left: 0; right: 0; z-index: 10;
-  padding: 22px 40px 48px;
-  background: linear-gradient(to bottom, #6f9c3e 0%, rgba(111,156,62,0) 100%);
+  padding: 18px 40px 44px;
+  background: linear-gradient(to bottom, rgba(111,156,62,0.5) 0%, transparent 100%);
   display: flex; align-items: center; justify-content: space-between; gap: 24px;
 }
-.site-header .logo { height: 54px; width: auto; filter: brightness(0) invert(1); }
+.site-header .logo-link { flex-shrink: 0; display: flex; align-items: center; }
+.site-header .logo { height: 52px; width: auto; }
 .site-header nav { display: flex; gap: 6px; flex-wrap: wrap; }
 .site-header nav a {
-  font-family: var(--font-mono); font-size: 12px; letter-spacing: var(--track);
-  text-transform: uppercase; color: var(--nav-text); text-decoration: none;
+  font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: #FFFDDA; text-decoration: none;
   padding: 6px 14px; border-radius: var(--radius-pill);
   transition: background 150ms ease-out;
 }
-.site-header nav a:hover { background: rgba(255,253,218,.22); }
+.site-header nav a:hover { background: rgba(255,253,218,.25); }
 .site-header nav a.activo { background: rgba(255,253,218,.30); }
-.site-header .handle { font-family: var(--font-mono); font-size: 12px; letter-spacing: var(--track); text-transform: uppercase; color: var(--nav-text); white-space: nowrap; }
 
 /* ── CABECERA CREMA ── */
 .dest-header {
   background: var(--cream);
-  padding: 120px 40px 56px;
+  padding: 110px 40px 48px;
   text-align: center;
 }
 .kicker {
@@ -75,7 +71,7 @@ body { font-family: var(--font-mono); color: var(--ink); display: flex; flex-dir
 /* ── FILTROS ── */
 .filtros { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
 .filtro {
-  font-family: var(--font-mono); font-size: 12px; letter-spacing: var(--track);
+  font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.14em;
   text-transform: uppercase; color: var(--green-deep);
   background: transparent; border: 2px solid var(--green-deep);
   border-radius: var(--radius-pill); padding: 8px 20px;
@@ -83,28 +79,42 @@ body { font-family: var(--font-mono); color: var(--ink); display: flex; flex-dir
 }
 .filtro.activo, .filtro:hover { background: var(--green-deep); color: var(--paper); }
 
-/* ── SECCIÓN VERDE (MENSAJES) ── */
+/* ── SECCIÓN MENSAJES fondo papel + marca de agua ── */
 .dest-mensajes {
-  background: var(--green-deep);
+  background: var(--paper);
   padding: 56px 40px 80px;
   flex: 1;
+  position: relative;
+  overflow: hidden;
 }
+.dest-wm {
+  position: absolute; inset: 0;
+  background-image: url("assets/monograma-verde.png"), url("assets/monograma-naranja.png");
+  background-repeat: repeat;
+  background-size: 220px 220px, 150px 150px;
+  background-position: 0 0, 110px 75px;
+  opacity: 0.055;
+  pointer-events: none;
+}
+
+/* ── GRID MASONRY ── */
 .burbujas-grid {
+  position: relative; z-index: 1;
   max-width: 1100px; margin: 0 auto;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 28px;
-  align-items: start;
+  columns: 280px 3;
+  column-gap: 24px;
 }
 
 /* ── BURBUJA ── */
 .burbuja {
-  display: flex; flex-direction: column; gap: 14px;
+  break-inside: avoid;
+  display: inline-block;
+  width: 100%;
+  margin-bottom: 24px;
   opacity: 0;
-  transform: translateY(32px);
-  transition: opacity 550ms ease-out, transform 550ms ease-out;
+  transition: opacity 500ms ease-out;
 }
-.burbuja.visible { opacity: 1; transform: none; }
+.burbuja.visible { opacity: 1; }
 
 .burbuja-nube {
   background: var(--bubble);
@@ -112,26 +122,35 @@ body { font-family: var(--font-mono); color: var(--ink); display: flex; flex-dir
   padding: 20px 22px;
   font-family: var(--font-mono); font-size: 14px; line-height: 1.75;
   color: var(--ink);
-  box-shadow: 0 2px 8px rgba(46,43,37,.10);
-  position: relative;
+  box-shadow: 0 2px 10px rgba(46,43,37,.08);
 }
+.burbuja-nube p { margin: 0; }
 
 .burbuja-firma {
-  display: flex; align-items: center; gap: 10px;
-  padding: 0 4px;
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 4px 0;
 }
-.burbuja-flor {
-  width: 32px; height: 32px; flex-shrink: 0;
-  filter: brightness(0) invert(1); opacity: 0.85;
+
+.burbuja-foto {
+  width: 48px; height: 48px; min-width: 48px;
+  background: var(--green-deep);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 2px 8px rgba(111,156,62,.28);
 }
+.burbuja-foto img {
+  width: 30px; height: 30px;
+  filter: brightness(0) invert(1);
+}
+
 .burbuja-info { display: flex; flex-direction: column; gap: 2px; }
 .burbuja-nombre {
   font-family: var(--font-display); font-weight: 800; font-size: 14px;
-  color: var(--nav-text);
+  color: var(--green-deep);
 }
 .burbuja-fecha {
   font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em;
-  color: rgba(255,253,218,.60);
+  color: var(--ink-soft);
 }
 
 /* ── FOOTER ── */
@@ -155,21 +174,18 @@ footer h4 { font-family: var(--font-mono); font-size: 11px; font-weight: 400; le
 .legal a { color: var(--paper); text-decoration: none; }
 .legal a:hover { text-decoration: underline; }
 .legal .legal-links { display: flex; gap: 20px; }
-.flor-legal { width: 44px; height: 44px; vertical-align: -3px; }
+.flor-legal { width: 44px; height: 44px; vertical-align: -3px; filter: brightness(0) invert(1); opacity: .85; }
 
-/* ── RESPONSIVE ── */
 @media (max-width: 900px) {
-  .burbujas-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
   .dest-titulo { font-size: 42px; }
   .footer-grid { grid-template-columns: 1fr; gap: 40px; }
 }
 @media (max-width: 600px) {
-  .site-header { padding: 18px 20px 44px; }
-  .site-header .handle { display: none; }
-  .dest-header { padding: 100px 24px 44px; }
+  .site-header { padding: 16px 20px 40px; }
+  .dest-header { padding: 90px 24px 40px; }
   .dest-titulo { font-size: 34px; }
-  .dest-mensajes { padding: 40px 20px 60px; }
-  .burbujas-grid { grid-template-columns: 1fr; gap: 20px; }
+  .dest-mensajes { padding: 36px 20px 56px; }
+  .burbujas-grid { columns: 1; }
   .wrap { padding: 0 24px; }
 }
 </style>
@@ -177,12 +193,11 @@ footer h4 { font-family: var(--font-mono); font-size: 11px; font-weight: 400; le
 <body>
 
 <header class="site-header">
-  <img class="logo" src="assets/logo-verde.png" alt="by_kirco" />
+  <a href="/" class="logo-link"><img class="logo" src="assets/logo-firma.png" alt="by_kirco" /></a>
   <nav>
     <a href="/sobre-mi.html">Sobre mí</a>
     <a href="/destinatarios.html" class="activo">Destinatarios</a>
   </nav>
-  <span class="handle">@BY_KIRCO</span>
 </header>
 
 <section class="dest-header">
@@ -196,6 +211,7 @@ footer h4 { font-family: var(--font-mono); font-size: 11px; font-weight: 400; le
 </section>
 
 <section class="dest-mensajes">
+  <div class="dest-wm" aria-hidden="true"></div>
   <div class="burbujas-grid" id="burbujasGrid"></div>
 </section>
 
@@ -224,38 +240,37 @@ footer h4 { font-family: var(--font-mono); font-size: 11px; font-weight: 400; le
     <div class="legal">
       <span>
         © 2026 by_kirco
-        <img class="flor-legal" src="assets/monograma-verde.png" alt=""
-             style="filter:brightness(0) invert(1);opacity:.85" aria-hidden="true" />
+        <img class="flor-legal" src="assets/monograma-verde.png" alt="" aria-hidden="true" />
         Cartas con cariño
       </span>
-      <span class="legal-links"><a href="#">@BY_KIRCO</a></span>
+      <span class="legal-links"><a href="/aviso-legal.html">Aviso legal</a><a href="/politica-privacidad.html">Privacidad</a></span>
     </div>
   </div>
 </footer>
 
 <script>
 var mensajes = [
-  { fecha: "26/08/2025", hora: "07:19", nombre: "Desconocido", mensaje: "J ai trouvé dans une plage une petite bouteille en verre dedans un petit papier avec un beau message signé par By-kirco. J ai décidé de rentrer en contact avec cette personne pour la remercier. Est ce que c est vous By-kirco ? Thank u" },
-  { fecha: "18/04/2025", hora: "16:24", nombre: "Nerea",       mensaje: "Holaa! El sábado paseando por El Retiro me encontré una de vuestras cartitas en un banco y me atreví a abrirla. ¡Me hizo muchísima ilusión! Gracias desde Badajoz ❤️ 🫶🏼" },
-  { fecha: "21/02/2025", hora: "08:45", nombre: "Llaima",      mensaje: "Hola encontré tu mejor historia 🙂 en metro prosperidad. Mil gracias 😊!!! Y sabes justo iba a una clase de teatro y compartí esto al principio de la clase con todos porque me pareció muy bonito y todos encantados con la idea, tipo cadena de favores. A mi me ha encantado el texto y a mano. Cuando sea nuestra obra de fin de curso te invitaré hihi buen finde!!!" },
-  { fecha: null,         hora: "09:19", nombre: "Yarin",       mensaje: "Hola buenos días 😃 he encontrado la cartita muy linda ❤️\nYo lo encontré me has sacado una sonrisa 🤭" },
-  { fecha: "29/01/2025", hora: "09:43", nombre: "Pablo",       mensaje: "Muchas gracias 🥹 La he dejado para el siguiente en el Hospital de La Paz 😉 🙂‍↔️\nMe ha hecho mucha ilusión jajajajaja ten muy buen día tu también anonim@" },
-  { fecha: "12/01/2025", hora: "13:14", nombre: "Sara",        mensaje: "Hola! Lo he encontrado yo, muchas gracias! Necesitaba leer algo así" },
-  { fecha: "22/12/2024", hora: "19:54", nombre: "Desconocido/a", mensaje: "Buenasss llegó una carta a mis manos jajajaja me encantó el mensaje la verdad que en cuanto la dejaste no sé quién fue pero estaba bastante agobiado, pero muy guay muchas gracias" },
-  { fecha: "20/12/2024", hora: "09:23", nombre: "Franci",      mensaje: "Hola! Gracias por la tarjeta… me la acabo de encontrar y justo pensaba en eso al entrar al metro" },
-  { fecha: null,         hora: "14:36", nombre: "Lili",        mensaje: "Hola acabo de encontrar una de tus cartas, y la verdad es que estoy en una etapa de mi vida en la que el mensaje me hace fuerte, y sobre todo me quita las ganas de dejar de luchar.\nGracias a ti por dar la gotita de esperanza que a veces cambia el mundo de alguien" },
-  { fecha: "03/10/2024", hora: "19:48", nombre: "Alejandra",   mensaje: "Me ha llegado la cartita y me ha encantado. Me alegraste el día 🥰. ¡Gracias!" },
-  { fecha: "12/01/2024", hora: "00:23", nombre: "Noa",         mensaje: "Holiii, encontré tu tarjetita de la rosa, me hizo mucha ilu 🥰" },
-  { fecha: "07/06/2023", hora: "14:43", nombre: "Álvaro",      mensaje: "Me encontré uno de tus mensajes 😚\nMe animó mucho 🙂\nDespués de una situación complicada en el trabajo la semana pasada\nParece que fue el destinooo jeje" },
-  { fecha: "10/01/2023", hora: "21:22", nombre: "Elena",       mensaje: "Me quedé con el mensaje y dejé la nota otra vez para que así tú y tu bonito acto lleguen a más personas" },
-  { fecha: "14/09/2021", hora: "21:59", nombre: "Andrea",      mensaje: "¡Hola! Paseando por la Zenia Boulevard he encontrado una cartita, tras dudarlo unos segundos he decidido abrirla y me he alegrado un montón. Quería agradecerte por tomarte un momento y escribir a gente desconocida cosas tan bonitas. Ha sido todo un placer" },
-  { fecha: "30/08/2021", hora: "13:33", nombre: "Ángel",       mensaje: "Hola por casualidad es tuya esta carta? Me gustó la carta" },
-  { fecha: "07/08/2021", hora: "00:52", nombre: "Salvador",    mensaje: "Buenas noches, he encontrado una de tus cartas a desconocidos por Estepona, Málaga.\nSimplemente quería darte las gracias por la carta y los consejos que escribiste 🤠🤠" },
-  { fecha: "21/08/2021", hora: "18:24", nombre: "Kimera",      mensaje: "Holaaa me he encontrado tu cartita en Quevedo!!\nIba a trabajar súper amargada y me has cambiado un poco la mañana, gracias!" },
-  { fecha: "07/05/2021", hora: "18:55", nombre: "Viryi",       mensaje: "Hola, ayer en un banco del metro de Canillas encontré tu mensaje. Fue de casualidad, me dieron una mala noticia en mi trabajo, iba tan sumida en mis pensamientos que me pasé de parada y así fue como esperando al metro encontré tu mensaje. Me dio un subidón tremendo y me dije: justo lo que necesitaba leer. Gracias, seguiré tu consejo: no viviré mi vida esperando, dejaré fluir. Un saludo" },
-  { fecha: "22/04/2021", hora: "15:38", nombre: "Tammy",       mensaje: "Me has hecho el día\nEs una carta súper bonita" },
-  { fecha: null,         hora: "20:18", nombre: "Diana",       mensaje: "Hola. Quería decirte que he encontrado esta tarde la tarjeta amarilla que has dejado en la estación de Colombia. Me ha parecido una idea muy chula que puede ser útil a mucha gente. Quería, por último, pedirte permiso para compartir las fotografías en mis stories mencionándote 😛" },
-  { fecha: "21/04/2021", hora: "22:45", nombre: "Laura",       mensaje: "Hola te escribo porque he encontrado tu carta esta tarde, me ha parecido algo precioso ☺️ y bueno, quería darte las gracias por hacer estas cosas tan bonitas ❤️" }
+  { fecha: "26/08/2025", hora: "07:19", nombre: "Desconocido",   mensaje: "J ai trouvé dans une plage une petite bouteille en verre dedans un petit papier avec un beau message signé par By-kirco. J ai décidé de rentrer en contact avec cette personne pour la remercier. Est ce que c est vous By-kirco ? Thank u" },
+  { fecha: "18/04/2025", hora: "16:24", nombre: "Nerea",          mensaje: "Holaa! El sábado paseando por El Retiro me encontré una de vuestras cartitas en un banco y me atreví a abrirla. ¡Me hizo muchísima ilusión! Gracias desde Badajoz ❤️ 🫶🏼" },
+  { fecha: "21/02/2025", hora: "08:45", nombre: "Llaima",         mensaje: "Hola encontré tu mejor historia 🙂 en metro prosperidad. Mil gracias 😊!!! Y sabes justo iba a una clase de teatro y compartí esto al principio de la clase con todos porque me pareció muy bonito y todos encantados con la idea, tipo cadena de favores. Me ha encantado el texto y a mano. Cuando sea nuestra obra de fin de curso te invitaré hihi buen finde!!!" },
+  { fecha: null,         hora: "09:19", nombre: "Yarin",          mensaje: "Hola buenos días 😃 he encontrado la cartita muy linda ❤️\nMe has sacado una sonrisa 🤭" },
+  { fecha: "29/01/2025", hora: "09:43", nombre: "Pablo",          mensaje: "Muchas gracias 🥹 La he dejado para el siguiente en el Hospital de La Paz 😉 🙂‍↔️\nMe ha hecho mucha ilusión jajajajaja ten muy buen día tu también anonim@" },
+  { fecha: "12/01/2025", hora: "13:14", nombre: "Sara",           mensaje: "Hola! Lo he encontrado yo, muchas gracias! Necesitaba leer algo así" },
+  { fecha: "22/12/2024", hora: "19:54", nombre: "Desconocido/a",  mensaje: "Buenasss llegó una carta a mis manos jajajaja me encantó el mensaje la verdad que en cuanto la dejaste no sé quién fue pero estaba bastante agobiado, pero muy guay muchas gracias" },
+  { fecha: "20/12/2024", hora: "09:23", nombre: "Franci",         mensaje: "Hola! Gracias por la tarjeta… me la acabo de encontrar y justo pensaba en eso al entrar al metro" },
+  { fecha: null,         hora: "14:36", nombre: "Lili",           mensaje: "Hola acabo de encontrar una de tus cartas, y la verdad es que estoy en una etapa de mi vida en la que el mensaje me hace fuerte, y sobre todo me quita las ganas de dejar de luchar.\nGracias a ti por dar la gotita de esperanza que a veces cambia el mundo de alguien" },
+  { fecha: "03/10/2024", hora: "19:48", nombre: "Alejandra",      mensaje: "Me ha llegado la cartita y me ha encantado. Me alegraste el día 🥰. ¡Gracias!" },
+  { fecha: "12/01/2024", hora: "00:23", nombre: "Noa",            mensaje: "Holiii, encontré tu tarjetita de la rosa, me hizo mucha ilu 🥰" },
+  { fecha: "07/06/2023", hora: "14:43", nombre: "Álvaro",         mensaje: "Me encontré uno de tus mensajes 😚\nMe animó mucho 🙂\nDespués de una situación complicada en el trabajo la semana pasada\nParece que fue el destinooo jeje" },
+  { fecha: "10/01/2023", hora: "21:22", nombre: "Elena",          mensaje: "Me quedé con el mensaje y dejé la nota otra vez para que así tú y tu bonito acto lleguen a más personas" },
+  { fecha: "14/09/2021", hora: "21:59", nombre: "Andrea",         mensaje: "¡Hola! Paseando por la Zenia Boulevard he encontrado una cartita, tras dudarlo unos segundos he decidido abrirla y me he alegrado un montón. Quería agradecerte por tomarte un momento y escribir a gente desconocida cosas tan bonitas. Ha sido todo un placer" },
+  { fecha: "30/08/2021", hora: "13:33", nombre: "Ángel",          mensaje: "Hola por casualidad es tuya esta carta? Me gustó la carta" },
+  { fecha: "07/08/2021", hora: "00:52", nombre: "Salvador",       mensaje: "Buenas noches, he encontrado una de tus cartas a desconocidos por Estepona, Málaga.\nSimplemente quería darte las gracias por la carta y los consejos que escribiste 🤠🤠" },
+  { fecha: "21/08/2021", hora: "18:24", nombre: "Kimera",         mensaje: "Holaaa me he encontrado tu cartita en Quevedo!!\nIba a trabajar súper amargada y me has cambiado un poco la mañana, gracias!" },
+  { fecha: "07/05/2021", hora: "18:55", nombre: "Viryi",          mensaje: "Hola, ayer en un banco del metro de Canillas encontré tu mensaje. Fue de casualidad, me dieron una mala noticia en mi trabajo, iba tan sumida en mis pensamientos que me pasé de parada y así fue como esperando al metro encontré tu mensaje. Me dio un subidón tremendo y me dije: justo lo que necesitaba leer. Gracias, seguiré tu consejo: no viviré mi vida esperando, dejaré fluir. Un saludo" },
+  { fecha: "22/04/2021", hora: "15:38", nombre: "Tammy",          mensaje: "Me has hecho el día\nEs una carta súper bonita" },
+  { fecha: null,         hora: "20:18", nombre: "Diana",          mensaje: "Hola. Quería decirte que he encontrado esta tarde la tarjeta amarilla que has dejado en la estación de Colombia. Me ha parecido una idea muy chula que puede ser útil a mucha gente. Quería, por último, pedirte permiso para compartir las fotografías en mis stories mencionándote 😛" },
+  { fecha: "21/04/2021", hora: "22:45", nombre: "Laura",          mensaje: "Hola te escribo porque he encontrado tu carta esta tarde, me ha parecido algo precioso ☺️ y bueno, quería darte las gracias por hacer estas cosas tan bonitas ❤️" }
 ];
 
 function parseFecha(f) {
@@ -273,6 +288,10 @@ function filtrar(o) {
   renderizar();
 }
 
+function esc(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+}
+
 function renderizar() {
   var grid = document.getElementById('burbujasGrid');
   var sorted = mensajes.slice().sort(function(a, b) {
@@ -284,12 +303,11 @@ function renderizar() {
   });
 
   grid.innerHTML = sorted.map(function(m, i) {
-    var texto = m.mensaje.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
     var fecha = m.fecha ? m.fecha + ' · ' + m.hora : m.hora;
-    return '<div class="burbuja" style="transition-delay:' + (i * 70) + 'ms">' +
-      '<div class="burbuja-nube"><p>' + texto + '</p></div>' +
+    return '<div class="burbuja" style="transition-delay:' + (i * 55) + 'ms">' +
+      '<div class="burbuja-nube"><p>' + esc(m.mensaje) + '</p></div>' +
       '<div class="burbuja-firma">' +
-        '<img class="burbuja-flor" src="assets/monograma-verde.png" alt="" />' +
+        '<div class="burbuja-foto"><img src="assets/monograma-verde.png" alt="" /></div>' +
         '<div class="burbuja-info">' +
           '<span class="burbuja-nombre">' + m.nombre + '</span>' +
           '<span class="burbuja-fecha">' + fecha + '</span>' +
@@ -303,7 +321,7 @@ function renderizar() {
       entries.forEach(function(e) {
         if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
       });
-    }, { threshold: 0.08 });
+    }, { threshold: 0.05 });
     grid.querySelectorAll('.burbuja').forEach(function(b) { obs.observe(b); });
   });
 }
