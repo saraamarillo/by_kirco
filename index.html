@@ -494,45 +494,6 @@ header {
   font-size: 15px;
 }
 
-/* Kit embed overrides */
-.pedido-caja .seva-form { width: 100%; }
-.pedido-caja .formkit-fields {
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 14px !important;
-}
-.pedido-caja .formkit-field { margin: 0 !important; }
-.pedido-caja .formkit-input {
-  width: 100% !important;
-  font-family: var(--font-body) !important;
-  font-size: 17px !important;
-  color: var(--kirco-ink) !important;
-  background: var(--kirco-paper) !important;
-  border: 2px solid transparent !important;
-  border-radius: var(--radius-md) !important;
-  padding: 15px 18px !important;
-  outline: none !important;
-  box-shadow: none !important;
-}
-.pedido-caja .formkit-input:focus {
-  border-color: var(--kirco-green) !important;
-  box-shadow: var(--shadow-glow-green) !important;
-}
-.pedido-caja .formkit-submit {
-  width: 100% !important;
-  font-family: var(--font-display) !important;
-  font-weight: 800 !important;
-  font-size: 18px !important;
-  color: var(--kirco-green-deep) !important;
-  background: var(--kirco-paper) !important;
-  border: 2px solid var(--kirco-paper) !important;
-  border-radius: var(--radius-pill) !important;
-  padding: 16px !important;
-  cursor: pointer !important;
-  margin-top: 6px !important;
-}
-.pedido-caja .formkit-powered-by-convertkit-container { display: none !important; }
-.pedido-caja .formkit-alert { margin-bottom: 8px; color: var(--kirco-yellow); font-size: 14px; }
 
 /* ============================================================
    FOOTER
@@ -788,7 +749,12 @@ footer h4 {
       <h2>¿Quieres una carta personalizada?</h2>
       <p class="sub">Déjame tu correo y me pongo en contacto contigo.</p>
       <div class="pedido-caja">
-        <form action="https://app.kit.com/forms/9602040/subscriptions" class="seva-form formkit-form" method="post" data-sv-form="9602040" data-uid="91fd762686" data-format="inline" data-version="5" data-options="{&quot;settings&quot;:{&quot;after_subscribe&quot;:{&quot;action&quot;:&quot;redirect&quot;,&quot;success_message&quot;:&quot;&quot;,&quot;redirect_url&quot;:&quot;https://bykirco.vercel.app/carta-para-ti.html&quot;},&quot;analytics&quot;:{&quot;google&quot;:null,&quot;fathom&quot;:null,&quot;facebook&quot;:null,&quot;segment&quot;:null,&quot;pinterest&quot;:null,&quot;sparkloop&quot;:null,&quot;googletagmanager&quot;:null},&quot;modal&quot;:{&quot;trigger&quot;:&quot;timer&quot;,&quot;scroll_percentage&quot;:null,&quot;timer&quot;:5,&quot;devices&quot;:&quot;all&quot;,&quot;show_once_every&quot;:15},&quot;powered_by&quot;:{&quot;show&quot;:false,&quot;url&quot;:&quot;https://kit.com/features/forms?utm_campaign=poweredby&amp;utm_content=form&amp;utm_medium=referral&amp;utm_source=dynamic&quot;},&quot;recaptcha&quot;:{&quot;enabled&quot;:false},&quot;return_visitor&quot;:{&quot;action&quot;:&quot;show&quot;,&quot;custom_content&quot;:&quot;&quot;},&quot;slide_in&quot;:{&quot;display_in&quot;:&quot;bottom_right&quot;,&quot;trigger&quot;:&quot;timer&quot;,&quot;scroll_percentage&quot;:null,&quot;timer&quot;:5,&quot;devices&quot;:&quot;all&quot;,&quot;show_once_every&quot;:15},&quot;sticky_bar&quot;:{&quot;display_in&quot;:&quot;top&quot;,&quot;trigger&quot;:&quot;timer&quot;,&quot;scroll_percentage&quot;:null,&quot;timer&quot;:5,&quot;devices&quot;:&quot;all&quot;,&quot;show_once_every&quot;:15}},&quot;version&quot;:&quot;5&quot;}" min-width="400 500 600 700 800"><div data-style="clean"><ul class="formkit-alert formkit-alert-error" data-element="errors" data-group="alert"></ul><div data-element="fields" data-stacked="true" class="seva-fields formkit-fields"><div class="formkit-field"><input class="formkit-input" name="fields[first_name]" aria-label="Tu nombre" placeholder="Tu nombre" required="" type="text" style="color: rgb(46,43,37); border-color: transparent; border-radius: 16px; font-weight: 400; font-size: 17px; padding: 14px 18px; background: #f7f1e3;"></div><div class="formkit-field"><input class="formkit-input" name="email_address" aria-label="Tu correo" placeholder="tu@correo.com" required="" type="email" style="color: rgb(46,43,37); border-color: transparent; border-radius: 16px; font-weight: 400; font-size: 17px; padding: 14px 18px; background: #f7f1e3;"></div><button data-element="submit" class="formkit-submit formkit-submit" style="color: #6f9c3e; background-color: #f7f1e3; border-radius: 999px; font-weight: 800; font-size: 18px; padding: 16px; width: 100%; font-family: inherit;"><div class="formkit-spinner"><div></div><div></div><div></div></div><span class="">Quiero mi carta</span></button></div></div></form>
+        <form id="formPedido">
+          <input type="text" name="first_name" placeholder="Tu nombre" required />
+          <input type="email" name="email_address" placeholder="tu@correo.com" required />
+          <button type="submit" class="btn">Quiero mi carta</button>
+          <p class="form-status" id="statusPedido"></p>
+        </form>
       </div>
     </div>
   </section>
@@ -951,8 +917,31 @@ function submitForm(form, statusEl, asunto, msgOk) {
   });
 }
 
+
+/* ---------------------------------------------------------------
+   PEDIDO — fire-and-redirect a Kit (FORM ID 9602040)
+--------------------------------------------------------------- */
+(function () {
+  var form = document.getElementById('formPedido');
+  if (!form) return;
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var nombre = form.querySelector('[name="first_name"]').value.trim();
+    var email  = form.querySelector('[name="email_address"]').value.trim();
+    var body = new URLSearchParams();
+    body.append('email_address', email);
+    body.append('fields[first_name]', nombre);
+    fetch('https://app.kit.com/forms/9602040/subscriptions', {
+      method: 'POST',
+      mode: 'no-cors',
+      body: body
+    });
+    window.location.href =
+      'https://bykirco.vercel.app/carta-para-ti.html?first_name=' +
+      encodeURIComponent(nombre);
+  });
+})();
 </script>
-<script src="https://f.convertkit.com/ckjs/ck.5.js"></script>
 
 </body>
 </html>
