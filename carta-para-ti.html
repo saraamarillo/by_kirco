@@ -173,7 +173,7 @@ footer h4 {
   <div class="carta-wrap">
     <div class="carta-sombra" aria-hidden="true"></div>
     <article class="carta">
-      <p class="saludo" id="saludo">Querido desconocido,</p>
+      <p class="saludo" id="saludo">Querido/a desconocido/a,</p>
       <p>estoy escribiendo un mensaje para ti.</p>
       <p>Estate atento a tu correo que pronto te mandaré tu carta personalizada.</p>
       <div class="firma">
@@ -252,7 +252,7 @@ footer h4 {
   var params = new URLSearchParams(window.location.search);
   var nombre = params.get('first_name');
   if (nombre && nombre.trim()) {
-    document.getElementById('saludo').textContent = 'Querido ' + nombre.trim() + ',';
+    document.getElementById('saludo').textContent = 'Querido/a ' + nombre.trim() + ',';
     var campoNombre = document.getElementById('fieldNombre');
     if (campoNombre) campoNombre.value = nombre.trim();
   }
