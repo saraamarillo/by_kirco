@@ -494,6 +494,45 @@ header {
   font-size: 15px;
 }
 
+/* Kit embed overrides */
+.pedido-caja .seva-form { width: 100%; }
+.pedido-caja .formkit-fields {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 14px !important;
+}
+.pedido-caja .formkit-field { margin: 0 !important; }
+.pedido-caja .formkit-input {
+  width: 100% !important;
+  font-family: var(--font-body) !important;
+  font-size: 17px !important;
+  color: var(--kirco-ink) !important;
+  background: var(--kirco-paper) !important;
+  border: 2px solid transparent !important;
+  border-radius: var(--radius-md) !important;
+  padding: 15px 18px !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+.pedido-caja .formkit-input:focus {
+  border-color: var(--kirco-green) !important;
+  box-shadow: var(--shadow-glow-green) !important;
+}
+.pedido-caja .formkit-submit {
+  width: 100% !important;
+  font-family: var(--font-display) !important;
+  font-weight: 800 !important;
+  font-size: 18px !important;
+  color: var(--kirco-green-deep) !important;
+  background: var(--kirco-paper) !important;
+  border: 2px solid var(--kirco-paper) !important;
+  border-radius: var(--radius-pill) !important;
+  padding: 16px !important;
+  cursor: pointer !important;
+  margin-top: 6px !important;
+}
+.pedido-caja .formkit-powered-by-convertkit-container { display: none !important; }
+.pedido-caja .formkit-alert { margin-bottom: 8px; color: var(--kirco-yellow); font-size: 14px; }
 
 /* ============================================================
    FOOTER
