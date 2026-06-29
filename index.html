@@ -762,7 +762,7 @@ footer h4 {
       <p class="kicker">Cartas que esperan ser encontradas</p>
       <h1>Queridos<br />desconocidos</h1>
       <p class="sub">Cartas anónimas escritas a mano que dejo para ti en algún lugar.</p>
-      <a class="btn" href="#pedido">Quiero una carta</a>
+      <a class="btn" href="/quiz.html">¿Cuál es tu flor?</a>
       <img class="flor-sep" src="assets/monograma-verde.png" alt="" aria-hidden="true" />
     </div>
   </section>
@@ -865,26 +865,6 @@ footer h4 {
     </div>
   </section>
 
-  <!-- ===== PEDIDO ===== -->
-  <section class="pedido" id="pedido">
-    <div class="flor-fondo f1"></div>
-    <div class="flor-fondo f2"></div>
-    <div class="flor-fondo f3"></div>
-    <div class="wrap">
-      <h2>¿Quieres una carta personalizada?</h2>
-      <p class="sub">Déjame tu correo y me pongo en contacto contigo.</p>
-      <div class="pedido-caja">
-        <form id="formPedido">
-          <input type="text" name="first_name" placeholder="Tu nombre" required />
-          <input type="email" name="email_address" placeholder="tu@correo.com" required />
-          <textarea name="sobre_ti" placeholder="Cuéntame un poco de ti" rows="4"></textarea>
-          <button type="submit" class="btn">Quiero mi carta</button>
-          <p class="form-status" id="statusPedido"></p>
-          <p class="pedido-nota">Si no recibes noticias mías, revisa tu carpeta de spam.</p>
-        </form>
-      </div>
-    </div>
-  </section>
 </main>
 
 <!-- ===== FOOTER ===== -->
@@ -996,56 +976,6 @@ footer h4 {
 })();
 
 /* ---------------------------------------------------------------
-   FORMULARIOS — FormSubmit.co (envío a by.kirco@gmail.com)
-   Primera vez: FormSubmit.co enviará un email de verificación
-   a by.kirco@gmail.com — haz clic en el enlace y listo.
---------------------------------------------------------------- */
-var FORMSUBMIT = 'https://formsubmit.co/ajax/by.kirco@gmail.com';
-
-function submitForm(form, statusEl, asunto, msgOk) {
-  var btn = form.querySelector('button[type=submit]');
-  var emailEl = form.querySelector('input[type=email]');
-  if (emailEl && !emailEl.checkValidity()) {
-    statusEl.textContent = 'Déjame un correo donde encontrarte.';
-    emailEl.focus(); return;
-  }
-  var nombreEl = form.querySelector('input[name=nombre]');
-  if (nombreEl && !nombreEl.value.trim()) {
-    statusEl.textContent = 'Dime cómo te llamas.';
-    nombreEl.focus(); return;
-  }
-
-  statusEl.textContent = 'Enviando…';
-  if (btn) btn.disabled = true;
-
-  var data = {};
-  new FormData(form).forEach(function(v, k) {
-    if (k !== '_honey') data[k] = v;
-  });
-  data._subject = asunto;
-  data._captcha = 'false';
-  data._template = 'table';
-
-  fetch(FORMSUBMIT, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-    body: JSON.stringify(data)
-  })
-  .then(function(r) { return r.json().then(function(j){ return { ok: r.ok, json: j }; }); })
-  .then(function(res) {
-    statusEl.textContent = res.ok ? msgOk : 'Algo falló. Inténtalo de nuevo.';
-    if (res.ok) form.reset();
-  })
-  .catch(function() {
-    statusEl.textContent = 'Sin conexión. Inténtalo en un rato.';
-  })
-  .finally(function() {
-    if (btn) btn.disabled = false;
-  });
-}
-
-
-/* ---------------------------------------------------------------
    DESTINATARIOS PREVIEW — animación de entrada
 --------------------------------------------------------------- */
 (function () {
@@ -1057,31 +987,6 @@ function submitForm(form, statusEl, asunto, msgOk) {
   document.querySelectorAll('.gal-burbuja').forEach(function (el) { obs.observe(el); });
 })();
 
-/* ---------------------------------------------------------------
-   PEDIDO — fire-and-redirect a Kit (FORM ID 9602040)
---------------------------------------------------------------- */
-(function () {
-  var form = document.getElementById('formPedido');
-  if (!form) return;
-  form.addEventListener('submit', function (e) {
-    e.preventDefault();
-    var nombre   = form.querySelector('[name="first_name"]').value.trim();
-    var email    = form.querySelector('[name="email_address"]').value.trim();
-    var sobreTi  = form.querySelector('[name="sobre_ti"]').value.trim();
-    var body = new URLSearchParams();
-    body.append('email_address', email);
-    body.append('fields[first_name]', nombre);
-    if (sobreTi) body.append('fields[sobre_ti]', sobreTi);
-    fetch('https://app.kit.com/forms/9602040/subscriptions', {
-      method: 'POST',
-      mode: 'no-cors',
-      body: body
-    });
-    window.location.href =
-      'https://bykirco.vercel.app/carta-para-ti.html?first_name=' +
-      encodeURIComponent(nombre);
-  });
-})();
 </script>
 
 </body>

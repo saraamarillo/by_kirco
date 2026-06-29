@@ -154,6 +154,67 @@ main { flex: 1; display: flex; flex-direction: column; align-items: center; padd
 .btn-repetir { font-family: var(--font-mono); font-size: 12px; letter-spacing: var(--track-mono); text-transform: uppercase; color: var(--kirco-ink-soft); background: none; border: none; cursor: pointer; padding: 8px; text-decoration: underline; text-underline-offset: 3px; }
 .btn-repetir:hover { color: var(--kirco-ink); }
 
+/* ── Formulario inline ── */
+.form-carta-wrap {
+  width: 100%;
+  max-width: 560px;
+  margin-top: 32px;
+  display: none;
+  animation: fadeUp 500ms ease-out both;
+}
+.form-carta-wrap.visible { display: block; }
+.pedido-caja {
+  background: var(--kirco-green-deep);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-pop);
+  padding: 40px 44px;
+}
+.pedido-caja form { display: flex; flex-direction: column; gap: 14px; }
+.pedido-caja input,
+.pedido-caja textarea {
+  width: 100%;
+  font-family: var(--font-body);
+  font-size: 17px;
+  color: var(--kirco-ink);
+  background: var(--kirco-paper);
+  border: 2px solid transparent;
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+  outline: none;
+}
+.pedido-caja textarea { resize: vertical; min-height: 110px; line-height: 1.5; }
+.pedido-caja input:focus,
+.pedido-caja textarea:focus {
+  border-color: var(--kirco-green);
+  box-shadow: 0 0 0 6px rgba(160,215,107,.3);
+}
+.btn-enviar-carta {
+  width: 100%;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 18px;
+  color: var(--kirco-green-deep);
+  background: var(--kirco-paper);
+  border: none;
+  border-radius: var(--radius-pill);
+  padding: 16px;
+  cursor: pointer;
+  transition: transform 180ms ease-out, filter 180ms ease-out;
+}
+.btn-enviar-carta:hover { transform: translateY(-2px); filter: brightness(0.97); }
+.btn-enviar-carta:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+.pedido-nota-quiz {
+  text-align: center;
+  font-size: 11px;
+  color: var(--kirco-paper);
+  opacity: 0.55;
+  font-family: var(--font-mono);
+  letter-spacing: var(--track-mono);
+  text-transform: uppercase;
+  margin: 0;
+}
+@media (max-width: 600px) { .pedido-caja { padding: 28px 20px; } }
+
 /* ── Footer ── */
 footer { background: var(--kirco-orange-deep); padding: 90px 0 60px; color: var(--kirco-paper); }
 .wrap { max-width: 1120px; margin: 0 auto; padding: 0 40px; }
@@ -230,7 +291,23 @@ footer h4 { font-family: var(--font-mono); font-size: 12px; font-weight: 400; le
       </article>
     </div>
     <div class="resultado-ctas">
-      <a href="/#pedido" class="btn-carta-cta">Pide tu carta personalizada</a>
+      <button class="btn-carta-cta" id="btnAbrirForm">Pide tu carta personalizada</button>
+    </div>
+
+    <!-- Formulario inline — oculto hasta que se pulse el CTA -->
+    <div class="form-carta-wrap" id="formCartaWrap">
+      <div class="pedido-caja">
+        <form id="formPedidoQuiz">
+          <input type="text" name="first_name" placeholder="Tu nombre" required />
+          <input type="email" name="email_address" placeholder="tu@correo.com" required />
+          <textarea name="sobre_ti" placeholder="Cuéntame un poco de ti" rows="4"></textarea>
+          <button type="submit" class="btn-enviar-carta">Quiero mi carta</button>
+          <p class="pedido-nota-quiz">Si no recibes noticias mías, revisa tu carpeta de spam.</p>
+        </form>
+      </div>
+    </div>
+
+    <div class="resultado-ctas" style="margin-top:24px">
       <button class="btn-repetir" id="btnRepetir">Volver a empezar</button>
     </div>
   </div>
@@ -469,6 +546,37 @@ footer h4 { font-family: var(--font-mono); font-size: 12px; font-weight: 400; le
     mostrar('pantallaResultado');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
+
+  /* ── Abrir formulario ── */
+  document.getElementById('btnAbrirForm').addEventListener('click', function () {
+    var wrap = document.getElementById('formCartaWrap');
+    wrap.classList.add('visible');
+    this.style.display = 'none';
+    setTimeout(function () { wrap.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 50);
+  });
+
+  /* ── Envío a Kit → carta-para-ti ── */
+  document.getElementById('formPedidoQuiz').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var form = this;
+    var btn = form.querySelector('button[type=submit]');
+    var nombre  = form.querySelector('[name="first_name"]').value.trim();
+    var email   = form.querySelector('[name="email_address"]').value.trim();
+    var sobreTi = form.querySelector('[name="sobre_ti"]').value.trim();
+    if (!nombre) { form.querySelector('[name="first_name"]').focus(); return; }
+    if (!email)  { form.querySelector('[name="email_address"]').focus(); return; }
+    if (btn) btn.disabled = true;
+    var body = new URLSearchParams();
+    body.append('email_address', email);
+    body.append('fields[first_name]', nombre);
+    if (sobreTi) body.append('fields[sobre_ti]', sobreTi);
+    fetch('https://app.kit.com/forms/9602040/subscriptions', {
+      method: 'POST', mode: 'no-cors', body: body
+    });
+    window.location.href =
+      'https://bykirco.vercel.app/carta-para-ti.html?first_name=' +
+      encodeURIComponent(nombre);
+  });
 
   /* ── Reset ── */
   function reiniciar() {
