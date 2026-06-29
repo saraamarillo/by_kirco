@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>¿Qué carta necesitas hoy? — by_kirco</title>
+<meta name="description" content="Un quiz para descubrir qué carta necesitas leer hoy." />
+<meta name="theme-color" content="#f7f1e3" />
+<link rel="icon" type="image/png" href="/assets/favicon.png" />
+<link rel="apple-touch-icon" href="/assets/favicon.png" />
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&display=swap" rel="stylesheet" />
+
+<style>
+@font-face { font-family: "Visby Round CF"; src: url("fonts/VisbyRoundCF-Heavy.ttf") format("truetype"); font-weight: 800; font-style: normal; font-display: swap; }
+@font-face { font-family: "OCR B Std"; src: url("fonts/OCRBStd.otf") format("opentype"); font-weight: 400; font-style: normal; font-display: swap; }
+
+:root {
+  --kirco-green:        #a0d76b;
+  --kirco-green-deep:   #6f9c3e;
+  --kirco-green-tint:   #ecf7df;
+  --kirco-orange:       #ffaa4d;
+  --kirco-orange-deep:  #d07f1f;
+  --kirco-orange-tint:  #fff2e2;
+  --kirco-yellow:       #fffa7d;
+  --kirco-yellow-tint:  #fffdda;
+  --kirco-white:        #ffffff;
+  --kirco-paper:        #f7f1e3;
+  --kirco-ink:          #2e2b25;
+  --kirco-ink-soft:     #6b6557;
+  --kirco-line:         #e8e1d2;
+  --font-display: "Visby Round CF", system-ui, sans-serif;
+  --font-mono:    "OCR B Std", monospace;
+  --font-body:    system-ui, -apple-system, sans-serif;
+  --track-mono:   0.16em;
+  --radius-md:    16px;
+  --radius-lg:    28px;
+  --radius-pill:  999px;
+  --shadow-pop:   0 4px 12px rgba(46,43,37,.10), 0 18px 44px rgba(46,43,37,.14);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { margin: 0; padding: 0; scroll-behavior: smooth; }
+body { margin: 0; padding: 0; background: var(--kirco-paper); color: var(--kirco-ink); font-family: var(--font-body); min-height: 100vh; display: flex; flex-direction: column; }
+
+/* ── Header ── */
+.site-header { position: absolute; top: 0; left: 0; right: 0; z-index: 10; padding: 18px 40px 44px; background: linear-gradient(to bottom, rgba(111,156,62,0.5) 0%, transparent 100%); display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.site-header .logo-link { flex-shrink: 0; display: flex; align-items: center; }
+.site-header .logo { height: 64px; width: auto; }
+.site-header nav { display: flex; gap: 8px; flex-wrap: wrap; }
+.site-header nav a { font-family: var(--font-mono); font-size: 12px; letter-spacing: var(--track-mono); text-transform: uppercase; color: #FFFDDA; text-decoration: none; padding: 6px 14px; border-radius: var(--radius-pill); transition: background 150ms ease-out, color 150ms ease-out; }
+.site-header nav a:hover { background: rgba(255,255,255,0.82); color: var(--kirco-green-deep); }
+
+/* ── Main layout ── */
+main { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 120px 24px 80px; }
+
+/* ── Intro ── */
+.intro-wrap { width: 100%; max-width: 560px; text-align: center; animation: fadeUp 700ms ease-out both; }
+.intro-kicker { font-family: var(--font-mono); font-size: 12px; letter-spacing: var(--track-mono); text-transform: uppercase; color: var(--kirco-orange-deep); margin: 0 0 20px; }
+.intro-titulo { font-family: var(--font-display); font-weight: 800; font-size: clamp(28px, 5vw, 42px); color: var(--kirco-ink); margin: 0 0 18px; line-height: 1.15; }
+.intro-subtitulo { font-size: 17px; line-height: 1.65; color: var(--kirco-ink-soft); margin: 0 0 40px; max-width: 440px; margin-left: auto; margin-right: auto; }
+.btn-empezar { display: inline-block; font-family: var(--font-display); font-weight: 800; font-size: 18px; color: var(--kirco-paper); background: var(--kirco-green-deep); border: none; border-radius: var(--radius-pill); padding: 18px 48px; cursor: pointer; transition: transform 180ms ease-out, filter 180ms ease-out; }
+.btn-empezar:hover { transform: translateY(-2px); filter: brightness(1.05); }
+
+/* ── Quiz card ── */
+.quiz-wrap { width: 100%; max-width: 600px; display: none; }
+.quiz-wrap.visible { display: block; }
+
+.progreso { display: flex; align-items: center; gap: 8px; justify-content: center; margin-bottom: 36px; }
+.progreso-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--kirco-line); transition: background 300ms ease, transform 300ms ease; }
+.progreso-dot.activo { background: var(--kirco-green-deep); transform: scale(1.3); }
+.progreso-dot.hecho { background: var(--kirco-green); }
+
+.pregunta-card { background: var(--kirco-white); border-radius: var(--radius-lg); box-shadow: var(--shadow-pop); padding: 48px 52px 44px; animation: fadeUp 500ms ease-out both; }
+@media (max-width: 600px) { .pregunta-card { padding: 32px 24px 28px; } }
+
+.pregunta-num { font-family: var(--font-mono); font-size: 11px; letter-spacing: var(--track-mono); text-transform: uppercase; color: var(--kirco-ink-soft); margin: 0 0 14px; }
+.pregunta-texto { font-family: var(--font-display); font-weight: 800; font-size: clamp(20px, 3.5vw, 26px); color: var(--kirco-ink); margin: 0 0 32px; line-height: 1.25; }
+
+.opciones { display: flex; flex-direction: column; gap: 12px; }
+.opcion-btn { width: 100%; text-align: left; font-family: var(--font-body); font-size: 16px; line-height: 1.5; color: var(--kirco-ink); background: var(--kirco-paper); border: 2px solid var(--kirco-line); border-radius: var(--radius-md); padding: 16px 20px; cursor: pointer; transition: border-color 150ms ease, background 150ms ease, transform 150ms ease; }
+.opcion-btn:hover { border-color: var(--kirco-green); background: var(--kirco-green-tint); transform: translateX(3px); }
+.opcion-btn.seleccionada { border-color: var(--kirco-green-deep); background: var(--kirco-green-tint); font-weight: 600; }
+
+/* ── Resultado ── */
+.resultado-wrap { width: 100%; max-width: 560px; display: none; animation: fadeUp 700ms ease-out both; }
+.resultado-wrap.visible { display: block; }
+
+/* Tarjeta de identidad del arquetipo */
+.resultado-card-id {
+  border-radius: var(--radius-lg);
+  padding: 32px 36px 28px;
+  margin-bottom: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: background 400ms ease;
+}
+.resultado-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.resultado-flor-icon { width: 40px; height: 40px; }
+.resultado-num {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: var(--track-mono);
+  opacity: 0.55;
+}
+.resultado-nombre {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(28px, 6vw, 42px);
+  margin: 0;
+  line-height: 1.1;
+}
+.resultado-desc { font-size: 16px; line-height: 1.6; color: var(--kirco-ink-soft); margin: 0; }
+
+/* Esquemas de color por arquetipo */
+.tema-amapola  { background: var(--kirco-orange-tint); }
+.tema-amapola  .resultado-nombre { color: var(--kirco-orange-deep); }
+.tema-amapola  .resultado-flor-icon { filter: invert(55%) sepia(80%) saturate(600%) hue-rotate(5deg) brightness(1.05); }
+
+.tema-nomeolvides { background: var(--kirco-green-tint); }
+.tema-nomeolvides .resultado-nombre { color: var(--kirco-green-deep); }
+.tema-nomeolvides .resultado-flor-icon { filter: invert(60%) sepia(40%) saturate(400%) hue-rotate(65deg) brightness(0.9); }
+
+.tema-pensamiento { background: var(--kirco-yellow-tint); }
+.tema-pensamiento .resultado-nombre { color: #7a7200; }
+.tema-pensamiento .resultado-flor-icon { filter: invert(85%) sepia(60%) saturate(500%) hue-rotate(10deg) brightness(0.88); }
+
+.tema-jazmin { background: #dff0ce; }
+.tema-jazmin  .resultado-nombre { color: var(--kirco-green-deep); }
+.tema-jazmin  .resultado-flor-icon { filter: invert(60%) sepia(40%) saturate(400%) hue-rotate(65deg) brightness(0.9); }
+
+.tema-romero  { background: #ffe4cc; }
+.tema-romero  .resultado-nombre { color: var(--kirco-orange-deep); }
+.tema-romero  .resultado-flor-icon { filter: invert(55%) sepia(80%) saturate(600%) hue-rotate(5deg) brightness(1.05); }
+
+.carta-sombra { position: absolute; inset: 0; background: rgba(46,43,37,.06); border-radius: 18px; transform: rotate(1.8deg) translateY(8px); }
+.carta-outer { position: relative; margin-bottom: 44px; }
+.carta { position: relative; background: var(--kirco-white); border-radius: var(--radius-md); box-shadow: var(--shadow-pop); padding: 52px 56px 44px; transform: rotate(-0.6deg); }
+@media (max-width: 600px) { .carta { padding: 36px 28px 32px; } }
+.carta::before { content: ''; position: absolute; inset: 52px 56px 44px; background-image: repeating-linear-gradient(to bottom, transparent, transparent 37px, rgba(46,43,37,.06) 37px, rgba(46,43,37,.06) 38px); pointer-events: none; border-radius: 4px; }
+.carta p { font-family: "Caveat", cursive; font-weight: 500; font-size: clamp(22px, 3.5vw, 28px); line-height: 1.65; color: var(--kirco-ink); margin: 0 0 12px; position: relative; }
+.carta p:last-of-type { margin-bottom: 0; }
+.carta .firma { display: flex; align-items: center; gap: 12px; margin-top: 32px; position: relative; }
+.carta .firma-logo { width: 44px; height: 44px; }
+.carta .firma-texto { font-family: "Caveat", cursive; font-weight: 600; font-size: 24px; color: var(--kirco-green-deep); }
+
+.resultado-ctas { display: flex; flex-direction: column; gap: 14px; align-items: center; }
+.btn-carta-cta { display: inline-block; font-family: var(--font-display); font-weight: 800; font-size: 17px; color: var(--kirco-paper); background: var(--kirco-orange-deep); border: none; border-radius: var(--radius-pill); padding: 18px 44px; cursor: pointer; text-decoration: none; transition: transform 180ms ease-out, filter 180ms ease-out; }
+.btn-carta-cta:hover { transform: translateY(-2px); filter: brightness(1.05); }
+.btn-repetir { font-family: var(--font-mono); font-size: 12px; letter-spacing: var(--track-mono); text-transform: uppercase; color: var(--kirco-ink-soft); background: none; border: none; cursor: pointer; padding: 8px; text-decoration: underline; text-underline-offset: 3px; }
+.btn-repetir:hover { color: var(--kirco-ink); }
+
+/* ── Footer ── */
+footer { background: var(--kirco-orange-deep); padding: 90px 0 60px; color: var(--kirco-paper); }
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 40px; }
+.footer-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 64px; align-items: start; }
+.logo-foot { height: 84px; }
+footer .claim { font-size: 16px; line-height: 1.6; color: var(--kirco-paper); opacity: 0.92; margin: 18px 0 0; max-width: 280px; }
+footer h4 { font-family: var(--font-mono); font-size: 12px; font-weight: 400; letter-spacing: var(--track-mono); text-transform: uppercase; color: var(--kirco-paper); opacity: 0.8; margin: 0 0 20px; }
+.foot-links { display: flex; flex-direction: column; gap: 12px; }
+.foot-links a { font-family: var(--font-display); font-weight: 800; font-size: 17px; color: var(--kirco-paper); text-decoration: none; transition: transform 150ms ease-out, opacity 150ms ease-out; }
+.foot-links a:hover { transform: translateX(3px); opacity: 0.85; }
+.redes { display: flex; gap: 12px; margin-top: 6px; flex-wrap: wrap; }
+.redes a { font-family: var(--font-display); font-weight: 800; font-size: 16px; color: var(--kirco-orange-deep); background: var(--kirco-paper); border-radius: var(--radius-pill); padding: 11px 24px; text-decoration: none; transition: transform 150ms ease-out; }
+.redes a:hover { transform: translateY(-2px); }
+.legal { display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; border-top: 2px solid rgba(247,241,227,.35); margin-top: 70px; padding-top: 28px; font-family: var(--font-mono); font-size: 12px; letter-spacing: var(--track-mono); text-transform: uppercase; color: var(--kirco-paper); }
+.legal a { color: var(--kirco-paper); text-decoration: none; }
+.legal a:hover { text-decoration: underline; }
+.legal .legal-links { display: flex; gap: 22px; }
+.flor-legal { width: 50px; height: 50px; vertical-align: -3px; }
+
+@keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+
+@media (max-width: 900px) { .footer-grid { grid-template-columns: 1fr; gap: 44px; } .wrap { padding: 0 28px; } }
+@media (max-width: 600px) { .site-header { padding: 20px 24px; } .site-header .logo { height: 42px; } footer { padding: 60px 0 44px; } .legal { flex-direction: column; align-items: flex-start; gap: 14px; } }
+@media (prefers-reduced-motion: reduce) { .intro-wrap, .quiz-wrap, .resultado-wrap, .pregunta-card { animation: none; } }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <a href="/" class="logo-link"><img class="logo" src="assets/logo-firma.png" alt="by_kirco" /></a>
+  <nav>
+    <a href="/sobre-mi.html">Sobre mí</a>
+    <a href="/destinatarios.html">Destinatarios</a>
+  </nav>
+</header>
+
+<main>
+
+  <!-- Pantalla intro -->
+  <div class="intro-wrap" id="pantallaIntro">
+    <p class="intro-kicker">Una carta para ti</p>
+    <h1 class="intro-titulo">¿Qué carta necesitas hoy?</h1>
+    <p class="intro-subtitulo">Cinco preguntas. Sin respuestas correctas. Solo lo que sientes ahora mismo.</p>
+    <button class="btn-empezar" id="btnEmpezar">Empezar</button>
+  </div>
+
+  <!-- Quiz -->
+  <div class="quiz-wrap" id="pantallaQuiz">
+    <div class="progreso" id="progreso" role="progressbar" aria-label="Progreso del quiz"></div>
+    <div class="pregunta-card" id="preguntaCard">
+      <p class="pregunta-num" id="preguntaNum"></p>
+      <h2 class="pregunta-texto" id="preguntaTexto"></h2>
+      <div class="opciones" id="opcionesWrap"></div>
+    </div>
+  </div>
+
+  <!-- Resultado -->
+  <div class="resultado-wrap" id="pantallaResultado">
+    <div class="resultado-card-id" id="resultadoCardId">
+      <div class="resultado-card-top">
+        <img class="resultado-flor-icon" src="assets/flor.svg" alt="" aria-hidden="true" />
+        <span class="resultado-num" id="resultadoNum"></span>
+      </div>
+      <h2 class="resultado-nombre" id="resultadoNombre"></h2>
+      <p class="resultado-desc" id="resultadoDesc"></p>
+    </div>
+    <div class="carta-outer">
+      <div class="carta-sombra" aria-hidden="true"></div>
+      <article class="carta" id="cartaResultado">
+        <div class="firma">
+          <img class="firma-logo" src="assets/monograma-verde.png" alt="" aria-hidden="true" />
+          <span class="firma-texto">by_kirco</span>
+        </div>
+      </article>
+    </div>
+    <div class="resultado-ctas">
+      <a href="/#pedido" class="btn-carta-cta">Pide tu carta personalizada</a>
+      <button class="btn-repetir" id="btnRepetir">Volver a empezar</button>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <img class="logo-foot" src="assets/logo-naranja-negativo.png" alt="by_kirco" />
+        <p class="claim">Cartas anónimas escritas a mano, repartidas por España para quien las necesite.</p>
+      </div>
+      <div>
+        <h4>Legal</h4>
+        <div class="foot-links">
+          <a href="/aviso-legal.html">Aviso legal</a>
+          <a href="/politica-privacidad.html">Política de privacidad</a>
+          <a href="/politica-cookies.html">Cookies</a>
+        </div>
+        <h4 style="margin-top:32px">Sígueme para enterarte dónde dejo la próxima cartita</h4>
+        <div class="redes">
+          <a href="https://www.instagram.com/by_kirco/" target="_blank" rel="noopener">Instagram</a>
+          <a href="https://www.tiktok.com/@by_kirco" target="_blank" rel="noopener">TikTok</a>
+          <a href="https://www.facebook.com/profile.php?id=61567524682650" target="_blank" rel="noopener">Facebook</a>
+        </div>
+      </div>
+    </div>
+    <div class="legal">
+      <span>
+        © 2026 by_kirco
+        <img class="flor-legal" src="assets/flor.svg" alt="" style="filter:brightness(0) invert(1);opacity:.85" aria-hidden="true" />
+        Cartas con cariño
+      </span>
+      <span class="legal-links"><a href="#">@BY_KIRCO</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  /* ── Datos ── */
+  var ARQUETIPOS = {
+    amapola: {
+      flor: 'Amapola',
+      nombre: 'Amapola',
+      num: '01',
+      tema: 'tema-amapola',
+      descripcion: 'Sientes mucho de golpe. Más que la mayoría, y más nítido.',
+      carta: ['Sentir tanto no es un defecto.', 'Es que tienes la piel más fina que la mayoría', 'y el mundo te llega más nítido.', 'Eso duele a veces.', 'Pero también es la razón por la que ves cosas que otros no ven.']
+    },
+    nomeolvides: {
+      flor: 'Nomeolvides',
+      nombre: 'Nomeolvides',
+      num: '02',
+      tema: 'tema-nomeolvides',
+      descripcion: 'Estás en medio de todo y aun así a veces sientes que nadie te ve del todo.',
+      carta: ['Sé que a veces pareces no estar', 'aunque estés en medio de todo.', 'Que la gente pasa y no se detiene.', 'Pues yo sí me detuve.', 'Y te vi.']
+    },
+    pensamiento: {
+      flor: 'Pensamiento',
+      nombre: 'Pensamiento',
+      num: '03',
+      tema: 'tema-pensamiento',
+      descripcion: 'La cabeza no para. Hay algo que vuelve aunque le digas que no.',
+      carta: ['El ruido de ahí dentro ya sé que es agotador.', 'Tanto pensar y pensar', 'sin encontrar el botón de apagado.', 'Ojalá pudiera dártelo.', 'Solo quería que supieras que no estás sola en eso.']
+    },
+    jazmin: {
+      flor: 'Jazmín',
+      nombre: 'Jazmín',
+      num: '04',
+      tema: 'tema-jazmin',
+      descripcion: 'Hay una versión de ti que muy poca gente conoce. Y es la más tuya.',
+      carta: ['Pocas personas saben lo que hay debajo.', 'La mayoría ve solo lo que muestras—', 'y ya eso es bonito.', 'Pero lo que guardas para dentro', 'es lo más tuyo que tienes.']
+    },
+    romero: {
+      flor: 'Romero',
+      nombre: 'Romero',
+      num: '05',
+      tema: 'tema-romero',
+      descripcion: 'Hay algo que ya pasó pero que todavía no has soltado del todo.',
+      carta: ['Qué difícil es soltar algo', 'que fue tan tuyo.', 'Quedarte ahí un poco más', 'todavía tiene sentido.', 'El presente puede esperar.']
+    }
+  };
+
+  var PREGUNTAS = [
+    {
+      texto: '¿Cómo sueles llegar al final del día?',
+      opciones: [
+        { texto: 'Con más cosas dentro de las que tenía al empezar', arq: 'amapola' },
+        { texto: 'Preguntándome si alguien me echó de menos', arq: 'nomeolvides' },
+        { texto: 'Con algo en la cabeza que no termina de irse', arq: 'pensamiento' },
+        { texto: 'Con ganas de quitarme la careta por fin', arq: 'jazmin' },
+        { texto: 'Pensando en algo que ya pasó pero que no se va', arq: 'romero' }
+      ]
+    },
+    {
+      texto: '¿Cuál de estas frases podría haber escrito tú?',
+      opciones: [
+        { texto: '"Las cosas me tocan más de lo que quiero admitir"', arq: 'amapola' },
+        { texto: '"A veces estoy en medio de todo y aun así no me ven"', arq: 'nomeolvides' },
+        { texto: '"Me gustaría poder apagar la cabeza un rato"', arq: 'pensamiento' },
+        { texto: '"Hay una versión de mí que casi nadie conoce"', arq: 'jazmin' },
+        { texto: '"Echo de menos algo que no sé muy bien cómo nombrar"', arq: 'romero' }
+      ]
+    },
+    {
+      texto: 'Si encontraras una carta hoy, ¿qué necesitarías que dijera?',
+      opciones: [
+        { texto: 'Que sentir tanto no tiene nada de malo', arq: 'amapola' },
+        { texto: 'Que alguien te ha visto, aunque sea un momento', arq: 'nomeolvides' },
+        { texto: 'Que está bien que el ruido pare aquí', arq: 'pensamiento' },
+        { texto: 'Que no hace falta que te expliques', arq: 'jazmin' },
+        { texto: 'Que lo que viviste valió la pena', arq: 'romero' }
+      ]
+    },
+    {
+      texto: '¿Qué momento te describe mejor últimamente?',
+      opciones: [
+        { texto: 'Cuando una canción te parte por la mitad sin avisar', arq: 'amapola' },
+        { texto: 'Cuando estás en una conversación y sientes que no te están escuchando del todo', arq: 'nomeolvides' },
+        { texto: 'Cuando intentas dormir pero la cabeza tiene otros planes', arq: 'pensamiento' },
+        { texto: 'Cuando estás con gente pero guardas algo solo para ti', arq: 'jazmin' },
+        { texto: 'Cuando algo pequeño y cotidiano te devuelve de golpe a otro tiempo', arq: 'romero' }
+      ]
+    },
+    {
+      texto: '¿Qué es lo que más te pesa ahora mismo?',
+      opciones: [
+        { texto: 'Todo lo que sientes y no siempre sabes dónde poner', arq: 'amapola' },
+        { texto: 'La sensación de que podrías no estar y nadie lo notaría demasiado', arq: 'nomeolvides' },
+        { texto: 'Ese pensamiento que vuelve aunque le digas que no', arq: 'pensamiento' },
+        { texto: 'Lo difícil que es mostrarte de verdad con alguien', arq: 'jazmin' },
+        { texto: 'Algo que ya terminó pero que todavía no has soltado del todo', arq: 'romero' }
+      ]
+    }
+  ];
+
+  /* ── Estado ── */
+  var preguntaActual = 0;
+  var votos = { amapola: 0, nomeolvides: 0, pensamiento: 0, jazmin: 0, romero: 0 };
+
+  /* ── Utilidades ── */
+  function mezclar(arr) {
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+    }
+    return a;
+  }
+
+  function mostrar(id) {
+    ['pantallaIntro', 'pantallaQuiz', 'pantallaResultado'].forEach(function (pid) {
+      var el = document.getElementById(pid);
+      el.style.display = 'none';
+      el.classList.remove('visible');
+    });
+    var target = document.getElementById(id);
+    target.style.display = '';
+    target.classList.add('visible');
+  }
+
+  /* ── Progreso ── */
+  function renderProgreso() {
+    var wrap = document.getElementById('progreso');
+    wrap.innerHTML = '';
+    PREGUNTAS.forEach(function (_, i) {
+      var dot = document.createElement('span');
+      dot.className = 'progreso-dot' + (i === preguntaActual ? ' activo' : i < preguntaActual ? ' hecho' : '');
+      dot.setAttribute('aria-hidden', 'true');
+      wrap.appendChild(dot);
+    });
+  }
+
+  /* ── Pregunta ── */
+  function renderPregunta() {
+    var p = PREGUNTAS[preguntaActual];
+    document.getElementById('preguntaNum').textContent = 'Pregunta ' + (preguntaActual + 1) + ' de ' + PREGUNTAS.length;
+    document.getElementById('preguntaTexto').textContent = p.texto;
+    var wrap = document.getElementById('opcionesWrap');
+    wrap.innerHTML = '';
+    mezclar(p.opciones).forEach(function (op) {
+      var btn = document.createElement('button');
+      btn.className = 'opcion-btn';
+      btn.textContent = op.texto;
+      btn.setAttribute('type', 'button');
+      btn.addEventListener('click', function () { elegir(op.arq); });
+      wrap.appendChild(btn);
+    });
+    renderProgreso();
+    // Re-animar card
+    var card = document.getElementById('preguntaCard');
+    card.style.animation = 'none';
+    void card.offsetWidth;
+    card.style.animation = '';
+  }
+
+  /* ── Elección ── */
+  function elegir(arq) {
+    votos[arq]++;
+    if (preguntaActual < PREGUNTAS.length - 1) {
+      preguntaActual++;
+      renderPregunta();
+    } else {
+      mostrarResultado();
+    }
+  }
+
+  /* ── Resultado ── */
+  function calcularResultado() {
+    var ganador = Object.keys(votos).reduce(function (a, b) { return votos[a] >= votos[b] ? a : b; });
+    return ARQUETIPOS[ganador];
+  }
+
+  function mostrarResultado() {
+    var res = calcularResultado();
+    // Tema de color
+    var cardId = document.getElementById('resultadoCardId');
+    cardId.className = 'resultado-card-id ' + res.tema;
+    document.getElementById('resultadoNum').textContent = res.num;
+    document.getElementById('resultadoNombre').textContent = res.nombre;
+    document.getElementById('resultadoDesc').textContent = res.descripcion;
+
+    var carta = document.getElementById('cartaResultado');
+    // Limpiar párrafos anteriores (conservar firma)
+    var firma = carta.querySelector('.firma');
+    carta.innerHTML = '';
+    res.carta.forEach(function (linea) {
+      var p = document.createElement('p');
+      p.textContent = linea;
+      carta.appendChild(p);
+    });
+    carta.appendChild(firma);
+
+    mostrar('pantallaResultado');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  /* ── Reset ── */
+  function reiniciar() {
+    preguntaActual = 0;
+    Object.keys(votos).forEach(function (k) { votos[k] = 0; });
+    renderPregunta();
+    mostrar('pantallaQuiz');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  /* ── Eventos ── */
+  document.getElementById('btnEmpezar').addEventListener('click', function () {
+    renderPregunta();
+    mostrar('pantallaQuiz');
+  });
+
+  document.getElementById('btnRepetir').addEventListener('click', reiniciar);
+
+  /* ── Init: ocultar quiz y resultado ── */
+  document.getElementById('pantallaQuiz').style.display = 'none';
+  document.getElementById('pantallaResultado').style.display = 'none';
+})();
+</script>
+
+</body>
+</html>

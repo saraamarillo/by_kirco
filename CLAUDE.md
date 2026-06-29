@@ -34,6 +34,9 @@ You are the marketing operator for **by_kirco** — cartas escritas a mano dejad
 - **Dirección física** (`carta-para-ti.html #formDireccion`): FormSubmit.co AJAX → **by.kirco@gmail.com**. Campos: nombre y apellido, dirección, CP, ciudad, país. Casilla de privacidad obligatoria.
 - Kit script: `<script src="https://f.convertkit.com/ckjs/ck.5.js"></script>` en `index.html`
 
+### Design system local
+- `design_extracted/by-kirco-design-system/project/` — tokens, guidelines y componentes HTML del sistema de diseño extraído. Consultar antes de crear nuevas páginas para heredar tokens correctamente (nunca redeclarar `:root`).
+
 ### Assets clave
 - `assets/favicon.png` — favicon activo
 - `assets/logo-verde.png` — header pages internas (54 px alto)
