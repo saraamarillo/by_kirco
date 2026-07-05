@@ -213,6 +213,23 @@ main { flex: 1; display: flex; flex-direction: column; align-items: center; padd
   text-transform: uppercase;
   margin: 0;
 }
+.flor-field-wrap { display: flex; flex-direction: column; gap: 4px; }
+.flor-field-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: var(--track-mono);
+  text-transform: uppercase;
+  color: var(--kirco-paper);
+  opacity: 0.7;
+  padding-left: 2px;
+}
+.pedido-caja input[readonly] {
+  color: var(--kirco-green-deep);
+  font-weight: 700;
+  font-size: 17px;
+  cursor: default;
+  opacity: 0.92;
+}
 @media (max-width: 600px) { .pedido-caja { padding: 28px 20px; } }
 
 /* ── Footer ── */
@@ -301,7 +318,10 @@ footer h4 { font-family: var(--font-mono); font-size: 12px; font-weight: 400; le
           <input type="text" name="first_name" placeholder="Tu nombre" required />
           <input type="email" name="email_address" placeholder="tu@correo.com" required />
           <textarea name="sobre_ti" placeholder="Cuéntame un poco de ti" rows="4"></textarea>
-          <input type="hidden" name="fields[flor]" id="quizFieldFlor" value="" />
+          <div class="flor-field-wrap">
+            <span class="flor-field-label">Tu flor</span>
+            <input type="text" name="fields[flor]" id="quizFieldFlor" value="" readonly />
+          </div>
           <button type="submit" class="btn-enviar-carta">Quiero mi carta</button>
           <p class="pedido-nota-quiz">Si no recibes noticias mías, revisa tu carpeta de spam.</p>
         </form>
