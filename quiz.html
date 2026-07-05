@@ -56,7 +56,7 @@ main { flex: 1; display: flex; flex-direction: column; align-items: center; padd
 /* ── Intro ── */
 .intro-wrap { width: 100%; max-width: 560px; text-align: center; animation: fadeUp 700ms ease-out both; }
 .intro-kicker { font-family: var(--font-mono); font-size: 12px; letter-spacing: var(--track-mono); text-transform: uppercase; color: var(--kirco-orange-deep); margin: 0 0 20px; }
-.intro-titulo { font-family: var(--font-display); font-weight: 800; font-size: clamp(28px, 5vw, 42px); color: var(--kirco-ink); margin: 0 0 18px; line-height: 1.15; }
+.intro-titulo { font-family: var(--font-display); font-weight: 800; font-size: clamp(28px, 5vw, 42px); color: var(--kirco-green-deep); margin: 0 0 18px; line-height: 1.15; }
 .intro-subtitulo { font-size: 17px; line-height: 1.65; color: var(--kirco-ink-soft); margin: 0 0 40px; max-width: 440px; margin-left: auto; margin-right: auto; }
 .btn-empezar { display: inline-block; font-family: var(--font-display); font-weight: 800; font-size: 18px; color: var(--kirco-paper); background: var(--kirco-green-deep); border: none; border-radius: var(--radius-pill); padding: 18px 48px; cursor: pointer; transition: transform 180ms ease-out, filter 180ms ease-out; }
 .btn-empezar:hover { transform: translateY(-2px); filter: brightness(1.05); }
@@ -301,6 +301,7 @@ footer h4 { font-family: var(--font-mono); font-size: 12px; font-weight: 400; le
           <input type="text" name="first_name" placeholder="Tu nombre" required />
           <input type="email" name="email_address" placeholder="tu@correo.com" required />
           <textarea name="sobre_ti" placeholder="Cuéntame un poco de ti" rows="4"></textarea>
+          <input type="hidden" name="fields[flor]" id="quizFieldFlor" value="" />
           <button type="submit" class="btn-enviar-carta">Quiero mi carta</button>
           <p class="pedido-nota-quiz">Si no recibes noticias mías, revisa tu carpeta de spam.</p>
         </form>
@@ -543,6 +544,9 @@ footer h4 { font-family: var(--font-mono); font-size: 12px; font-weight: 400; le
     });
     carta.appendChild(firma);
 
+    var florInput = document.getElementById('quizFieldFlor');
+    if (florInput) florInput.value = res.flor;
+
     mostrar('pantallaResultado');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
@@ -570,6 +574,8 @@ footer h4 { font-family: var(--font-mono); font-size: 12px; font-weight: 400; le
     body.append('email_address', email);
     body.append('fields[first_name]', nombre);
     if (sobreTi) body.append('fields[sobre_ti]', sobreTi);
+    var florVal = document.getElementById('quizFieldFlor').value;
+    if (florVal) body.append('fields[flor]', florVal);
     fetch('https://app.kit.com/forms/9602040/subscriptions', {
       method: 'POST', mode: 'no-cors', body: body
     });
