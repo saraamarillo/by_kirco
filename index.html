@@ -134,26 +134,9 @@ main, footer { position: relative; z-index: 1; }
 /* ============================================================
    HEADER
    ============================================================ */
-/* ── TOP NAV GRADIENTE ── */
-.site-header {
-  position: absolute; top: 0; left: 0; right: 0; z-index: 10;
-  padding: 18px 40px 44px;
-  background: linear-gradient(to bottom, rgba(111,156,62,0.5) 0%, transparent 100%);
-  display: flex; align-items: center; justify-content: space-between; gap: 24px;
-}
-.site-header .logo-link { flex-shrink: 0; display: flex; align-items: center; }
-.site-header .logo { height: 64px; }
-.site-header nav { display: flex; gap: 8px; flex-wrap: wrap; }
-.site-header nav a {
-  font-family: var(--font-mono); font-size: 12px; letter-spacing: var(--track-mono);
-  text-transform: uppercase; color: #FFFDDA; text-decoration: none;
-  padding: 6px 14px; border-radius: var(--radius-pill); transition: background 150ms ease-out, color 150ms ease-out;
-}
-.site-header nav a:hover { background: rgba(255,255,255,0.82); color: #6F9C3E; }
-
 header {
-  display: flex; align-items: center; justify-content: center;
-  padding: 80px 0 0;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 26px 0 0;
   position: relative; z-index: 2;
 }
 .logo-anim {
@@ -510,16 +493,12 @@ header {
   color: var(--kirco-yellow);
   font-size: 15px;
 }
-.pedido-nota {
-  margin: 4px 0 0;
-  text-align: center;
-  font-size: 12px;
-  color: var(--kirco-paper);
-  opacity: 0.55;
-  font-family: var(--font-mono);
-  letter-spacing: 0.04em;
-}
 
+/* Kit form overrides */
+.pedido-caja .seva-form { width: 100%; }
+.pedido-caja .formkit-fields { gap: 14px; }
+.pedido-caja .formkit-powered-by-convertkit-container { display: none; }
+.flor-badge { background: var(--kirco-green); border-radius: var(--radius-md); padding: 11px 18px; font-family: var(--font-display); font-weight: 800; font-size: 16px; color: var(--kirco-ink); text-align: center; margin-bottom: 6px; }
 
 /* ============================================================
    FOOTER
@@ -614,56 +593,6 @@ footer h4 {
 .flor-legal { width: 50px; height: 50px; vertical-align: -3px; }
 
 /* ============================================================
-   GALERÍA BURBUJAS
-   ============================================================ */
-.gal-burbujas {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-  max-width: 920px;
-  margin: 52px auto 0;
-  text-align: left;
-  padding: 0 40px;
-}
-.gal-burbuja {
-  display: flex; flex-direction: column; gap: 12px;
-  opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 560ms ease-out, transform 560ms ease-out;
-}
-.gal-burbuja.in-view { opacity: 1; transform: none; }
-.gal-burbuja:nth-child(2) { transition-delay: 130ms; }
-.gal-burbuja:nth-child(3) { transition-delay: 260ms; }
-.gal-nube {
-  border-radius: 16px 16px 16px 4px;
-  padding: 20px 22px;
-  font-family: var(--font-mono);
-  font-size: 14px;
-  line-height: 1.75;
-  box-shadow: 0 2px 10px rgba(46,43,37,.08);
-}
-.gal-nube.verde   { background: #6F9C3E; }
-.gal-nube.naranja { background: #D07F1F; }
-.gal-nube p { margin: 0; color: #fff; }
-.gal-firma { display: flex; align-items: center; gap: 10px; padding: 0 4px; }
-.gal-flor { width: 34px; height: 34px; flex-shrink: 0; }
-.gal-flor.verde   { filter: hue-rotate(64deg) saturate(0.42) brightness(0.65); }
-.gal-flor.naranja { filter: hue-rotate(4deg) saturate(0.75) brightness(0.71); }
-.gal-nombre {
-  font-family: var(--font-display); font-weight: 800; font-size: 13px;
-  display: block;
-}
-.gal-nombre.verde   { color: #6F9C3E; }
-.gal-nombre.naranja { color: #D07F1F; }
-.gal-fecha {
-  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em;
-  color: var(--kirco-ink-soft); display: block;
-}
-@media (max-width: 700px) {
-  .gal-burbujas { grid-template-columns: 1fr; max-width: 380px; padding: 0 24px; }
-}
-
-/* ============================================================
    RESPONSIVE
    ============================================================ */
 /* ---- Tablet ---- */
@@ -737,20 +666,13 @@ footer h4 {
   <div class="loader-anim" id="loaderAnim"></div>
 </div>
 
-<header class="site-header">
-  <a href="/" class="logo-link"><img class="logo" src="assets/logo-firma.png" alt="by_kirco" /></a>
-  <nav>
-    <a href="/sobre-mi.html">Sobre mí</a>
-    <a href="/destinatarios.html">Destinatarios</a>
-  </nav>
-</header>
-
 <main>
   <div class="wrap">
     <header>
       <div class="logo-anim" id="logoAnim">
         <img class="logo-img" src="assets/logo-verde.png" alt="by_kirco" />
       </div>
+      <span class="handle">@BY_KIRCO</span>
     </header>
   </div>
 
@@ -762,7 +684,7 @@ footer h4 {
       <p class="kicker">Cartas que esperan ser encontradas</p>
       <h1>Queridos<br />desconocidos</h1>
       <p class="sub">Cartas anónimas escritas a mano que dejo para ti en algún lugar.</p>
-      <a class="btn" href="/quiz.html">¿Cuál es tu flor?</a>
+      <a class="btn" href="#pedido">Quiero una carta</a>
       <img class="flor-sep" src="assets/monograma-verde.png" alt="" aria-hidden="true" />
     </div>
   </section>
@@ -794,7 +716,7 @@ footer h4 {
     <div class="flor-marca verde g1f"></div>
     <div class="flor-marca verde g2f"></div>
     <h2>Cartitas que ya encontraron a alguien</h2>
-    <p class="gal-sub">Con cariño, para ti.</p>
+    <p class="gal-sub">Dejadas por ahí, con cariño</p>
     <div class="gal-strip" id="galStrip">
       <div class="polaroid" style="--i:0">
         <img class="foto" src="assets/galeria/02-naturaleza.png" alt="Cartita naranja entre la hierba" />
@@ -821,50 +743,22 @@ footer h4 {
         <div class="pie"><img src="assets/monograma-verde.png" alt="" /><span>Parabrisas con suerte</span></div>
       </div>
     </div>
-    <div class="gal-burbujas">
-
-      <div class="gal-burbuja">
-        <div class="gal-nube verde">
-          <p>Hola! Lo he encontrado yo, muchas gracias! Necesitaba leer algo así</p>
-        </div>
-        <div class="gal-firma">
-          <img class="gal-flor verde" src="assets/flor.svg" alt="" />
-          <div>
-            <span class="gal-nombre verde">Sara</span>
-            <span class="gal-fecha">12/01/2025</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="gal-burbuja">
-        <div class="gal-nube naranja">
-          <p>Holiii, encontré tu tarjetita de la rosa, me hizo mucha ilu 🥰</p>
-        </div>
-        <div class="gal-firma">
-          <img class="gal-flor naranja" src="assets/flor.svg" alt="" />
-          <div>
-            <span class="gal-nombre naranja">Noa</span>
-            <span class="gal-fecha">12/01/2024</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="gal-burbuja">
-        <div class="gal-nube verde">
-          <p>Me ha llegado la cartita y me ha encantado. Me alegraste el día 🥰. ¡Gracias!</p>
-        </div>
-        <div class="gal-firma">
-          <img class="gal-flor verde" src="assets/flor.svg" alt="" />
-          <div>
-            <span class="gal-nombre verde">Alejandra</span>
-            <span class="gal-fecha">03/10/2024</span>
-          </div>
-        </div>
-      </div>
-
-    </div>
   </section>
 
+  <!-- ===== PEDIDO ===== -->
+  <section class="pedido" id="pedido">
+    <div class="flor-fondo f1"></div>
+    <div class="flor-fondo f2"></div>
+    <div class="flor-fondo f3"></div>
+    <div class="wrap">
+      <h2>¿Quieres una carta personalizada?</h2>
+      <p class="sub">Déjame tu correo y me pongo en contacto contigo.</p>
+      <div class="pedido-caja">
+        <div class="flor-badge" id="florBadge" hidden>Tu flor: <span id="florNombre"></span></div>
+        <form action="https://app.kit.com/forms/9602040/subscriptions" class="seva-form formkit-form" method="post" data-sv-form="9602040" data-uid="91fd762686" data-format="inline" data-version="5" data-options="{&quot;settings&quot;:{&quot;after_subscribe&quot;:{&quot;action&quot;:&quot;redirect&quot;,&quot;success_message&quot;:&quot;&quot;,&quot;redirect_url&quot;:&quot;https://bykirco.vercel.app/carta-para-ti.html&quot;},&quot;analytics&quot;:{&quot;google&quot;:null,&quot;fathom&quot;:null,&quot;facebook&quot;:null,&quot;segment&quot;:null,&quot;pinterest&quot;:null,&quot;sparkloop&quot;:null,&quot;googletagmanager&quot;:null},&quot;modal&quot;:{&quot;trigger&quot;:&quot;timer&quot;,&quot;scroll_percentage&quot;:null,&quot;timer&quot;:5,&quot;devices&quot;:&quot;all&quot;,&quot;show_once_every&quot;:15},&quot;powered_by&quot;:{&quot;show&quot;:false,&quot;url&quot;:&quot;https://kit.com/features/forms?utm_campaign=poweredby&amp;utm_content=form&amp;utm_medium=referral&amp;utm_source=dynamic&quot;},&quot;recaptcha&quot;:{&quot;enabled&quot;:false},&quot;return_visitor&quot;:{&quot;action&quot;:&quot;show&quot;,&quot;custom_content&quot;:&quot;&quot;},&quot;slide_in&quot;:{&quot;display_in&quot;:&quot;bottom_right&quot;,&quot;trigger&quot;:&quot;timer&quot;,&quot;scroll_percentage&quot;:null,&quot;timer&quot;:5,&quot;devices&quot;:&quot;all&quot;,&quot;show_once_every&quot;:15},&quot;sticky_bar&quot;:{&quot;display_in&quot;:&quot;top&quot;,&quot;trigger&quot;:&quot;timer&quot;,&quot;scroll_percentage&quot;:null,&quot;timer&quot;:5,&quot;devices&quot;:&quot;all&quot;,&quot;show_once_every&quot;:15}},&quot;version&quot;:&quot;5&quot;}" min-width="400 500 600 700 800"><div data-style="clean"><ul class="formkit-alert formkit-alert-error" data-element="errors" data-group="alert"></ul><div data-element="fields" data-stacked="true" class="seva-fields formkit-fields"><div class="formkit-field"><input class="formkit-input" name="fields[first_name]" aria-label="Tu nombre" placeholder="Tu nombre" required="" type="text" style="color: rgb(46,43,37); border-color: transparent; border-radius: 16px; font-weight: 400; font-size: 17px; padding: 14px 18px; background: #f7f1e3;"></div><div class="formkit-field"><input class="formkit-input" name="email_address" aria-label="Tu correo" placeholder="tu@correo.com" required="" type="email" style="color: rgb(46,43,37); border-color: transparent; border-radius: 16px; font-weight: 400; font-size: 17px; padding: 14px 18px; background: #f7f1e3;"></div><button data-element="submit" class="formkit-submit formkit-submit" style="color: #6f9c3e; background-color: #f7f1e3; border-radius: 999px; font-weight: 800; font-size: 18px; padding: 16px; width: 100%; font-family: inherit;"><div class="formkit-spinner"><div></div><div></div><div></div></div><span class="">Quiero mi carta</span></button><input type="hidden" name="fields[flor]" id="fieldFlor" value=""></div></div></form>
+      </div>
+    </div>
+  </section>
 </main>
 
 <!-- ===== FOOTER ===== -->
@@ -882,7 +776,7 @@ footer h4 {
           <a href="/politica-privacidad.html">Política de privacidad</a>
           <a href="/politica-cookies.html">Cookies</a>
         </div>
-        <h4 style="margin-top:32px">Sígueme para enterarte dónde dejo la próxima cartita</h4>
+        <h4 style="margin-top:32px">Sígueme</h4>
         <div class="redes">
           <a href="https://www.instagram.com/by_kirco/" target="_blank" rel="noopener">Instagram</a>
           <a href="https://www.tiktok.com/@by_kirco" target="_blank" rel="noopener">TikTok</a>
@@ -893,7 +787,7 @@ footer h4 {
     <div class="legal">
       <span>
         © 2026 by_kirco
-        <img class="flor-legal" src="assets/flor.svg" alt=""
+        <img class="flor-legal" src="assets/monograma-verde.png" alt=""
              style="filter:brightness(0) invert(1);opacity:.85" aria-hidden="true" />
         Cartas con cariño
       </span>
@@ -976,18 +870,74 @@ footer h4 {
 })();
 
 /* ---------------------------------------------------------------
-   DESTINATARIOS PREVIEW — animación de entrada
+   FLOR — URL param ?flor= → Kit custom field
 --------------------------------------------------------------- */
 (function () {
-  var obs = new IntersectionObserver(function (entries) {
-    entries.forEach(function (e) {
-      if (e.isIntersecting) { e.target.classList.add('in-view'); obs.unobserve(e.target); }
-    });
-  }, { threshold: 0.12 });
-  document.querySelectorAll('.gal-burbuja').forEach(function (el) { obs.observe(el); });
+  var flor = new URLSearchParams(window.location.search).get('flor');
+  if (!flor || !flor.trim()) return;
+  var f = flor.trim();
+  var hidden = document.getElementById('fieldFlor');
+  if (hidden) hidden.value = f;
+  var badge = document.getElementById('florBadge');
+  var nombre = document.getElementById('florNombre');
+  if (badge && nombre) {
+    nombre.textContent = f.charAt(0).toUpperCase() + f.slice(1).toLowerCase();
+    badge.removeAttribute('hidden');
+  }
 })();
+
+/* ---------------------------------------------------------------
+   FORMULARIOS — FormSubmit.co (envío a by.kirco@gmail.com)
+   Primera vez: FormSubmit.co enviará un email de verificación
+   a by.kirco@gmail.com — haz clic en el enlace y listo.
+--------------------------------------------------------------- */
+var FORMSUBMIT = 'https://formsubmit.co/ajax/by.kirco@gmail.com';
+
+function submitForm(form, statusEl, asunto, msgOk) {
+  var btn = form.querySelector('button[type=submit]');
+  var emailEl = form.querySelector('input[type=email]');
+  if (emailEl && !emailEl.checkValidity()) {
+    statusEl.textContent = 'Déjame un correo donde encontrarte.';
+    emailEl.focus(); return;
+  }
+  var nombreEl = form.querySelector('input[name=nombre]');
+  if (nombreEl && !nombreEl.value.trim()) {
+    statusEl.textContent = 'Dime cómo te llamas.';
+    nombreEl.focus(); return;
+  }
+
+  statusEl.textContent = 'Enviando…';
+  if (btn) btn.disabled = true;
+
+  var data = {};
+  new FormData(form).forEach(function(v, k) {
+    if (k !== '_honey') data[k] = v;
+  });
+  data._subject = asunto;
+  data._captcha = 'false';
+  data._template = 'table';
+
+  fetch(FORMSUBMIT, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify(data)
+  })
+  .then(function(r) { return r.json().then(function(j){ return { ok: r.ok, json: j }; }); })
+  .then(function(res) {
+    statusEl.textContent = res.ok ? msgOk : 'Algo falló. Inténtalo de nuevo.';
+    if (res.ok) form.reset();
+  })
+  .catch(function() {
+    statusEl.textContent = 'Sin conexión. Inténtalo en un rato.';
+  })
+  .finally(function() {
+    if (btn) btn.disabled = false;
+  });
+}
+
 
 </script>
 
+<script src="https://f.convertkit.com/ckjs/ck.5.js"></script>
 </body>
 </html>
