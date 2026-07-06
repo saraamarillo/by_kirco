@@ -374,7 +374,6 @@ footer h4 { font-family: var(--font-mono); font-size: 12px; font-weight: 400; le
   </div>
 </footer>
 
-<script src="https://f.convertkit.com/ckjs/ck.5.js"></script>
 <script>
 (function () {
   /* ── Datos ── */
@@ -593,19 +592,18 @@ footer h4 { font-family: var(--font-mono); font-size: 12px; font-weight: 400; le
     var btn = form.querySelector('button[type=submit]');
     var nombre  = form.querySelector('[name="first_name"]').value.trim();
     var email   = form.querySelector('[name="email_address"]').value.trim();
-    var sobreTi = form.querySelector('[name="sobre_ti"]').value.trim();
+    var sobreTi = form.querySelector('[name="fields[sobre_ti]"]').value.trim();
     if (!nombre) { form.querySelector('[name="first_name"]').focus(); return; }
     if (!email)  { form.querySelector('[name="email_address"]').focus(); return; }
     if (btn) btn.disabled = true;
-    var body = new URLSearchParams();
-    body.append('email_address', email);
-    body.append('fields[first_name]', nombre);
-    if (sobreTi) body.append('fields[sobre_ti]', sobreTi);
+    var params = new URLSearchParams();
+    params.append('email_address', email);
+    params.append('first_name', nombre);
+    if (sobreTi) params.append('fields[sobre_ti]', sobreTi);
     var florVal = document.getElementById('quizFieldFlor').value;
-    if (florVal) body.append('fields[flor]', florVal);
-    fetch('https://app.kit.com/forms/9602040/subscriptions', {
-      method: 'POST', mode: 'no-cors', body: body
-    });
+    if (florVal) params.append('fields[flor]', florVal);
+    var blob = new Blob([params.toString()], { type: 'application/x-www-form-urlencoded' });
+    navigator.sendBeacon('https://app.kit.com/forms/9602040/subscriptions', blob);
     window.location.href =
       'https://bykirco.vercel.app/carta-para-ti.html?first_name=' +
       encodeURIComponent(nombre);
