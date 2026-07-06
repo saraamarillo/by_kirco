@@ -374,7 +374,6 @@ footer h4 { font-family: var(--font-mono); font-size: 12px; font-weight: 400; le
   </div>
 </footer>
 
-<script src="https://f.convertkit.com/ckjs/ck.5.js"></script>
 <script>
 (function () {
   /* ── Datos ── */
@@ -527,7 +526,6 @@ footer h4 { font-family: var(--font-mono); font-size: 12px; font-weight: 400; le
       wrap.appendChild(btn);
     });
     renderProgreso();
-    // Re-animar card
     var card = document.getElementById('preguntaCard');
     card.style.animation = 'none';
     void card.offsetWidth;
@@ -553,7 +551,6 @@ footer h4 { font-family: var(--font-mono); font-size: 12px; font-weight: 400; le
 
   function mostrarResultado() {
     var res = calcularResultado();
-    // Tema de color
     var cardId = document.getElementById('resultadoCardId');
     cardId.className = 'resultado-card-id ' + res.tema;
     document.getElementById('resultadoNum').textContent = res.num;
@@ -561,7 +558,6 @@ footer h4 { font-family: var(--font-mono); font-size: 12px; font-weight: 400; le
     document.getElementById('resultadoDesc').textContent = res.descripcion;
 
     var carta = document.getElementById('cartaResultado');
-    // Limpiar párrafos anteriores (conservar firma)
     var firma = carta.querySelector('.firma');
     carta.innerHTML = '';
     res.carta.forEach(function (linea) {
@@ -597,15 +593,14 @@ footer h4 { font-family: var(--font-mono); font-size: 12px; font-weight: 400; le
     if (!nombre) { form.querySelector('[name="first_name"]').focus(); return; }
     if (!email)  { form.querySelector('[name="email_address"]').focus(); return; }
     if (btn) btn.disabled = true;
-    var body = new URLSearchParams();
-    body.append('email_address', email);
-    body.append('first_name', nombre);
-    if (sobreTi) body.append('fields[sobre_ti]', sobreTi);
+    var params = new URLSearchParams();
+    params.append('email_address', email);
+    params.append('first_name', nombre);
+    if (sobreTi) params.append('fields[sobre_ti]', sobreTi);
     var florVal = document.getElementById('quizFieldFlor').value;
-    if (florVal) body.append('fields[flor]', florVal);
-    fetch('https://app.kit.com/forms/9602040/subscriptions', {
-      method: 'POST', mode: 'no-cors', body: body
-    });
+    if (florVal) params.append('fields[flor]', florVal);
+    var blob = new Blob([params.toString()], { type: 'application/x-www-form-urlencoded' });
+    navigator.sendBeacon('https://app.kit.com/forms/9602040/subscriptions', blob);
     window.location.href =
       'https://bykirco.vercel.app/carta-para-ti.html?first_name=' +
       encodeURIComponent(nombre);
