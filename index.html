@@ -7,13 +7,12 @@
 <meta name="description" content="Cartas anónimas escritas a mano que dejo para ti en algún lugar." />
 <meta property="og:title" content="by_kirco — Queridos desconocidos" />
 <meta property="og:description" content="Cartas anónimas escritas a mano que dejo para ti en algún lugar." />
-<!-- TODO(og:image): añade /assets/og.jpg (1200×630) y descomenta -->
 <!-- <meta property="og:image" content="/assets/og.jpg" /> -->
 <meta name="theme-color" content="#f7f1e3" />
 <link rel="icon" type="image/png" href="/assets/favicon.png" />
 <link rel="apple-touch-icon" href="/assets/favicon.png" />
 
-<!-- Lottie for animated logo -->
+<!-- Lottie for loader -->
 <script src="https://unpkg.com/lottie-web@5.12.2/build/player/lottie.min.js"></script>
 <!-- Caveat for handwritten letter text -->
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&display=swap" rel="stylesheet" />
@@ -61,22 +60,14 @@
   --kirco-line:         #e8e1d2;
 
   /* --- Semantic aliases --- */
-  --surface-page:   var(--kirco-white);
-  --surface-soft:   var(--kirco-yellow-tint);
-  --surface-card:   var(--kirco-white);
   --text-body:      var(--kirco-ink);
   --text-muted:     var(--kirco-ink-soft);
-  --accent-primary: var(--kirco-green);
 
   /* --- Typography --- */
   --font-display: "Visby Round CF", system-ui, sans-serif;
   --font-mono:    "OCR B Std", "OCR A Std", monospace;
   --font-body:    system-ui, -apple-system, "Segoe UI", sans-serif;
   --track-mono:   0.16em;
-
-  /* --- Spacing --- */
-  --space-1: 4px;   --space-2: 8px;   --space-3: 16px;
-  --space-4: 24px;  --space-5: 40px;  --space-6: 64px;
 
   /* --- Radii --- */
   --radius-sm:   10px;
@@ -87,7 +78,6 @@
   /* --- Shadows --- */
   --shadow-card:       0 2px 6px rgba(46,43,37,.06), 0 10px 28px rgba(46,43,37,.08);
   --shadow-pop:        0 4px 12px rgba(46,43,37,.10), 0 18px 44px rgba(46,43,37,.14);
-  --shadow-glow-green: 0 0 0 6px rgba(160,215,107,.3);
 }
 
 /* ============================================================
@@ -129,41 +119,21 @@ body {
 }
 .flor-marca.verde   { background-image: url("assets/monograma-verde.png"); }
 .flor-marca.naranja { background-image: url("assets/monograma-naranja.png?v=2"); }
-main, footer { position: relative; z-index: 1; }
 
 /* ============================================================
-   TOP NAV
+   SITE HEADER
    ============================================================ */
 .site-header {
-  position: absolute; top: 0; left: 0; right: 0; z-index: 10;
-  padding: 18px 40px 44px;
-  background: linear-gradient(to bottom, rgba(111,156,62,0.5) 0%, transparent 100%);
-  display: flex; align-items: center; justify-content: space-between; gap: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 26px 48px 0;
 }
-.site-header .logo-link { flex-shrink: 0; display: flex; align-items: center; }
-.site-header .logo { height: 64px; }
-.site-header nav { display: flex; gap: 8px; flex-wrap: wrap; }
-.site-header nav a {
-  font-family: var(--font-mono); font-size: 12px; letter-spacing: var(--track-mono);
-  text-transform: uppercase; color: #FFFDDA; text-decoration: none;
-  padding: 6px 14px; border-radius: var(--radius-pill); transition: background 150ms ease-out, color 150ms ease-out;
-}
-.site-header nav a:hover { background: rgba(255,255,255,0.82); color: #3a5520; }
-
-/* ============================================================
-   HEADER
-   ============================================================ */
-header {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 80px 0 0;
-  position: relative; z-index: 2;
-}
-.logo-anim {
-  width: 300px; height: 300px;
-  display: flex; align-items: center;
-}
-.logo-anim .logo-img { height: 300px; width: 300px; object-fit: contain; }
-.handle {
+.site-header .logo-link { display: flex; align-items: center; }
+.site-header .logo { height: 96px; display: block; }
+.site-header .handle {
   font-family: var(--font-mono);
   font-size: 13px;
   letter-spacing: var(--track-mono);
@@ -183,7 +153,7 @@ header {
   background: var(--kirco-orange-deep);
   border: 2px solid var(--kirco-orange-deep);
   border-radius: var(--radius-pill);
-  padding: 17px 42px;
+  padding: 17px 46px;
   text-decoration: none;
   cursor: pointer;
   transition: transform 180ms ease-out, filter 180ms ease-out;
@@ -198,20 +168,11 @@ header {
 .hero {
   position: relative; overflow: hidden;
   text-align: center;
-  padding: 110px 0 140px;
+  padding: 100px 48px 130px;
 }
 .hero .flor-marca.h1f { width: 620px; height: 620px; top: -160px; left: -180px; transform: rotate(-14deg); }
 .hero .flor-marca.h2f { width: 340px; height: 340px; bottom: -60px; right: -90px; transform: rotate(12deg); }
-.hero .wrap { position: relative; }
-
-.hero .kicker {
-  font-family: var(--font-mono);
-  font-size: 15px;
-  letter-spacing: var(--track-mono);
-  text-transform: uppercase;
-  color: var(--kirco-orange-deep);
-  margin: 0 0 26px;
-}
+.hero .inner { position: relative; max-width: 900px; margin: 0 auto; }
 .hero h1 {
   font-family: var(--font-display);
   font-weight: 800;
@@ -219,19 +180,21 @@ header {
   line-height: 0.98;
   margin: 0;
   color: var(--kirco-green-deep);
+  text-wrap: balance;
 }
 .hero .sub {
-  font-size: 23px;
-  line-height: 1.6;
+  font-size: 24px;
+  line-height: 1.5;
   color: var(--text-muted);
-  max-width: 600px;
-  margin: 34px auto 0;
+  max-width: 520px;
+  margin: 32px auto 0;
+  text-wrap: pretty;
 }
-.hero .btn  { margin-top: 46px; }
+.hero .btn  { margin-top: 42px; }
 .hero .flor-sep {
   display: block;
-  width: 50px; height: 50px;
-  margin: 56px auto 0;
+  width: 30px; height: 30px;
+  margin: 52px auto 0;
   opacity: 0.65;
 }
 
@@ -241,13 +204,12 @@ header {
 .carta-scene {
   position: relative;
   background: var(--kirco-paper);
-  padding: 130px 0 150px;
+  padding: 110px 48px 150px;
   text-align: center;
   overflow: hidden;
 }
 .carta-scene .flor-marca.c1f { width: 480px; height: 480px; top: 60px; right: -150px; transform: rotate(16deg); }
 .carta-scene .flor-marca.c2f { width: 300px; height: 300px; bottom: -70px; left: -80px; transform: rotate(-10deg); }
-.carta-scene .wrap { position: relative; }
 .carta-scene .label {
   font-family: var(--font-mono);
   font-size: 14px;
@@ -255,6 +217,7 @@ header {
   text-transform: uppercase;
   color: var(--kirco-green-deep);
   margin: 0 0 70px;
+  position: relative;
 }
 
 .envelope {
@@ -306,8 +269,8 @@ header {
   z-index: 2;
 }
 .letter .saludo {
-  font-family: var(--font-display);
-  font-weight: 800; font-size: 26px;
+  font-family: 'Caveat', cursive;
+  font-weight: 600; font-size: 34px;
   color: var(--kirco-orange-deep);
   margin: 0 0 12px;
 }
@@ -326,7 +289,10 @@ header {
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
 }
-.letter .flor-firma { height: 50px; width: 50px; margin-top: 16px; display: block; margin-left: auto; margin-right: auto; }
+.letter .flor-firma {
+  height: 30px; width: 30px;
+  margin-top: 16px; display: block;
+}
 .letter .saludo, .letter p, .letter .flor-firma {
   opacity: 0;
   transform: translateY(10px);
@@ -348,76 +314,6 @@ header {
 }
 
 /* ============================================================
-   DESTINATARIOS PREVIEW
-   ============================================================ */
-.dest-preview {
-  background: var(--kirco-paper);
-  padding: 100px 0 120px;
-  text-align: center;
-}
-.dest-preview-h {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: clamp(44px, 7vw, 72px);
-  color: var(--kirco-green-deep);
-  margin: 0 0 52px;
-  line-height: 1.1;
-}
-.dest-preview-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-  max-width: 920px;
-  margin: 0 auto 48px;
-  text-align: left;
-}
-.prev-nube {
-  border-radius: 16px 16px 16px 4px;
-  padding: 20px 22px;
-  font-family: var(--font-mono);
-  font-size: 14px;
-  line-height: 1.75;
-  color: var(--kirco-ink);
-  box-shadow: 0 2px 10px rgba(46,43,37,.08);
-}
-.prev-nube.verde   { background: #A0D76B; }
-.prev-nube.naranja { background: #FFAA4D; }
-.prev-nube p { margin: 0; color: #fff; }
-.prev-firma { display: flex; align-items: center; gap: 10px; padding: 0 4px; margin-top: 12px; }
-.prev-flor { width: 34px; height: 34px; flex-shrink: 0; }
-.prev-nombre {
-  font-family: var(--font-display); font-weight: 800; font-size: 13px;
-  display: block; color: var(--kirco-ink);
-}
-.prev-fecha {
-  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em;
-  color: var(--kirco-ink-soft); display: block;
-}
-.dest-prev-burbuja {
-  display: flex; flex-direction: column;
-  opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 560ms ease-out, transform 560ms ease-out;
-}
-.dest-prev-burbuja.in-view { opacity: 1; transform: none; }
-.dest-prev-burbuja:nth-child(2) { transition-delay: 130ms; }
-.dest-prev-burbuja:nth-child(3) { transition-delay: 260ms; }
-.dest-preview-leyenda {
-  font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.14em;
-  text-transform: uppercase; color: var(--kirco-ink-soft);
-  margin: -40px 0 44px;
-}
-.btn-dest {
-  background: transparent;
-  color: var(--kirco-green-deep);
-  border-color: var(--kirco-green-deep);
-}
-.btn-dest:hover { background: var(--kirco-green-deep); color: var(--kirco-paper); filter: none; }
-@media (max-width: 700px) {
-  .dest-preview-grid { grid-template-columns: 1fr; max-width: 380px; }
-}
-
-/* ============================================================
    GALERÍA — polaroids
    ============================================================ */
 .galeria {
@@ -426,11 +322,13 @@ header {
 }
 .galeria .flor-marca.g1f { width: 520px; height: 520px; top: -120px; left: -160px; transform: rotate(-12deg); }
 .galeria .flor-marca.g2f { width: 280px; height: 280px; bottom: -60px; right: -70px; transform: rotate(9deg); }
+.galeria .gal-header { max-width: 1100px; margin: 0 auto; padding: 0 48px; position: relative; }
 .galeria h2 {
   font-family: var(--font-display);
   font-weight: 800; font-size: 52px; line-height: 1.1;
   color: var(--kirco-green-deep);
   text-align: center; margin: 0;
+  text-wrap: balance;
 }
 .galeria .gal-sub {
   font-family: var(--font-mono);
@@ -482,7 +380,306 @@ header {
   color: var(--text-muted);
   margin-top: 14px;
 }
-.polaroid .pie img { width: 50px; height: 50px; }
+.polaroid .pie img { width: 14px; height: 14px; }
+
+/* ============================================================
+   DESTINATARIOS PREVIEW
+   ============================================================ */
+.dest-preview {
+  position: relative;
+  background: var(--kirco-paper);
+  padding: 120px 48px 150px;
+  overflow: hidden;
+  text-align: center;
+}
+.dest-preview .flor-dp { width: 400px; height: 400px; top: -100px; right: -120px; transform: rotate(10deg); }
+.dest-preview h2 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(40px, 6vw, 52px);
+  color: var(--kirco-green-deep);
+  margin: 0;
+  text-wrap: balance;
+}
+.dest-preview .dest-sub {
+  font-family: var(--font-mono);
+  font-size: 13px; letter-spacing: var(--track-mono);
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin: 18px 0 0;
+}
+.dest-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 36px;
+  max-width: 1000px;
+  margin: 70px auto 0;
+  text-align: left;
+  position: relative;
+}
+.dest-card { position: relative; }
+.dest-bubble {
+  border-radius: 24px;
+  padding: 30px 26px;
+  position: relative;
+  z-index: 2;
+  box-shadow: var(--shadow-card);
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 560ms ease-out, transform 560ms ease-out;
+}
+.dest-bubble.in-view { opacity: 1; transform: none; }
+.dest-bubble.verde   { background: var(--kirco-green-deep); }
+.dest-bubble.naranja { background: var(--kirco-orange-deep); }
+.dest-bubble p {
+  font-size: 17px; line-height: 1.6;
+  color: #ffffff; margin: 0 0 20px;
+  text-wrap: pretty;
+}
+.dest-bubble p::before { content: '“'; }
+.dest-bubble p::after  { content: '”'; }
+.dest-bubble-footer {
+  display: flex; align-items: center; gap: 12px;
+}
+.dest-monograma {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.6);
+  flex-shrink: 0;
+  object-fit: contain;
+  padding: 4px;
+}
+.dest-nombre {
+  font-family: var(--font-display);
+  font-weight: 800; font-size: 15px;
+  color: #ffffff; display: block; margin: 0;
+}
+.dest-fecha {
+  font-family: var(--font-mono);
+  font-size: 11px; letter-spacing: var(--track-mono);
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.8); display: block; margin: 2px 0 0;
+}
+.dest-tail {
+  position: absolute;
+  left: 36px; bottom: -9px;
+  width: 20px; height: 20px;
+  transform: rotate(45deg);
+  border-radius: 4px;
+  z-index: 1;
+}
+.dest-tail.verde   { background: var(--kirco-green-deep); }
+.dest-tail.naranja { background: var(--kirco-orange-deep); }
+.dest-preview .btn-dest {
+  display: inline-block;
+  margin-top: 60px;
+  font-family: var(--font-display);
+  font-weight: 800; font-size: 17px;
+  color: var(--kirco-green-deep);
+  background: transparent;
+  border: 2px solid var(--kirco-green);
+  border-radius: var(--radius-pill);
+  padding: 15px 34px;
+  text-decoration: none;
+  transition: background 150ms ease-out;
+}
+.dest-preview .btn-dest:hover { background: var(--kirco-green-tint); }
+.dest-card:nth-child(2) .dest-bubble { transition-delay: 130ms; }
+.dest-card:nth-child(3) .dest-bubble { transition-delay: 260ms; }
+
+/* ============================================================
+   SOBRE MÍ PREVIEW
+   ============================================================ */
+.sobre-preview {
+  position: relative;
+  background: var(--kirco-orange-tint);
+  padding: 120px 48px;
+  overflow: hidden;
+}
+.sobre-preview-inner {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 64px;
+  align-items: center;
+}
+.sobre-preview .label-tag {
+  font-family: var(--font-mono);
+  font-size: 13px; letter-spacing: var(--track-mono);
+  text-transform: uppercase;
+  color: var(--kirco-orange-deep);
+  margin: 0 0 18px;
+}
+.sobre-preview h2 {
+  font-family: var(--font-display);
+  font-weight: 800; font-size: 40px; line-height: 1.15;
+  margin: 0; color: var(--kirco-orange-deep);
+  text-wrap: balance;
+}
+.sobre-preview .sobre-desc {
+  font-size: 18px; line-height: 1.65;
+  color: var(--kirco-ink);
+  max-width: 480px; margin: 22px 0 0;
+  text-wrap: pretty;
+}
+.sobre-preview .btn-sobre {
+  display: inline-block;
+  margin-top: 32px;
+  font-family: var(--font-display);
+  font-weight: 800; font-size: 17px;
+  color: #fff;
+  background: var(--kirco-orange-deep);
+  border: 2px solid var(--kirco-orange-deep);
+  border-radius: var(--radius-pill);
+  padding: 15px 34px;
+  text-decoration: none;
+  transition: transform 150ms ease-out;
+}
+.sobre-preview .btn-sobre:hover { transform: translateY(-2px); }
+.sobre-tiktok {
+  position: relative;
+  width: 280px; height: 280px;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: var(--shadow-pop);
+  border: 6px solid var(--kirco-white);
+  flex-shrink: 0;
+}
+.sobre-tiktok iframe {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%) scale(1.55);
+  width: 325px; height: 580px;
+  border: none;
+  pointer-events: none;
+}
+
+/* ============================================================
+   COMUNIDAD DE ESCRITORES
+   ============================================================ */
+.comunidad {
+  position: relative;
+  background: var(--kirco-paper);
+  padding: 120px 48px 130px;
+  overflow: hidden;
+  text-align: center;
+}
+.comunidad .flor-marca.com1 { width: 420px; height: 420px; top: 40px; left: -130px; transform: rotate(-16deg); }
+.comunidad .flor-marca.com2 { width: 300px; height: 300px; bottom: -80px; right: -70px; transform: rotate(20deg); }
+.comunidad .label-tag {
+  font-family: var(--font-mono);
+  font-size: 13px; letter-spacing: var(--track-mono);
+  text-transform: uppercase;
+  color: var(--kirco-orange-deep);
+  margin: 0 0 18px;
+  position: relative;
+}
+.comunidad h2 {
+  font-family: var(--font-display);
+  font-weight: 800; font-size: 44px; line-height: 1.15;
+  margin: 0 auto; color: var(--kirco-green-deep);
+  max-width: 680px;
+  text-wrap: balance;
+  position: relative;
+}
+.comunidad .com-desc {
+  font-size: 19px; line-height: 1.7;
+  color: var(--text-body);
+  max-width: 680px; margin: 30px auto 0;
+  text-wrap: pretty;
+  position: relative;
+}
+.com-form-wrap {
+  background: var(--kirco-green-deep);
+  border-radius: 24px;
+  box-shadow: var(--shadow-pop);
+  max-width: 480px;
+  margin: 56px auto 0;
+  padding: 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  position: relative;
+}
+.com-form-wrap label {
+  font-family: var(--font-mono);
+  font-size: 12px; letter-spacing: var(--track-mono);
+  text-transform: uppercase;
+  color: var(--kirco-paper);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+.com-form-wrap input,
+.com-form-wrap textarea {
+  font-family: var(--font-body);
+  font-size: 17px;
+  color: var(--text-body);
+  background: var(--kirco-paper);
+  border: 2px solid var(--kirco-line);
+  border-radius: 14px;
+  padding: 14px 18px;
+  outline: none;
+  width: 100%;
+  text-align: center;
+  transition: border-color 200ms ease-out;
+}
+.com-form-wrap input:focus,
+.com-form-wrap textarea:focus { border-color: var(--kirco-green); }
+.com-form-wrap textarea { resize: vertical; }
+.com-form-wrap .btn-com {
+  align-self: center;
+  margin-top: 6px;
+  font-family: var(--font-display);
+  font-weight: 800; font-size: 19px;
+  color: var(--kirco-green-deep);
+  background: var(--kirco-paper);
+  border: 2px solid var(--kirco-paper);
+  border-radius: var(--radius-pill);
+  padding: 17px 42px;
+  cursor: pointer;
+  transition: transform 180ms ease-out;
+  line-height: 1;
+}
+.com-form-wrap .btn-com:hover { transform: translateY(-2px); }
+.com-form-note {
+  font-size: 14px; color: var(--kirco-paper);
+  opacity: 0.85; text-align: center;
+  margin: 4px 0 0;
+}
+.com-success {
+  background: var(--kirco-green-deep);
+  border-radius: 24px;
+  padding: 48px;
+  max-width: 480px;
+  margin: 56px auto 0;
+  text-align: center;
+  box-shadow: var(--shadow-pop);
+  display: none;
+  position: relative;
+}
+.com-success.visible { display: block; }
+.com-success .success-logo {
+  width: 48px; height: 48px;
+  filter: brightness(0) invert(1);
+  opacity: 0.9;
+  margin: 0 auto 18px;
+  display: block;
+}
+.com-success h3 {
+  font-family: var(--font-display);
+  font-weight: 800; font-size: 24px;
+  color: var(--kirco-paper); margin: 0;
+}
+.com-success p {
+  font-size: 16px; line-height: 1.6;
+  color: var(--kirco-paper); opacity: 0.9;
+  margin: 14px 0 0;
+}
 
 /* ============================================================
    FOOTER
@@ -494,7 +691,7 @@ footer {
 }
 .footer-grid {
   display: grid;
-  grid-template-columns: 1.2fr 1fr;
+  grid-template-columns: 1.2fr 1fr 1.3fr;
   gap: 64px; align-items: start;
 }
 .logo-foot { height: 84px; }
@@ -516,10 +713,10 @@ footer h4 {
   font-family: var(--font-display);
   font-weight: 800; font-size: 17px;
   color: var(--kirco-paper); text-decoration: none;
-  transition: transform 150ms ease-out, opacity 150ms ease-out;
+  transition: opacity 150ms ease-out;
 }
-.foot-links a:hover { transform: translateX(3px); opacity: 0.85; }
-.redes { display: flex; gap: 12px; margin-top: 6px; }
+.foot-links a:hover { opacity: 0.85; }
+.redes { display: flex; gap: 12px; flex-wrap: wrap; }
 .redes a {
   font-family: var(--font-display);
   font-weight: 800; font-size: 16px;
@@ -531,35 +728,6 @@ footer h4 {
   transition: transform 150ms ease-out;
 }
 .redes a:hover { transform: translateY(-2px); }
-.footer-avisos {}
-.footer-avisos p.avisos-desc {
-  font-size: 15px; line-height: 1.6;
-  color: var(--kirco-paper); opacity: 0.88;
-  margin: 0 0 16px;
-}
-.avisos-row { display: flex; gap: 10px; flex-wrap: wrap; }
-.footer-avisos input {
-  background: var(--kirco-paper);
-  border-color: var(--kirco-paper); flex: 1; min-width: 160px;
-}
-.footer-avisos input:focus { border-color: var(--kirco-green); box-shadow: none; }
-.btn-mini {
-  font-family: var(--font-display);
-  font-weight: 800; font-size: 16px;
-  color: #ffffff;
-  background: var(--kirco-green);
-  border: 2px solid var(--kirco-green);
-  border-radius: var(--radius-pill);
-  padding: 0 26px; cursor: pointer;
-  transition: transform 150ms ease-out;
-  white-space: nowrap;
-}
-.btn-mini:hover { transform: translateY(-2px); }
-.avisos-status-foot {
-  min-height: 1.2em; margin-top: 10px;
-  font-style: italic; font-size: 14px;
-  color: var(--kirco-paper); opacity: 0.85;
-}
 .legal {
   display: flex; align-items: center;
   justify-content: space-between; gap: 24px;
@@ -573,48 +741,49 @@ footer h4 {
 }
 .legal a { color: var(--kirco-paper); text-decoration: none; }
 .legal a:hover { text-decoration: underline; }
-.legal .legal-links { display: flex; gap: 22px; }
-.flor-legal { width: 50px; height: 50px; vertical-align: -3px; }
+.legal-links { display: flex; gap: 22px; }
 
 /* ============================================================
    RESPONSIVE
    ============================================================ */
-/* ---- Tablet ---- */
 @media (max-width: 900px) {
   .wrap { padding: 0 28px; }
-  .footer-grid { grid-template-columns: 1fr; gap: 44px; }
-  .campos-fila { grid-template-columns: 1fr; }
-  .logo-anim { width: 200px; height: 200px; }
-  .logo-anim .logo-img { width: 200px; height: 200px; }
-  .hero { padding: 80px 0 100px; }
+  .site-header { padding: 20px 28px 0; }
+  .hero { padding: 80px 28px 100px; }
+  .carta-scene { padding: 80px 28px 110px; }
+  .dest-preview { padding: 80px 28px 100px; }
+  .sobre-preview { padding: 80px 28px; }
+  .sobre-preview-inner { grid-template-columns: 1fr; gap: 40px; }
+  .sobre-tiktok { width: 200px; height: 200px; }
+  .sobre-tiktok iframe { transform: translate(-50%, -50%) scale(1.1); }
+  .comunidad { padding: 80px 28px 100px; }
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 44px; }
   .galeria h2 { font-size: 42px; }
 }
 
-/* ---- Mobile ---- */
+@media (max-width: 700px) {
+  .dest-grid { grid-template-columns: 1fr; max-width: 420px; margin-left: auto; margin-right: auto; }
+  .footer-grid { grid-template-columns: 1fr; gap: 36px; }
+}
+
 @media (max-width: 640px) {
-  .wrap { padding: 0 20px; }
+  .site-header { padding: 18px 20px 0; }
+  .site-header .logo { height: 64px; }
+  .site-header .handle { font-size: 11px; }
 
-  /* Header */
-  .logo-anim { width: 130px; height: 130px; }
-  .logo-anim .logo-img { width: 130px; height: 130px; }
-  .handle { font-size: 11px; letter-spacing: 0.1em; }
-
-  /* Hero */
-  .hero { padding: 48px 0 64px; }
+  .hero { padding: 48px 20px 64px; }
   .hero h1 { font-size: clamp(44px, 13vw, 72px); }
   .hero .sub { font-size: 18px; }
   .hero .btn { font-size: 17px; padding: 14px 32px; margin-top: 32px; }
-  .hero .flor-sep { margin-top: 36px; }
 
-  /* Carta animada */
-  .carta-scene { padding: 72px 0 88px; }
+  .carta-scene { padding: 72px 20px 88px; }
   .envelope { margin-top: 200px; }
   .letter { padding: 18px 22px 14px; }
   .letter .saludo { font-size: 26px; }
   .letter p { font-size: 18px; }
 
-  /* Galería — vertical en móvil */
   .galeria { padding: 80px 0 90px; }
+  .galeria .gal-header { padding: 0 20px; }
   .galeria h2 { font-size: 34px; }
   .gal-strip {
     flex-direction: column;
@@ -628,11 +797,18 @@ footer h4 {
   .polaroid { flex: 0 0 auto; width: 100%; max-width: 340px; }
   .polaroid .foto { height: 260px; }
 
-  /* Footer */
+  .dest-preview { padding: 60px 20px 80px; }
+  .sobre-preview { padding: 60px 20px; }
+  .sobre-tiktok { display: none; }
+  .sobre-preview-inner { grid-template-columns: 1fr; }
+
+  .comunidad { padding: 60px 20px 80px; }
+  .comunidad h2 { font-size: 34px; }
+  .com-form-wrap { padding: 32px 24px; }
+
   footer { padding: 60px 0 44px; }
-  .footer-grid { gap: 32px; }
-  .redes { flex-wrap: wrap; }
   .legal { flex-direction: column; align-items: flex-start; gap: 14px; }
+  .legal-links { flex-direction: column; gap: 10px; }
 }
 </style>
 </head>
@@ -643,146 +819,187 @@ footer h4 {
   <div class="loader-anim" id="loaderAnim"></div>
 </div>
 
-<!-- NAV -->
+<!-- HEADER -->
 <header class="site-header">
-  <a href="/" class="logo-link"><img class="logo" src="assets/logo-verde.png" alt="by_kirco" /></a>
-  <nav>
-    <a href="/sobre-mi.html">Sobre mí</a>
-    <a href="/destinatarios.html">Destinatarios</a>
-  </nav>
+  <a href="/" class="logo-link"><img class="logo" src="assets/logo-verde.png" alt="by_kirco" id="headerLogo" /></a>
+  <span class="handle">@BY_KIRCO</span>
 </header>
 
-<main>
-  <div class="wrap">
-    <header>
-      <div class="logo-anim" id="logoAnim">
-        <img class="logo-img" src="assets/logo-verde.png" alt="by_kirco" />
-      </div>
-      <span class="handle">@BY_KIRCO</span>
-    </header>
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="flor-marca verde h1f"></div>
+  <div class="flor-marca verde h2f"></div>
+  <div class="inner">
+    <h1>Queridos<br />desconocidos</h1>
+    <p class="sub">Tengo un mensaje.</p>
+    <a class="btn" href="/quiz.html">Para ti</a>
+    <img class="flor-sep" src="assets/monograma-verde.png" alt="" aria-hidden="true" />
   </div>
+</section>
 
-  <!-- ===== HERO ===== -->
-  <section class="hero">
-    <div class="flor-marca verde h1f"></div>
-    <div class="flor-marca verde h2f"></div>
-    <div class="wrap">
-      <p class="kicker">Cartas que esperan ser encontradas</p>
-      <h1>Queridos<br />desconocidos</h1>
-      <p class="sub">Descubre qué flor eres y te escribo una carta, solo para ti.</p>
-      <a class="btn" href="/quiz.html">¿Qué flor eres?</a>
-      <img class="flor-sep" src="assets/monograma-verde.png" alt="" aria-hidden="true" />
+<!-- ===== CARTA ANIMADA ===== -->
+<section class="carta-scene">
+  <div class="flor-marca naranja c1f"></div>
+  <div class="flor-marca naranja c2f"></div>
+  <p class="label">Para todo el que llega nuevo aquí</p>
+  <div class="envelope" id="envelope">
+    <div class="env-back"></div>
+    <div class="letter">
+      <p class="saludo">Querido desconocido,</p>
+      <p class="l1">si estás leyendo esto por primera vez, esta cartita también es para ti.</p>
+      <p class="l2"><span class="hl">bienvenido a este rincón. gracias por quedarte un ratito.</span></p>
+      <img class="flor-firma" src="assets/monograma-verde.png" alt="by_kirco" />
     </div>
-  </section>
-
-  <!-- ===== CARTA ANIMADA ===== -->
-  <section class="carta-scene">
-    <div class="flor-marca naranja c1f"></div>
-    <div class="flor-marca naranja c2f"></div>
-    <div class="wrap">
-      <p class="label">Si encuentras una, es para ti</p>
-      <div class="envelope" id="envelope">
-        <div class="env-back"></div>
-        <div class="letter">
-          <p class="saludo">Querido desconocido,</p>
-          <p class="l1">Quién no arriesga no gana. Sé que habrás escuchado mucho esta frase, pero es la verdad. Aunque tengas que tomar una decisión difícil, hazlo, inténtalo.</p>
-          <p class="l2"><span class="hl">No te quedes con el casi.</span></p>
-          <img class="flor-firma" src="assets/monograma-verde.png" alt="by_kirco" />
-        </div>
-        <div class="env-front">
-          <img class="logo-sobre" src="assets/logo-naranja-negativo.png" alt="by_kirco" />
-        </div>
-        <div class="env-flap"></div>
-      </div>
+    <div class="env-front">
+      <img class="logo-sobre" src="assets/logo-naranja-negativo.png" alt="by_kirco" />
     </div>
-  </section>
+    <div class="env-flap"></div>
+  </div>
+</section>
 
-  <!-- ===== GALERÍA ===== -->
-  <section class="galeria">
-    <div class="flor-marca verde g1f"></div>
-    <div class="flor-marca verde g2f"></div>
+<!-- ===== GALERÍA ===== -->
+<section class="galeria">
+  <div class="flor-marca verde g1f"></div>
+  <div class="flor-marca verde g2f"></div>
+  <div class="gal-header">
     <h2>Cartitas que ya encontraron a alguien</h2>
     <p class="gal-sub">Dejadas por ahí, con cariño</p>
-    <div class="gal-strip" id="galStrip">
-      <div class="polaroid" style="--i:0">
-        <img class="foto" src="assets/galeria/02-naturaleza.png" alt="Cartita naranja entre la hierba" />
-        <div class="pie"><img src="assets/monograma-verde.png" alt="" /><span>Banco del parque</span></div>
-      </div>
-      <div class="polaroid" style="--i:1">
-        <img class="foto" src="assets/galeria/04-metro.png" alt="Cartita verde en la estación" />
-        <div class="pie"><img src="assets/monograma-verde.png" alt="" /><span>Estación de tren</span></div>
-      </div>
-      <div class="polaroid" style="--i:2">
-        <img class="foto" src="assets/galeria/03-prota.png" alt="Cartita naranja: tú eres el/la prota" />
-        <div class="pie"><img src="assets/monograma-verde.png" alt="" /><span>Entre dos libros</span></div>
-      </div>
-      <div class="polaroid" style="--i:3">
-        <img class="foto" src="assets/galeria/06-metro-nota.png" alt="Cartita verde en el metro" />
-        <div class="pie"><img src="assets/monograma-verde.png" alt="" /><span>En el metro</span></div>
-      </div>
-      <div class="polaroid" style="--i:4">
-        <img class="foto" src="assets/galeria/05-tren.png" alt="Cartita naranja en un tren" />
-        <div class="pie"><img src="assets/monograma-verde.png" alt="" /><span>Vagón de tren</span></div>
-      </div>
-      <div class="polaroid" style="--i:5">
-        <img class="foto" src="assets/galeria/01-calle.png" alt="Cartita en la calle" />
-        <div class="pie"><img src="assets/monograma-verde.png" alt="" /><span>Parabrisas con suerte</span></div>
-      </div>
+  </div>
+  <div class="gal-strip" id="galStrip">
+    <div class="polaroid" style="--i:0">
+      <img class="foto" src="assets/galeria/02-naturaleza.png" alt="Cartita naranja entre la hierba" />
+      <div class="pie"><img src="assets/monograma-verde.png" alt="" /><span>Banco del parque</span></div>
     </div>
-  </section>
-
-  <!-- ===== DESTINATARIOS PREVIEW ===== -->
-  <section class="dest-preview">
-    <div class="wrap">
-      <h2 class="dest-preview-h">Destinatarios</h2>
-      <p class="dest-preview-leyenda">De mis cartitas</p>
-      <div class="dest-preview-grid">
-
-        <div class="dest-prev-burbuja">
-          <div class="prev-nube verde">
-            <p>Hola! Lo he encontrado yo, muchas gracias! Necesitaba leer algo así</p>
-          </div>
-          <div class="prev-firma">
-            <img class="prev-flor" src="assets/monograma-verde.png" alt="" />
-            <div>
-              <span class="prev-nombre">Sara</span>
-              <span class="prev-fecha">12/01/2025</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="dest-prev-burbuja">
-          <div class="prev-nube naranja">
-            <p>Holiii, encontré tu tarjetita de la rosa, me hizo mucha ilu 🥰</p>
-          </div>
-          <div class="prev-firma">
-            <img class="prev-flor" src="assets/monograma-naranja.png" alt="" />
-            <div>
-              <span class="prev-nombre">Noa</span>
-              <span class="prev-fecha">12/01/2024</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="dest-prev-burbuja">
-          <div class="prev-nube verde">
-            <p>Me ha llegado la cartita y me ha encantado. Me alegraste el día 🥰. ¡Gracias!</p>
-          </div>
-          <div class="prev-firma">
-            <img class="prev-flor" src="assets/monograma-verde.png" alt="" />
-            <div>
-              <span class="prev-nombre">Alejandra</span>
-              <span class="prev-fecha">03/10/2024</span>
-            </div>
-          </div>
-        </div>
-
-      </div>
-      <a href="/destinatarios.html" class="btn btn-dest">Ver más</a>
+    <div class="polaroid" style="--i:1">
+      <img class="foto" src="assets/galeria/04-metro.png" alt="Cartita verde en la estación" />
+      <div class="pie"><img src="assets/monograma-verde.png" alt="" /><span>Estación de tren</span></div>
     </div>
-  </section>
+    <div class="polaroid" style="--i:2">
+      <img class="foto" src="assets/galeria/03-prota.png" alt="Cartita naranja: tú eres el/la prota" />
+      <div class="pie"><img src="assets/monograma-verde.png" alt="" /><span>Entre dos libros</span></div>
+    </div>
+    <div class="polaroid" style="--i:3">
+      <img class="foto" src="assets/galeria/06-metro-nota.png" alt="Cartita verde en el metro" />
+      <div class="pie"><img src="assets/monograma-verde.png" alt="" /><span>En el metro</span></div>
+    </div>
+    <div class="polaroid" style="--i:4">
+      <img class="foto" src="assets/galeria/05-tren.png" alt="Cartita naranja en un tren" />
+      <div class="pie"><img src="assets/monograma-verde.png" alt="" /><span>Vagón de tren</span></div>
+    </div>
+    <div class="polaroid" style="--i:5">
+      <img class="foto" src="assets/galeria/01-calle.png" alt="Cartita en la calle" />
+      <div class="pie"><img src="assets/monograma-verde.png" alt="" /><span>Esquina cualquiera</span></div>
+    </div>
+  </div>
+</section>
 
-</main>
+<!-- ===== DESTINATARIOS PREVIEW ===== -->
+<section class="dest-preview">
+  <div class="flor-marca naranja flor-dp"></div>
+  <div style="max-width:1000px;margin:0 auto;position:relative">
+    <h2>Destinatarios</h2>
+    <p class="dest-sub">De mis cartitas</p>
+    <div class="dest-grid">
+
+      <div class="dest-card">
+        <div class="dest-bubble verde">
+          <p>La encontré un día horrible y la leí tres veces seguidas. Todavía la guardo en la cartera.</p>
+          <div class="dest-bubble-footer">
+            <img class="dest-monograma" src="assets/monograma-verde.png" alt="" />
+            <div>
+              <span class="dest-nombre">Marta</span>
+              <span class="dest-fecha">3 feb 2026</span>
+            </div>
+          </div>
+        </div>
+        <div class="dest-tail verde"></div>
+      </div>
+
+      <div class="dest-card">
+        <div class="dest-bubble naranja">
+          <p>No sé quién la escribió, pero llegó justo cuando la necesitaba. Gracias, quien seas.</p>
+          <div class="dest-bubble-footer">
+            <img class="dest-monograma" src="assets/monograma-naranja.png" alt="" />
+            <div>
+              <span class="dest-nombre">Diego</span>
+              <span class="dest-fecha">18 mar 2026</span>
+            </div>
+          </div>
+        </div>
+        <div class="dest-tail naranja"></div>
+      </div>
+
+      <div class="dest-card">
+        <div class="dest-bubble verde">
+          <p>Le hice una foto antes de guardármela. Me la reencuentro cada vez que dudo de mí.</p>
+          <div class="dest-bubble-footer">
+            <img class="dest-monograma" src="assets/monograma-verde.png" alt="" />
+            <div>
+              <span class="dest-nombre">Aroa</span>
+              <span class="dest-fecha">27 abr 2026</span>
+            </div>
+          </div>
+        </div>
+        <div class="dest-tail verde"></div>
+      </div>
+
+    </div>
+    <a href="/destinatarios.html" class="btn-dest">Ver todos los destinatarios</a>
+  </div>
+</section>
+
+<!-- ===== SOBRE MÍ PREVIEW ===== -->
+<section class="sobre-preview">
+  <div class="sobre-preview-inner">
+    <div>
+      <p class="label-tag">Sobre mí</p>
+      <h2>Escribo cada cartita yo, a mano.</h2>
+      <p class="sobre-desc">Nada de plantillas ni inteligencia artificial: cada carta es 100% humana, pensada para alguien que ni siquiera conozco todavía. Las dejo por ahí con la esperanza de que lleguen a quien las necesita.</p>
+      <a href="/sobre-mi.html" class="btn-sobre">Ver más sobre mí</a>
+    </div>
+    <div class="sobre-tiktok">
+      <iframe
+        src="https://www.tiktok.com/embed/v2/7503206472214449430"
+        scrolling="no"
+        allow="autoplay; encrypted-media"
+        title="Vídeo de by_kirco en TikTok"
+      ></iframe>
+    </div>
+  </div>
+</section>
+
+<!-- ===== COMUNIDAD DE ESCRITORES ===== -->
+<section class="comunidad">
+  <div class="flor-marca naranja com1"></div>
+  <div class="flor-marca naranja com2"></div>
+  <p class="label-tag">Para quien quiera escribir</p>
+  <h2>Únete a la comunidad de cartitas anónimas</h2>
+  <p class="com-desc">Si has llegado hasta aquí, es una señal. Si te gusta escribir, eres una persona empática, detallista, creativa y tienes buena letra… <strong>¿a qué esperas para dejar tus cartitas por el mundo?</strong></p>
+
+  <div class="com-success" id="comSuccess">
+    <img class="success-logo" src="assets/monograma-verde.png" alt="" />
+    <h3>¡Gracias por escribir!</h3>
+    <p>Te escribiré pronto a tu correo con las directrices y todo lo que necesitas para empezar.</p>
+  </div>
+
+  <form class="com-form-wrap" id="comForm" novalidate>
+    <label>Nombre
+      <input type="text" name="first_name" placeholder="Tu nombre" required />
+    </label>
+    <label>Apellido
+      <input type="text" name="last_name" placeholder="Tu apellido" required />
+    </label>
+    <label>Correo
+      <input type="email" name="email_address" placeholder="tu@correo.com" required />
+    </label>
+    <label>¿Por qué te gustaría unirte al proyecto?
+      <textarea name="fields[motivo]" rows="4" placeholder="Cuéntame un poco de ti y por qué quieres dejar cartitas por el mundo…" required></textarea>
+    </label>
+    <button type="submit" class="btn-com">Quiero unirme</button>
+    <p class="com-form-note">Al enviarlo, te escribiré por correo con las directrices, el material y todo lo que necesites para dejar tus cartitas.</p>
+    <p class="com-form-note" id="comStatus" aria-live="polite"></p>
+  </form>
+</section>
 
 <!-- ===== FOOTER ===== -->
 <footer>
@@ -790,31 +1007,33 @@ footer h4 {
     <div class="footer-grid">
       <div>
         <img class="logo-foot" src="assets/logo-naranja-negativo.png" alt="by_kirco" />
-        <p class="claim">Cartas anónimas escritas a mano, repartidas por España para quien las necesite.</p>
+        <p class="claim">Cartas anónimas escritas a mano, repartidas por el mundo para quien las necesite.</p>
       </div>
       <div>
-        <h4>Legal</h4>
+        <h4>Explora</h4>
+        <div class="foot-links">
+          <a href="/destinatarios.html">Destinatarios</a>
+          <a href="/sobre-mi.html">Sobre mí</a>
+          <a href="/quiz.html">Haz el test</a>
+        </div>
+      </div>
+      <div>
+        <h4>Sígueme</h4>
+        <div class="redes">
+          <a href="https://www.tiktok.com/@by_kirco" target="_blank" rel="noopener">TikTok</a>
+          <a href="https://www.instagram.com/by_kirco/" target="_blank" rel="noopener">Instagram</a>
+        </div>
+        <h4 style="margin-top:28px">Legal</h4>
         <div class="foot-links">
           <a href="/aviso-legal.html">Aviso legal</a>
-          <a href="/politica-privacidad.html">Política de privacidad</a>
+          <a href="/politica-privacidad.html">Privacidad</a>
           <a href="/politica-cookies.html">Cookies</a>
-        </div>
-        <h4 style="margin-top:32px">Sígueme</h4>
-        <div class="redes">
-          <a href="https://www.instagram.com/by_kirco/" target="_blank" rel="noopener">Instagram</a>
-          <a href="https://www.tiktok.com/@by_kirco" target="_blank" rel="noopener">TikTok</a>
-          <a href="https://www.facebook.com/profile.php?id=61567524682650" target="_blank" rel="noopener">Facebook</a>
         </div>
       </div>
     </div>
     <div class="legal">
-      <span>
-        © 2026 by_kirco
-        <img class="flor-legal" src="assets/monograma-verde.png" alt=""
-             style="filter:brightness(0) invert(1);opacity:.85" aria-hidden="true" />
-        Cartas con cariño
-      </span>
-      <span class="legal-links"><a href="#">@BY_KIRCO</a></span>
+      <span>© 2026 by_kirco — Cartas con cariño</span>
+      <span>@BY_KIRCO</span>
     </div>
   </div>
 </footer>
@@ -847,21 +1066,6 @@ footer h4 {
   } else {
     setTimeout(hideLoader, 600);
   }
-
-  /* header logo anim */
-  var logoBox = document.getElementById('logoAnim');
-  if (window.lottie) {
-    try {
-      var hAnim = lottie.loadAnimation({
-        container: logoBox, renderer: 'svg', loop: false, autoplay: true,
-        path: 'assets/anim-logo.json'
-      });
-      hAnim.addEventListener('DOMLoaded', function () {
-        var fb = logoBox.querySelector('.logo-img');
-        if (fb) fb.remove();
-      });
-    } catch (e) { /* keep PNG */ }
-  }
 })();
 
 /* ---------------------------------------------------------------
@@ -879,7 +1083,7 @@ footer h4 {
 })();
 
 /* ---------------------------------------------------------------
-   DESTINATARIOS — animación de entrada burbujas
+   DESTINATARIOS — entrada burbujas
 --------------------------------------------------------------- */
 (function () {
   var obs = new IntersectionObserver(function (entries) {
@@ -887,7 +1091,7 @@ footer h4 {
       if (e.isIntersecting) { e.target.classList.add('in-view'); obs.unobserve(e.target); }
     });
   }, { threshold: 0.3 });
-  document.querySelectorAll('.dest-prev-burbuja').forEach(function (el) { obs.observe(el); });
+  document.querySelectorAll('.dest-bubble').forEach(function (el) { obs.observe(el); });
 })();
 
 /* ---------------------------------------------------------------
@@ -905,55 +1109,64 @@ footer h4 {
 })();
 
 /* ---------------------------------------------------------------
-   FORMULARIOS — FormSubmit.co (envío a by.kirco@gmail.com)
-   Primera vez: FormSubmit.co enviará un email de verificación
-   a by.kirco@gmail.com — haz clic en el enlace y listo.
+   COMUNIDAD — formulario Kit (form 9661411)
 --------------------------------------------------------------- */
-var FORMSUBMIT = 'https://formsubmit.co/ajax/by.kirco@gmail.com';
+(function () {
+  var form = document.getElementById('comForm');
+  var success = document.getElementById('comSuccess');
+  var status = document.getElementById('comStatus');
+  if (!form) return;
 
-function submitForm(form, statusEl, asunto, msgOk) {
-  var btn = form.querySelector('button[type=submit]');
-  var emailEl = form.querySelector('input[type=email]');
-  if (emailEl && !emailEl.checkValidity()) {
-    statusEl.textContent = 'Déjame un correo donde encontrarte.';
-    emailEl.focus(); return;
-  }
-  var nombreEl = form.querySelector('input[name=nombre]');
-  if (nombreEl && !nombreEl.value.trim()) {
-    statusEl.textContent = 'Dime cómo te llamas.';
-    nombreEl.focus(); return;
-  }
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var btn = form.querySelector('.btn-com');
+    var email = form.querySelector('[name="email_address"]').value.trim();
+    var nombre = form.querySelector('[name="first_name"]').value.trim();
+    var apellido = form.querySelector('[name="last_name"]').value.trim();
 
-  statusEl.textContent = 'Enviando…';
-  if (btn) btn.disabled = true;
+    if (!email || !nombre) {
+      status.textContent = 'Dime tu nombre y tu correo.';
+      return;
+    }
 
-  var data = {};
-  new FormData(form).forEach(function(v, k) {
-    if (k !== '_honey') data[k] = v;
+    status.textContent = 'Enviando…';
+    if (btn) btn.disabled = true;
+
+    var payload = new URLSearchParams({
+      email_address: email,
+      first_name: nombre,
+      'fields[last_name]': apellido,
+      'fields[motivo]': form.querySelector('[name="fields[motivo]"]').value.trim()
+    });
+
+    var sent = false;
+    function showSuccess() {
+      if (sent) return;
+      sent = true;
+      form.style.display = 'none';
+      success.classList.add('visible');
+    }
+
+    try {
+      var ok = navigator.sendBeacon(
+        'https://app.kit.com/forms/9661411/subscriptions',
+        payload
+      );
+      if (ok) { setTimeout(showSuccess, 400); return; }
+    } catch (_) {}
+
+    fetch('https://app.kit.com/forms/9661411/subscriptions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: payload.toString()
+    })
+    .then(function () { showSuccess(); })
+    .catch(function () {
+      status.textContent = 'Sin conexión. Inténtalo en un rato.';
+      if (btn) btn.disabled = false;
+    });
   });
-  data._subject = asunto;
-  data._captcha = 'false';
-  data._template = 'table';
-
-  fetch(FORMSUBMIT, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-    body: JSON.stringify(data)
-  })
-  .then(function(r) { return r.json().then(function(j){ return { ok: r.ok, json: j }; }); })
-  .then(function(res) {
-    statusEl.textContent = res.ok ? msgOk : 'Algo falló. Inténtalo de nuevo.';
-    if (res.ok) form.reset();
-  })
-  .catch(function() {
-    statusEl.textContent = 'Sin conexión. Inténtalo en un rato.';
-  })
-  .finally(function() {
-    if (btn) btn.disabled = false;
-  });
-}
-
-
+})();
 </script>
 
 </body>
