@@ -151,24 +151,30 @@
         <!-- FORMULARIO CARTA -->
         <div id="quiz-form-content" style="display:none;text-align:center">
           <p style="font-family:var(--font-hand);font-size:clamp(22px,2.2vw,28px);line-height:1.35;color:var(--kirco-ink);margin:0 0 6px">Tu carta está a punto de escribirse.</p>
-          <p style="font-family:var(--font-mono);font-size:12px;letter-spacing:var(--track-mono);text-transform:uppercase;color:var(--kirco-ink);opacity:0.6;margin:0 0 28px">Deja tu nombre y tu correo</p>
+          <p style="font-family:var(--font-mono);font-size:12px;letter-spacing:var(--track-mono);text-transform:uppercase;color:var(--kirco-ink);opacity:0.6;margin:0 0 24px">Cuéntame un poco</p>
           <form id="carta-form" style="display:flex;flex-direction:column;gap:12px;text-align:left">
-            <input type="text" name="first_name" placeholder="Tu nombre" required
+            <input type="text" name="first_name" id="carta-nombre" placeholder="Tu nombre" required
               style="font-family:var(--font-hand);font-size:18px;padding:13px 18px;border:2px solid transparent;border-radius:14px;background:#fff;box-shadow:var(--shadow-card);outline:none;color:var(--kirco-ink);width:100%;transition:border-color 160ms ease-out"
               onfocus="this.style.borderColor='var(--kirco-orange-deep)'" onblur="this.style.borderColor='transparent'" />
             <input type="email" name="email_address" placeholder="Tu correo" required
               style="font-family:var(--font-hand);font-size:18px;padding:13px 18px;border:2px solid transparent;border-radius:14px;background:#fff;box-shadow:var(--shadow-card);outline:none;color:var(--kirco-ink);width:100%;transition:border-color 160ms ease-out"
               onfocus="this.style.borderColor='var(--kirco-orange-deep)'" onblur="this.style.borderColor='transparent'" />
-            <button type="submit" id="btn-carta-submit" class="btn-round" style="margin-top:8px;align-self:center;font-size:22px;color:var(--kirco-orange-deep);background:#fff;box-shadow:var(--shadow-card)">enviar</button>
+            <input type="text" name="fields[flor]" id="carta-flor" placeholder="Tu flor" readonly
+              style="font-family:var(--font-display);font-size:18px;padding:13px 18px;border:2px solid transparent;border-radius:14px;background:rgba(255,255,255,0.7);box-shadow:var(--shadow-card);outline:none;color:var(--kirco-orange-deep);width:100%;cursor:default" />
+            <textarea name="fields[mensaje]" placeholder="Cuéntame un poco de ti (si quieres :))" rows="3"
+              style="font-family:var(--font-hand);font-size:18px;padding:13px 18px;border:2px solid transparent;border-radius:14px;background:#fff;box-shadow:var(--shadow-card);outline:none;color:var(--kirco-ink);width:100%;resize:none;transition:border-color 160ms ease-out;line-height:1.4"
+              onfocus="this.style.borderColor='var(--kirco-orange-deep)'" onblur="this.style.borderColor='transparent'"></textarea>
+            <button type="submit" id="btn-carta-submit" class="btn-round" style="margin-top:8px;align-self:center;font-size:22px;color:var(--kirco-green-deep);background:var(--kirco-green);box-shadow:var(--shadow-card)">enviar</button>
           </form>
         </div>
 
         <!-- CONFIRMACIÓN -->
         <div id="quiz-success-content" style="display:none;text-align:center">
-          <p style="font-family:var(--font-hand);font-size:clamp(26px,2.6vw,34px);line-height:1.35;color:var(--kirco-ink);margin:0">Estoy escribiendo una carta para ti.</p>
-          <p style="font-family:var(--font-hand);font-size:clamp(20px,2vw,26px);line-height:1.4;color:var(--kirco-ink);margin:14px 0 0">La recibirás pronto en tu correo.</p>
-          <p style="font-family:var(--font-mono);font-size:11px;letter-spacing:var(--track-mono);text-transform:uppercase;color:var(--kirco-ink);opacity:0.55;margin:18px 0 0">(revisa tu bandeja de spam)</p>
-          <p style="font-family:var(--font-hand);font-size:20px;color:var(--kirco-ink);margin:28px 0 0">Att. @by_kirco ✿</p>
+          <p style="font-family:var(--font-hand);font-size:clamp(22px,2.2vw,28px);line-height:1.35;color:var(--kirco-ink);margin:0">Estoy escribiendo una carta para ti,</p>
+          <p id="success-name" style="font-family:var(--font-display);font-weight:400;font-size:clamp(52px,8vw,88px);line-height:1;color:var(--kirco-orange-deep);margin:8px 0 0"></p>
+          <p style="font-family:var(--font-hand);font-size:clamp(20px,2vw,26px);line-height:1.4;color:var(--kirco-ink);margin:16px 0 0">La recibirás pronto en tu correo.</p>
+          <p style="font-family:var(--font-mono);font-size:11px;letter-spacing:var(--track-mono);text-transform:uppercase;color:var(--kirco-ink);opacity:0.55;margin:14px 0 0">(revisa tu bandeja de spam)</p>
+          <p style="font-family:var(--font-hand);font-size:20px;color:var(--kirco-ink);margin:24px 0 0">Att. @by_kirco ✿</p>
         </div>
 
       </div>
@@ -281,6 +287,7 @@
   var resultDesc = document.getElementById('result-desc');
 
   var formPhase = 0; // 0=quiz normal, 1=form, 2=success
+  var formSubmittedName = '';
 
   function freshScores() { return { amapola: 0, nomeolvides: 0, pensamiento: 0, jazmin: 0, romero: 0 }; }
 
@@ -305,10 +312,24 @@
     successEl.style.display = formPhase === 2 ? 'block' : 'none';
 
     // Card background
-    if (res) {
+    if (formPhase === 1 || formPhase === 2) {
+      card.style.background = '#FFF2E2';
+    } else if (res) {
       card.style.background = res.tint;
     } else {
       card.style.background = 'var(--kirco-orange)';
+    }
+
+    // Pre-rellenar nombre de la flor en el formulario
+    if (formPhase === 1 && res) {
+      var florInput = document.getElementById('carta-flor');
+      if (florInput && !florInput.value) florInput.value = res.name;
+    }
+
+    // Mostrar nombre en la confirmación
+    if (formPhase === 2) {
+      var nameEl = document.getElementById('success-name');
+      if (nameEl) nameEl.textContent = formSubmittedName;
     }
 
     if (inQ) {
@@ -384,6 +405,9 @@
     state.step = 0;
     state.scores = freshScores();
     formPhase = 0;
+    formSubmittedName = '';
+    var florInput = document.getElementById('carta-flor');
+    if (florInput) florInput.value = '';
     render();
     animateIn();
   }
@@ -402,9 +426,12 @@
 
   function submitCartaForm(form) {
     var fd = new FormData(form);
+    formSubmittedName = (fd.get('first_name') || '').trim();
     var payload = new URLSearchParams({
       email_address: fd.get('email_address') || '',
-      first_name: fd.get('first_name') || ''
+      first_name: formSubmittedName,
+      'fields[flor]': fd.get('fields[flor]') || '',
+      'fields[mensaje]': fd.get('fields[mensaje]') || ''
     });
     var show = function () {
       transitionTo(function () { formPhase = 2; render(); });
