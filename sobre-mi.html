@@ -1,331 +1,637 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Sobre mí — by_kirco</title>
-<meta name="description" content="La historia detrás de by_kirco y de las cartitas anónimas escritas a mano." />
-<link rel="icon" type="image/png" href="/assets/favicon.png" />
-<link rel="apple-touch-icon" href="/assets/favicon.png" />
-<style>
-@font-face { font-family: "Visby Round CF"; src: url("fonts/VisbyRoundCF-Heavy.ttf") format("truetype"); font-weight: 800; font-style: normal; font-display: swap; }
-@font-face { font-family: "OCR B Std"; src: url("fonts/OCRBStd.otf") format("opentype"); font-weight: 400; font-style: normal; font-display: swap; }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sobre mí — by_kirco</title>
+  <link rel="icon" type="image/png" href="/assets/favicon.png" />
+  <link rel="apple-touch-icon" href="/assets/favicon.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Darumadrop+One&family=Indie+Flower&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+  <style>
+    /* ── Tokens ── */
+    :root {
+      --kirco-green:        #A0D76B;
+      --kirco-green-deep:   #6F9C3E;
+      --kirco-green-tint:   #ECF7DF;
+      --kirco-orange:       #FFAA4D;
+      --kirco-orange-deep:  #D07F1F;
+      --kirco-orange-tint:  #FFF2E2;
+      --kirco-yellow:       #FFFA7D;
+      --kirco-paper:        #F7F1E3;
+      --kirco-white:        #FFFFFF;
+      --kirco-ink:          #2E2B25;
+      --kirco-ink-soft:     #6B6557;
+      --kirco-line:         #E8E1D2;
+      --font-display:       'Darumadrop One', sans-serif;
+      --font-hand:          'Indie Flower', cursive;
+      --font-mono:          'OCR-B Std', 'Courier New', monospace;
+      --font-ocr:           'OCR-A Std', 'Courier New', monospace;
+      --track-mono:         0.16em;
+      --shadow-card:        0 2px 6px rgba(46,43,37,.06), 0 10px 28px rgba(46,43,37,.08);
+      --shadow-pop:         0 4px 12px rgba(46,43,37,.1), 0 18px 44px rgba(46,43,37,.14);
+    }
 
-:root {
-  --kirco-green:        #a0d76b;
-  --kirco-green-deep:   #6f9c3e;
-  --kirco-green-tint:   #ecf7df;
-  --kirco-orange:       #ffaa4d;
-  --kirco-orange-deep:  #d07f1f;
-  --kirco-orange-tint:  #fff2e2;
-  --kirco-yellow:       #fffa7d;
-  --kirco-yellow-tint:  #fffdda;
-  --kirco-white:        #ffffff;
-  --kirco-paper:        #f7f1e3;
-  --kirco-ink:          #2e2b25;
-  --kirco-ink-soft:     #6b6557;
-  --text-muted:         #6b6557;
-  --font-display: "Visby Round CF", system-ui, sans-serif;
-  --font-mono:    "OCR B Std", monospace;
-  --track-mono:   0.16em;
-  --radius-pill:  999px;
-  --shadow-card:  0 2px 6px rgba(46,43,37,.06), 0 10px 28px rgba(46,43,37,.08);
-  --shadow-pop:   0 4px 12px rgba(46,43,37,.10), 0 18px 44px rgba(46,43,37,.14);
-}
-*, *::before, *::after { box-sizing: border-box; }
-html, body { margin: 0; padding: 0; }
-body {
-  background: var(--kirco-paper);
-  color: var(--kirco-ink);
-  font-family: system-ui, -apple-system, sans-serif;
-  overflow-x: hidden;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
+    /* ── Reset ── */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    a { color: inherit; }
+    img { max-width: 100%; }
+    font-synthesis: none;
 
-/* ── HEADER ── */
-.site-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 26px 48px 0;
-  width: 100%;
-}
-.site-header .logo { height: 96px; display: block; }
-.back-link {
-  font-family: var(--font-mono);
-  font-size: 13px;
-  letter-spacing: var(--track-mono);
-  color: var(--text-muted);
-  text-decoration: none;
-  transition: color 150ms;
-}
-.back-link:hover { color: var(--kirco-green-deep); }
+    /* ── Base ── */
+    body {
+      background-color: #F7F1E3;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.45 0 0 0 0 0.36 0 0 0 0 0.2 0 0 0 0.09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      color: var(--kirco-ink);
+      overflow-x: clip;
+    }
 
-/* ── HERO ── */
-.hero-sm {
-  position: relative;
-  overflow: hidden;
-  text-align: center;
-  padding: 90px 48px 60px;
-}
-.hero-wm {
-  position: absolute;
-  background: url("assets/monograma-naranja.png") no-repeat center / contain;
-  width: 480px;
-  height: 480px;
-  top: -140px;
-  right: -150px;
-  transform: rotate(14deg);
-  opacity: 0.07;
-  pointer-events: none;
-}
-.hero-inner {
-  position: relative;
-  max-width: 680px;
-  margin: 0 auto;
-}
-.kicker-tag {
-  font-family: var(--font-mono);
-  font-size: 13px;
-  letter-spacing: var(--track-mono);
-  text-transform: uppercase;
-  color: var(--kirco-orange-deep);
-  margin: 0 0 20px;
-}
-.hero-sm h1 {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: clamp(46px, 7vw, 68px);
-  line-height: 1.05;
-  margin: 0;
-  color: var(--kirco-green-deep);
-}
+    /* ── Fonts ── */
+    @font-face {
+      font-family: 'OCR-A Std';
+      src: url('/fonts/OCRAStd.otf') format('opentype');
+      font-weight: 400;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'OCR-B Std';
+      src: url('/fonts/OCRBStd.otf') format('opentype');
+      font-weight: 400;
+      font-display: swap;
+    }
 
-/* ── HISTORIA ── */
-.historia {
-  padding: 40px 48px 110px;
-}
-.historia-inner {
-  max-width: 1000px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 64px;
-  align-items: start;
-}
-.historia-tiktok {
-  position: relative;
-  width: 280px;
-  height: 280px;
-  border-radius: 50%;
-  overflow: hidden;
-  box-shadow: var(--shadow-pop);
-  border: 6px solid var(--kirco-white);
-  flex: 0 0 auto;
-  align-self: start;
-  margin-top: 12px;
-}
-.historia-tiktok iframe {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(1.55);
-  width: 325px;
-  height: 580px;
-  border: none;
-  pointer-events: none;
-}
-.historia-texto h2 {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 34px;
-  line-height: 1.2;
-  margin: 0;
-  color: var(--kirco-orange-deep);
-}
-.historia-texto p {
-  font-size: 18px;
-  line-height: 1.75;
-  color: var(--kirco-ink);
-  margin: 20px 0 0;
-}
-.historia-texto p strong { color: var(--kirco-green-deep); }
+    /* ── Lenis ── */
+    html.lenis, html.lenis body { height: auto; }
+    .lenis.lenis-smooth { scroll-behavior: auto !important; }
 
-/* ── CÓMO NACE ── */
-.como-nace {
-  background: var(--kirco-orange-tint);
-  padding: 90px 48px;
-}
-.como-nace-inner {
-  max-width: 800px;
-  margin: 0 auto;
-  text-align: center;
-}
-.como-nace h3 {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 30px;
-  margin: 0;
-  color: var(--kirco-orange-deep);
-}
-.pasos {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-  margin-top: 48px;
-  text-align: left;
-}
-.paso {
-  background: #fffdf0;
-  border-radius: 20px;
-  padding: 28px 24px;
-}
-.paso:nth-child(2) { background: var(--kirco-yellow-tint); }
-.paso:nth-child(3) { background: #fdf0a8; }
-.paso-num {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  letter-spacing: var(--track-mono);
-  color: var(--kirco-orange-deep);
-  margin: 0 0 10px;
-}
-.paso p {
-  font-size: 16px;
-  line-height: 1.55;
-  color: var(--kirco-ink);
-  margin: 0;
-}
+    /* ── Cursor personalizado ── */
+    @media (pointer: fine) {
+      html.kirco-cursor, html.kirco-cursor * { cursor: none !important; }
+    }
+    #kirco-cursor {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 27px; height: 27px;
+      margin: -13.5px 0 0 -13.5px;
+      pointer-events: none;
+      z-index: 9999;
+      transition: none;
+    }
+    @media (pointer: fine) { #kirco-cursor { display: block; } }
 
-/* ── CTA ── */
-.cta-sm {
-  padding: 100px 48px;
-  text-align: center;
-  flex: 1;
-}
-.cta-sm h2 {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 34px;
-  margin: 0;
-  color: var(--kirco-green-deep);
-}
-.btn-cta {
-  display: inline-block;
-  margin-top: 30px;
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 18px;
-  color: #fff;
-  background: var(--kirco-orange-deep);
-  border: 2px solid var(--kirco-orange-deep);
-  border-radius: var(--radius-pill);
-  padding: 16px 40px;
-  text-decoration: none;
-  transition: transform 180ms ease-out;
-}
-.btn-cta:hover { transform: translateY(-2px); }
+    /* ── Hero ── */
+    .hero {
+      position: relative;
+      height: 88vh;
+      min-height: 560px;
+      overflow: hidden;
+      background: var(--kirco-ink);
+    }
+    .hero__img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .hero__overlay {
+      position: absolute;
+      inset: 0;
+      background: var(--kirco-orange-deep);
+      opacity: 0.5;
+      pointer-events: none;
+    }
+    .hero__header {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 22px clamp(20px, 4vw, 48px);
+    }
+    .hero__header nav {
+      display: flex;
+      gap: 28px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      letter-spacing: var(--track-mono);
+      text-transform: uppercase;
+    }
+    .hero__header nav a {
+      color: var(--kirco-paper);
+      text-decoration: none;
+      transition: color 200ms;
+    }
+    .hero__header nav a:hover { color: var(--kirco-yellow); }
+    .hero__title {
+      position: absolute;
+      left: 0; right: 0;
+      bottom: clamp(50px, 9vh, 100px);
+      z-index: 2;
+      text-align: center;
+      padding: 0 20px;
+    }
+    .hero__title h1 {
+      font-family: var(--font-display);
+      font-weight: 400;
+      font-size: clamp(72px, 11vw, 170px);
+      line-height: 0.9;
+      margin: 0;
+      color: var(--kirco-paper);
+      text-shadow: 0 4px 30px rgba(46,43,37,0.4);
+    }
 
-/* ── FOOTER ── */
-footer {
-  background: var(--kirco-orange-deep);
-  padding: 60px 48px;
-  color: var(--kirco-paper);
-  text-align: center;
-}
-footer p {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  letter-spacing: var(--track-mono);
-  text-transform: uppercase;
-  margin: 0;
-  opacity: 0.9;
-}
+    /* ── Parchment section ── */
+    .carta-section {
+      position: relative;
+      padding: 110px clamp(20px, 5vw, 72px) 120px;
+    }
+    .carta-wrap {
+      position: relative;
+      max-width: 780px;
+      margin: 0 auto;
+    }
+    .carta-roller {
+      position: absolute;
+      left: -14px; right: -14px;
+      height: 46px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #E07E1C 0%, #FFC27A 45%, #E07E1C 100%);
+      box-shadow: 0 10px 20px -8px rgba(46,43,37,0.45);
+      z-index: 5;
+      pointer-events: none;
+    }
+    .carta-roller--top {
+      top: -23px;
+    }
+    .carta-roller--bottom {
+      top: 0;
+      margin-top: -23px;
+    }
+    .carta-paper {
+      position: relative;
+      background: var(--kirco-orange);
+      border-radius: 0;
+      box-shadow: var(--shadow-pop);
+      overflow: hidden;
+      height: 60px;
+    }
+    .carta-inner {
+      padding: 72px clamp(30px, 6vw, 80px) clamp(48px, 6vw, 72px);
+    }
+    .carta-p {
+      font-family: var(--font-hand);
+      font-size: clamp(20px, 1.9vw, 24px);
+      line-height: 1.5;
+      color: var(--kirco-ink);
+      margin: 0 0 20px;
+      text-wrap: pretty;
+    }
+    .carta-highlight {
+      font-family: var(--font-display);
+      font-weight: 400;
+      font-size: clamp(28px, 3vw, 38px);
+      line-height: 1.15;
+      color: #ffffff;
+      margin: 8px 0 24px;
+      text-wrap: balance;
+    }
 
-/* ── RESPONSIVE ── */
-@media (max-width: 860px) {
-  .historia-inner {
-    grid-template-columns: 1fr;
-    gap: 40px;
-  }
-  .historia-tiktok { width: 220px; height: 220px; margin: 0 auto; }
-  .pasos { grid-template-columns: 1fr; }
-}
-@media (max-width: 640px) {
-  .site-header { padding: 20px 24px 0; }
-  .site-header .logo { height: 72px; }
-  .hero-sm { padding: 60px 24px 40px; }
-  .historia { padding: 40px 24px 80px; }
-  .como-nace { padding: 70px 24px; }
-  .cta-sm { padding: 70px 24px; }
-  footer { padding: 40px 24px; }
-}
-</style>
+    /* ── Cómo nace ── */
+    .como-nace {
+      padding: 40px clamp(20px, 5vw, 72px) 130px;
+      text-align: center;
+    }
+    .como-nace__inner { max-width: 900px; margin: 0 auto; }
+    .como-nace__step {
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: 18px;
+      margin-top: 34px;
+    }
+    .como-nace__num {
+      font-family: var(--font-display);
+      font-size: clamp(34px, 3.6vw, 48px);
+      line-height: 1;
+      flex-shrink: 0;
+    }
+    .como-nace__text {
+      font-family: var(--font-hand);
+      font-size: clamp(26px, 3vw, 40px);
+      line-height: 1.25;
+      margin: 0;
+      text-wrap: balance;
+    }
+
+    /* ── Dónde las dejo ── */
+    .donde {
+      padding: 0 0 120px;
+    }
+    .donde__title {
+      font-family: var(--font-display);
+      font-weight: 400;
+      font-size: clamp(36px, 4vw, 52px);
+      line-height: 1.05;
+      margin: 0 0 40px;
+      text-align: center;
+      color: var(--kirco-green-deep);
+      padding: 0 20px;
+    }
+    .donde__carousel {
+      display: flex;
+      gap: 24px;
+      overflow-x: auto;
+      padding: 16px clamp(20px, 5vw, 72px) 30px;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .donde__carousel::-webkit-scrollbar { display: none; }
+    .polaroid {
+      flex: 0 0 clamp(240px, 26vw, 320px);
+      scroll-snap-align: center;
+      background: var(--kirco-white);
+      border-radius: 22px;
+      padding: 12px 12px 16px;
+      box-shadow: var(--shadow-card);
+      transition: transform 200ms ease-out;
+    }
+    .polaroid:hover { transform: translateY(-6px) rotate(0deg) !important; }
+    .polaroid__img-wrap {
+      overflow: hidden;
+      border-radius: 14px;
+    }
+    .polaroid__img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 4/5;
+      object-fit: cover;
+      transition: transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
+      background: var(--kirco-orange-tint);
+    }
+    .polaroid:hover .polaroid__img { transform: scale(1.22); }
+    .polaroid__label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: var(--track-mono);
+      text-transform: uppercase;
+      color: var(--kirco-ink-soft);
+      margin: 12px 4px 0;
+    }
+
+    /* ── CTA ── */
+    .cta {
+      padding: 0 clamp(20px, 5vw, 72px) 120px;
+    }
+    .cta__inner {
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .cta__text {
+      font-family: var(--font-hand);
+      font-weight: 400;
+      font-size: clamp(40px, 4.8vw, 64px);
+      line-height: 1.15;
+      color: var(--kirco-green-deep);
+      margin: 0;
+    }
+    .cta__btn {
+      display: inline-block;
+      margin-top: 28px;
+      font-family: var(--font-display);
+      font-size: 22px;
+      color: #ffffff;
+      background: var(--kirco-green);
+      border-radius: 999px;
+      padding: 12px 40px;
+      text-decoration: none;
+      box-shadow: var(--shadow-card);
+      transition: transform 180ms ease-out;
+    }
+    .cta__btn:hover { transform: translateY(-2px); }
+
+    /* ── Footer ── */
+    .footer {
+      background: var(--kirco-orange-deep);
+      padding: 70px clamp(20px, 5vw, 72px) 46px;
+      color: var(--kirco-paper);
+    }
+    .footer__inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 28px;
+    }
+    .footer__icons {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+    }
+    .footer__icon {
+      display: block;
+      width: 54px;
+      height: 54px;
+      opacity: 0.9;
+      transition: opacity 200ms, transform 200ms;
+    }
+    .footer__icon:hover { opacity: 1; transform: scale(1.1); }
+    .footer__copy {
+      max-width: 1100px;
+      margin: 44px auto 0;
+      border-top: 2px solid rgba(247,241,227,0.35);
+      padding-top: 22px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: var(--track-mono);
+      text-transform: uppercase;
+    }
+
+    /* ── [data-reveal] initial state ── */
+    [data-reveal] { opacity: 0; transform: translateY(60px); }
+
+    /* ── Reduced motion ── */
+    @media (prefers-reduced-motion: reduce) {
+      [data-reveal] { opacity: 1; transform: none; }
+      .carta-paper { height: auto !important; }
+    }
+  </style>
 </head>
 <body>
 
-<header class="site-header">
-  <a href="/"><img class="logo" src="assets/logo-verde.png" alt="by_kirco" /></a>
-  <a href="/" class="back-link">← VOLVER AL INICIO</a>
-</header>
+<!-- Cursor personalizado -->
+<svg id="kirco-cursor" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <path d="M13.5 2 C13.5 2 11 8 2 8 C2 8 8 11 8 13.5 C8 16 2 19 2 19 C2 19 8 19 11 21 C13 22.5 13.5 25 13.5 25 C13.5 25 14 22.5 16 21 C19 19 25 19 25 19 C25 19 19 16 19 13.5 C19 11 25 8 25 8 C25 8 16 8 13.5 2 Z" fill="#FFAA4D"/>
+</svg>
 
-<section class="hero-sm">
-  <div class="hero-wm" aria-hidden="true"></div>
-  <div class="hero-inner">
-    <p class="kicker-tag">Quién escribe las cartitas</p>
-    <h1>Sobre mí</h1>
-  </div>
-</section>
+<div data-kirco-root="">
 
-<section class="historia">
-  <div class="historia-inner">
-    <div class="historia-tiktok">
-      <iframe src="https://www.tiktok.com/embed/v2/7503206472214449430"
-        scrolling="no"
-        allow="autoplay; encrypted-media"
-        title="Vídeo de by_kirco en TikTok"></iframe>
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <img class="hero__img" src="assets/sobre-mi-header.webp" alt="Cartita naranja de by_kirco en un banco del parque" />
+    <div class="hero__overlay"></div>
+    <header class="hero__header">
+      <a href="/"><img src="assets/logo-naranja-negativo.png" alt="by_kirco" style="height:84px;display:block" /></a>
+      <nav>
+        <a href="/">Inicio</a>
+        <a href="/destinatarios.html">Destinatarios</a>
+      </nav>
+    </header>
+    <div class="hero__title">
+      <h1>Sobre mí</h1>
     </div>
-    <div class="historia-texto">
-      <h2>Soy Kirco, y escribo cartas para gente que no conozco.</h2>
-      <p>Un 13 de marzo de 2021 abrí una cuenta de Instagram con la idea de publicar frases bonitas. De esas que se guardan en favoritos y se comparten en las historias. Pero algo no encajaba. Las frases estaban bien, pero faltaba algo real, algo que llegara de verdad.</p>
-      <p>Y entonces empecé a escribir cartitas anónimas con una idea clara: <strong>sacarle una sonrisa a la persona que se la encuentre.</strong> Las fui dejando en bancos de parques, en asientos de metro, entre los libros de una biblioteca.</p>
-      <p>Desde ese día empezó nuestra historia: <strong>Queridos Desconocidos.</strong> Todas las cartas son 100% humanas: sin plantillas, sin IA, sin dos cartas iguales. Cada una nace de algo que quiero decirle a quien la encuentre, aunque no sepa quién es.</p>
-      <p>Escribir es mi manera de relajarme y de poner en palabras lo que a veces no sé cómo decir de otra forma. Cada vez que releo vuestros mensajes cuando encontráis una de las mías, la ilusión vuelve de golpe.</p>
+  </section>
+
+  <!-- ===== CARTA-PERGAMINO ===== -->
+  <section class="carta-section">
+    <div class="carta-wrap">
+      <div class="carta-roller carta-roller--top" aria-hidden="true"></div>
+      <div class="carta-paper" id="carta-paper">
+        <div class="carta-inner">
+          <p class="carta-p">Un 13 de abril de 2021 abrí una cuenta de Instagram con la idea de publicar frases bonitas. De esas que se guardan en favoritos y se comparten en las historias. Pero algo no encajaba. Las frases estaban bien, pero faltaba algo real, algo que llegara de verdad.</p>
+          <p class="carta-highlight">Y entonces empecé a escribir cartitas.</p>
+          <p class="carta-p">Sin destinatario. Sin remitente. Solo papel, bolígrafo y la sensación de que alguien, en algún lugar de Madrid, quizás las necesitaba. Las dejé en bancos de parques, en asientos de metro o entre los libros de una biblioteca. Y desde ese día comenzó nuestra historia: <span style="font-family:var(--font-display);color:#ffffff">Queridos Desconocidos</span>.</p>
+          <p class="carta-p">La primavera del 2022 fui un pasito más allá. Si alguien hacía algo por mí —darme una tirita, ayudarme a llegar a algún sitio— le entregaba una cartita de agradecimiento escrita a mano. Porque si un desconocido hacía algo por mí, merecía algo más que un simple "gracias". Algo así como una cadena de favores.</p>
+          <p class="carta-p">Escribir es mi manera de relajarme y de poner en palabras lo que a veces no sé cómo decir de otra forma. Aunque es un proyecto que me apasiona, hay días en que la rutina lo complica todo y no tengo tiempo de dejarte una cartita. Pero entonces releo vuestros mensajes cuando encontráis alguna de las mías, y la ilusión vuelve de golpe.</p>
+          <p class="carta-highlight">Eso es lo que me mantiene aquí.</p>
+          <p class="carta-p">Si tú encontraste una de mis cartitas, espero que en ese momento hayas sentido lo mismo que yo imagino: curiosidad primero, y luego esa sensación pequeña y bonita de que alguien pensó en ti sin conocerte.</p>
+          <p class="carta-highlight">Porque de eso va todo esto.</p>
+          <img src="assets/logo-naranja-negativo.png" alt="by_kirco" style="display:block;height:76px;margin:20px 0 0 auto" />
+        </div>
+      </div>
+      <div class="carta-roller carta-roller--bottom" id="carta-roller-bottom" aria-hidden="true"></div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section class="como-nace">
-  <div class="como-nace-inner">
-    <h3>Cómo nace cada cartita</h3>
-    <div class="pasos">
-      <div class="paso">
-        <p class="paso-num">01</p>
-        <p>Escribo a mano, con boli y letra propia. Nada de máquinas.</p>
+  <!-- ===== CÓMO NACE CADA CARTITA ===== -->
+  <section class="como-nace">
+    <div class="como-nace__inner">
+      <h2 data-reveal="" style="font-family:var(--font-display);font-weight:400;font-size:clamp(40px,4.6vw,60px);line-height:1.05;margin:0 0 20px;color:var(--kirco-orange-deep)">Cómo nace cada cartita</h2>
+      <div class="como-nace__step">
+        <span data-reveal="" class="como-nace__num" style="color:var(--kirco-orange-deep)">1.</span>
+        <p data-write="" class="como-nace__text" style="color:var(--kirco-ink)">Escribo a mano, con boli y letra propia.</p>
       </div>
-      <div class="paso">
-        <p class="paso-num">02</p>
-        <p>La dejo en un lugar con algo de intención: un banco, un vagón, un libro.</p>
+      <div class="como-nace__step">
+        <span data-reveal="" class="como-nace__num" style="color:var(--kirco-orange-deep)">2.</span>
+        <p data-write="" class="como-nace__text" style="color:var(--kirco-green-deep)">Camino buscando el lugar más especial: un banco, un metro, una ramita.</p>
       </div>
-      <div class="paso">
-        <p class="paso-num">03</p>
-        <p>A veces me escriben para contarme qué sintieron al encontrarla.</p>
+      <div class="como-nace__step">
+        <span data-reveal="" class="como-nace__num" style="color:var(--kirco-orange-deep)">3.</span>
+        <p data-write="" class="como-nace__text" style="color:var(--kirco-orange-deep)">La dejo por Madrid para quien la necesite.</p>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section class="cta-sm">
-  <h2>¿Quieres tu propia cartita?</h2>
-  <a href="/quiz.html" class="btn-cta">Para ti</a>
-</section>
+  <!-- ===== DÓNDE LAS DEJO ===== -->
+  <section class="donde">
+    <h2 data-reveal="" class="donde__title">Dónde las dejo</h2>
+    <div class="donde__carousel" id="carousel">
+      <div class="polaroid" style="transform:rotate(-2deg)">
+        <div class="polaroid__img-wrap"><img class="polaroid__img" src="assets/hero/04-obra-de-arte.webp" alt="Cartita en un banco del parque" /></div>
+        <p class="polaroid__label">Banco del parque</p>
+      </div>
+      <div class="polaroid" style="transform:rotate(1.6deg)">
+        <div class="polaroid__img-wrap"><img class="polaroid__img" src="assets/hero/05-metro.webp" alt="Cartita en el metro" /></div>
+        <p class="polaroid__label">Asiento de metro</p>
+      </div>
+      <div class="polaroid" style="transform:rotate(-1.4deg)">
+        <div class="polaroid__img-wrap"><img class="polaroid__img" src="assets/hero/03-arte-simple.webp" alt="Cartita colgada de una rama" /></div>
+        <p class="polaroid__label">Una ramita</p>
+      </div>
+      <div class="polaroid" style="transform:rotate(1.8deg)">
+        <div class="polaroid__img-wrap"><img class="polaroid__img" src="assets/hero/02-cafe.webp" alt="Cartita en un café" /></div>
+        <p class="polaroid__label">Mesa de café</p>
+      </div>
+      <div class="polaroid" style="transform:rotate(-1.6deg)">
+        <div class="polaroid__img-wrap"><img class="polaroid__img" src="assets/hero/01-tren.webp" alt="Cartita en un tren" /></div>
+        <p class="polaroid__label">Ventana de tren</p>
+      </div>
+    </div>
+  </section>
 
-<footer>
-  <p>© 2026 by_kirco · Cartas con cariño</p>
-</footer>
+  <!-- ===== CTA ===== -->
+  <section class="cta">
+    <div data-reveal="" class="cta__inner">
+      <p data-write="" class="cta__text">¿Quieres tu propia cartita?</p>
+      <a href="/" class="cta__btn">para ti</a>
+    </div>
+  </section>
 
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="footer__inner">
+      <img src="assets/logo-naranja-negativo.png" alt="by_kirco" style="height:78px" />
+      <div class="footer__icons">
+        <a href="https://www.instagram.com/by_kirco/" target="_blank" rel="noopener" aria-label="Instagram" class="footer__icon">
+          <img src="assets/icons/instagram.svg" alt="Instagram" style="width:100%;height:100%;display:block" />
+        </a>
+        <a href="https://www.facebook.com/profile.php?id=61567524682650" target="_blank" rel="noopener" aria-label="Facebook" class="footer__icon">
+          <img src="assets/icons/facebook.svg" alt="Facebook" style="width:100%;height:100%;display:block" />
+        </a>
+        <a href="#" target="_blank" rel="noopener" aria-label="X" class="footer__icon">
+          <img src="assets/icons/x.svg" alt="X" style="width:100%;height:100%;display:block" />
+        </a>
+        <a href="https://www.tiktok.com/@by_kirco" target="_blank" rel="noopener" aria-label="TikTok" class="footer__icon">
+          <img src="assets/icons/tiktok.svg" alt="TikTok" style="width:100%;height:100%;display:block" />
+        </a>
+      </div>
+    </div>
+    <p class="footer__copy">© 2026 by_kirco · Cartas con cariño</p>
+  </footer>
+
+</div><!-- /data-kirco-root -->
+
+<script>
+(function () {
+  /* ── Lenis smooth scroll ── */
+  const lenis = new Lenis({ duration: 1.15, smoothWheel: true });
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add((time) => lenis.raf(time * 1000));
+  gsap.ticker.lagSmoothing(0);
+
+  /* ── Cursor personalizado ── */
+  const cur = document.getElementById('kirco-cursor');
+  if (cur && matchMedia('(pointer:fine)').matches) {
+    document.documentElement.classList.add('kirco-cursor');
+    const xTo = gsap.quickTo(cur, 'x', { duration: 0.16, ease: 'power2.out' });
+    const yTo = gsap.quickTo(cur, 'y', { duration: 0.16, ease: 'power2.out' });
+    document.addEventListener('mousemove', (e) => { xTo(e.clientX); yTo(e.clientY); });
+    const hoverEls = 'a, button, img, input, textarea, label, [data-tilt], [data-hover]';
+    document.addEventListener('mouseover', (e) => {
+      if (e.target.closest(hoverEls)) {
+        gsap.to(cur.querySelector('path'), { fill: '#A0D76B', scale: 1.35, rotate: 45, duration: 0.25, transformOrigin: 'center' });
+      }
+    });
+    document.addEventListener('mouseout', (e) => {
+      if (e.target.closest(hoverEls)) {
+        gsap.to(cur.querySelector('path'), { fill: '#FFAA4D', scale: 1, rotate: 0, duration: 0.25, transformOrigin: 'center' });
+      }
+    });
+  }
+
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ── [data-reveal] ── */
+  document.querySelectorAll('[data-reveal]').forEach(function (el) {
+    gsap.fromTo(el,
+      { opacity: 0, y: 60 },
+      { opacity: 1, y: 0, duration: 1, ease: 'power3.out',
+        scrollTrigger: { trigger: el, start: 'top 88%' } }
+    );
+  });
+
+  /* ── Titulares palabra a palabra (kirco-words) ── */
+  if (!reduce) {
+    var root = document.querySelector('[data-kirco-root]');
+    if (root) {
+      var els = Array.prototype.slice.call(
+        root.querySelectorAll('h1, h2, h3, [data-write]')
+      ).filter(function (el) {
+        return !el.closest('[aria-hidden="true"]') && !el.querySelector('[data-kw]');
+      });
+      els.forEach(function (el) {
+        var walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null);
+        var nodes = []; while (walker.nextNode()) nodes.push(walker.currentNode);
+        var spans = [];
+        nodes.forEach(function (n) {
+          if (!n.nodeValue.trim()) return;
+          var frag = document.createDocumentFragment();
+          n.nodeValue.split(/(\s+)/).forEach(function (part) {
+            if (!part) return;
+            if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(part)); return; }
+            var s = document.createElement('span');
+            s.textContent = part;
+            s.style.display = 'inline-block';
+            s.setAttribute('data-kw', '');
+            frag.appendChild(s); spans.push(s);
+          });
+          n.parentNode.replaceChild(frag, n);
+        });
+        if (!spans.length) return;
+        gsap.fromTo(spans,
+          { opacity: 0, y: '0.25em', clipPath: 'inset(-25% 100% -25% -8%)' },
+          { opacity: 1, y: 0, clipPath: 'inset(-25% -12% -25% -8%)',
+            duration: 0.5, stagger: 0.09, ease: 'power2.out',
+            scrollTrigger: { trigger: el, start: 'top 90%' } }
+        );
+      });
+    }
+  }
+
+  /* ── Parchment unroll ── */
+  var paper = document.getElementById('carta-paper');
+  var rollerBottom = document.getElementById('carta-roller-bottom');
+  if (paper && !reduce) {
+    var fullH = 0;
+    function measurePaper() {
+      paper.style.height = 'auto';
+      fullH = paper.scrollHeight;
+      paper.style.height = '60px';
+    }
+    measurePaper();
+    window.addEventListener('resize', function () {
+      ScrollTrigger.getAll().forEach(function (t) { if (t.vars._isParchment) t.kill(); });
+      measurePaper();
+      initParchment();
+    });
+
+    function initParchment() {
+      var section = paper.closest('section');
+      gsap.to(paper, {
+        height: fullH,
+        ease: 'none',
+        scrollTrigger: {
+          _isParchment: true,
+          trigger: section,
+          start: 'top 70%',
+          end: 'bottom 90%',
+          scrub: 0.6,
+          onUpdate: function (self) {
+            var h = 60 + (fullH - 60) * self.progress;
+            if (rollerBottom) {
+              rollerBottom.style.top = h + 'px';
+            }
+          }
+        }
+      });
+    }
+    initParchment();
+  } else if (paper && reduce) {
+    paper.style.height = 'auto';
+  }
+
+  /* ── Hero h1 intro (letra a letra) ── */
+  var heroH1 = document.querySelector('.hero__title h1');
+  if (heroH1 && !reduce) {
+    var text = heroH1.textContent;
+    heroH1.innerHTML = '';
+    text.split('').forEach(function (ch) {
+      var span = document.createElement('span');
+      span.textContent = ch === ' ' ? ' ' : ch;
+      span.style.display = 'inline-block';
+      heroH1.appendChild(span);
+    });
+    var letters = heroH1.querySelectorAll('span');
+    gsap.fromTo(letters,
+      { opacity: 0, clipPath: 'inset(-25% 100% -25% -8%)' },
+      { opacity: 1, clipPath: 'inset(-25% -12% -25% -8%)',
+        duration: 0.5, stagger: 0.075, ease: 'power2.out', delay: 0.3 }
+    );
+  }
+
+  ScrollTrigger.refresh();
+})();
+</script>
 </body>
 </html>
