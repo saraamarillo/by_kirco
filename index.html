@@ -237,12 +237,22 @@ button{cursor:pointer;border:none;background:none;padding:0}
       <span data-word style="display:inline-block">Sígueme</span> <span data-word style="display:inline-block">en</span> <span data-word style="display:inline-block">redes</span> <span data-word style="display:inline-block">sociales</span> <span data-word style="display:inline-block">para</span> <span data-word style="display:inline-block">no</span> <span data-word style="display:inline-block">perderte</span> <span data-word style="display:inline-block">dónde</span> <span data-word style="display:inline-block">dejaré</span> <span data-word style="display:inline-block">la</span> <span data-word style="display:inline-block">próxima</span> <span data-word style="display:inline-block;color:var(--kirco-orange-deep)">cartita</span>
     </h2>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:28px;margin-top:64px;align-items:stretch">
-      <div data-insta-card style="height:600px;background:var(--kirco-paper);border-radius:24px;overflow:hidden;box-shadow:var(--shadow-card)">
-        <iframe src="https://www.instagram.com/p/DdpEpYPCLMS/embed/" title="Post de Instagram de by_kirco" loading="lazy" style="width:100%;height:100%;border:none;display:block" scrolling="no" allowtransparency="true"></iframe>
-      </div>
-      <div data-insta-card style="height:600px;background:var(--kirco-paper);border-radius:24px;overflow:hidden;box-shadow:var(--shadow-card)">
-        <iframe src="https://www.instagram.com/reel/DdPUprSoZao/embed/" title="Reel de Instagram de by_kirco" loading="lazy" style="width:100%;height:100%;border:none;display:block" scrolling="no" allowtransparency="true"></iframe>
-      </div>
+      <a data-insta-card href="https://www.instagram.com/p/DdpEpYPCLMS/" target="_blank" rel="noopener" style="height:600px;background:var(--kirco-ink);border-radius:24px;overflow:hidden;box-shadow:var(--shadow-card);display:block;position:relative;transition:transform 200ms ease-out" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform=''">
+        <img src="assets/insta-post-thumb.png" alt="Post de Instagram de by_kirco" style="width:100%;height:100%;object-fit:cover;display:block;transition:transform 400ms cubic-bezier(0.22,1,0.36,1)" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform=''">
+        <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 50%,rgba(46,43,37,0.55) 100%);pointer-events:none"></div>
+        <div style="position:absolute;bottom:22px;left:22px;display:flex;align-items:center;gap:10px;pointer-events:none">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="#fff" stroke="none"/></svg>
+          <span style="font-family:var(--font-mono);font-size:12px;letter-spacing:var(--track-mono);text-transform:uppercase;color:#fff">Ver en Instagram</span>
+        </div>
+      </a>
+      <a data-insta-card href="https://www.instagram.com/reel/DdPUprSoZao/" target="_blank" rel="noopener" style="height:600px;background:var(--kirco-ink);border-radius:24px;overflow:hidden;box-shadow:var(--shadow-card);display:block;position:relative;transition:transform 200ms ease-out" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform=''">
+        <img src="assets/insta-reel-thumb.png" alt="Reel de Instagram de by_kirco" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;transition:transform 400ms cubic-bezier(0.22,1,0.36,1)" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform=''">
+        <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 50%,rgba(46,43,37,0.55) 100%);pointer-events:none"></div>
+        <div style="position:absolute;bottom:22px;left:22px;display:flex;align-items:center;gap:10px;pointer-events:none">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3" fill="#fff" stroke="none"/></svg>
+          <span style="font-family:var(--font-mono);font-size:12px;letter-spacing:var(--track-mono);text-transform:uppercase;color:#fff">Ver reel</span>
+        </div>
+      </a>
       <a data-insta-card href="https://www.instagram.com/by_kirco/" target="_blank" rel="noopener" style="height:600px;background:var(--kirco-orange-deep);border-radius:24px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;text-decoration:none;padding:32px;box-sizing:border-box;transition:transform 200ms ease-out" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform=''">
         <img src="assets/logo-naranja-negativo.png" alt="by_kirco" style="width:180px">
         <span style="font-family:var(--font-display);font-size:30px;color:var(--kirco-paper)">@by_kirco</span>
