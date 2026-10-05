@@ -143,9 +143,32 @@
           <p id="result-desc" style="font-size:16px;line-height:1.75;color:var(--kirco-ink);max-width:480px;margin:18px auto 0;text-wrap:pretty"></p>
           <p style="font-family:var(--font-hand);font-size:22px;color:var(--kirco-ink);margin:22px 0 0">Att. @by_kirco</p>
           <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:28px">
-            <a href="https://www.instagram.com/by_kirco/" target="_blank" rel="noopener" class="btn-round" style="color:#fff;background:var(--kirco-orange-deep)">quiero mi carta</a>
+            <button id="btn-quiero-carta" class="btn-round" style="color:#fff;background:var(--kirco-orange-deep)">quiero mi carta</button>
             <button id="btn-restart" class="btn-round" style="color:var(--kirco-green-deep);background:#fff;box-shadow:var(--shadow-card)">repetir el test</button>
           </div>
+        </div>
+
+        <!-- FORMULARIO CARTA -->
+        <div id="quiz-form-content" style="display:none;text-align:center">
+          <p style="font-family:var(--font-hand);font-size:clamp(22px,2.2vw,28px);line-height:1.35;color:var(--kirco-ink);margin:0 0 6px">Tu carta está a punto de escribirse.</p>
+          <p style="font-family:var(--font-mono);font-size:12px;letter-spacing:var(--track-mono);text-transform:uppercase;color:var(--kirco-ink);opacity:0.6;margin:0 0 28px">Deja tu nombre y tu correo</p>
+          <form id="carta-form" style="display:flex;flex-direction:column;gap:12px;text-align:left">
+            <input type="text" name="first_name" placeholder="Tu nombre" required
+              style="font-family:var(--font-hand);font-size:18px;padding:13px 18px;border:2px solid transparent;border-radius:14px;background:#fff;box-shadow:var(--shadow-card);outline:none;color:var(--kirco-ink);width:100%;transition:border-color 160ms ease-out"
+              onfocus="this.style.borderColor='var(--kirco-orange-deep)'" onblur="this.style.borderColor='transparent'" />
+            <input type="email" name="email_address" placeholder="Tu correo" required
+              style="font-family:var(--font-hand);font-size:18px;padding:13px 18px;border:2px solid transparent;border-radius:14px;background:#fff;box-shadow:var(--shadow-card);outline:none;color:var(--kirco-ink);width:100%;transition:border-color 160ms ease-out"
+              onfocus="this.style.borderColor='var(--kirco-orange-deep)'" onblur="this.style.borderColor='transparent'" />
+            <button type="submit" id="btn-carta-submit" class="btn-round" style="margin-top:8px;align-self:center;font-size:22px;color:var(--kirco-orange-deep);background:#fff;box-shadow:var(--shadow-card)">enviar</button>
+          </form>
+        </div>
+
+        <!-- CONFIRMACIÓN -->
+        <div id="quiz-success-content" style="display:none;text-align:center">
+          <p style="font-family:var(--font-hand);font-size:clamp(26px,2.6vw,34px);line-height:1.35;color:var(--kirco-ink);margin:0">Estoy escribiendo una carta para ti.</p>
+          <p style="font-family:var(--font-hand);font-size:clamp(20px,2vw,26px);line-height:1.4;color:var(--kirco-ink);margin:14px 0 0">La recibirás pronto en tu correo.</p>
+          <p style="font-family:var(--font-mono);font-size:11px;letter-spacing:var(--track-mono);text-transform:uppercase;color:var(--kirco-ink);opacity:0.55;margin:18px 0 0">(revisa tu bandeja de spam)</p>
+          <p style="font-family:var(--font-hand);font-size:20px;color:var(--kirco-ink);margin:28px 0 0">Att. @by_kirco ✿</p>
         </div>
 
       </div>
@@ -246,6 +269,8 @@
   var introEl = document.getElementById('quiz-intro-content');
   var questionEl = document.getElementById('quiz-question-content');
   var resultEl = document.getElementById('quiz-result-content');
+  var formEl = document.getElementById('quiz-form-content');
+  var successEl = document.getElementById('quiz-success-content');
   var stepLabel = document.getElementById('step-label');
   var dotsEl = document.getElementById('quiz-dots');
   var questionText = document.getElementById('question-text');
@@ -254,6 +279,8 @@
   var resultName = document.getElementById('result-name');
   var resultPhrase = document.getElementById('result-phrase');
   var resultDesc = document.getElementById('result-desc');
+
+  var formPhase = 0; // 0=quiz normal, 1=form, 2=success
 
   function freshScores() { return { amapola: 0, nomeolvides: 0, pensamiento: 0, jazmin: 0, romero: 0 }; }
 
@@ -271,9 +298,11 @@
     var done = step >= total;
     var res = done ? winner() : null;
 
-    introEl.style.display = step < 0 ? 'block' : 'none';
-    questionEl.style.display = inQ ? 'block' : 'none';
-    resultEl.style.display = done ? 'block' : 'none';
+    introEl.style.display = (formPhase === 0 && step < 0) ? 'block' : 'none';
+    questionEl.style.display = (formPhase === 0 && inQ) ? 'block' : 'none';
+    resultEl.style.display = (formPhase === 0 && done) ? 'block' : 'none';
+    formEl.style.display = formPhase === 1 ? 'block' : 'none';
+    successEl.style.display = formPhase === 2 ? 'block' : 'none';
 
     // Card background
     if (res) {
@@ -354,12 +383,57 @@
     state.busy = false;
     state.step = 0;
     state.scores = freshScores();
+    formPhase = 0;
     render();
     animateIn();
   }
 
+  function transitionTo(fn) {
+    var g = window.gsap;
+    if (g && card) {
+      g.to(card, { y: -24, opacity: 0, rotation: 1.5, duration: 0.28, ease: 'power2.in', onComplete: function () {
+        fn();
+        animateIn();
+      }});
+    } else {
+      fn();
+    }
+  }
+
+  function submitCartaForm(form) {
+    var fd = new FormData(form);
+    var payload = new URLSearchParams({
+      email_address: fd.get('email_address') || '',
+      first_name: fd.get('first_name') || ''
+    });
+    var show = function () {
+      transitionTo(function () { formPhase = 2; render(); });
+    };
+    var ok = navigator.sendBeacon('https://app.kit.com/forms/9602040/subscriptions', payload);
+    if (ok) { setTimeout(show, 400); return; }
+    fetch('https://app.kit.com/forms/9602040/subscriptions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: payload.toString()
+    }).then(show).catch(function () {
+      var btn = form.querySelector('[type=submit]');
+      if (btn) btn.textContent = 'Sin conexión. Inténtalo de nuevo.';
+    });
+  }
+
   document.getElementById('btn-start').addEventListener('click', start);
   document.getElementById('btn-restart').addEventListener('click', start);
+
+  document.getElementById('btn-quiero-carta').addEventListener('click', function () {
+    transitionTo(function () { formPhase = 1; render(); });
+  });
+
+  document.getElementById('carta-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var btn = document.getElementById('btn-carta-submit');
+    if (btn) { btn.textContent = '...'; btn.disabled = true; }
+    submitCartaForm(this);
+  });
 
   render();
 
