@@ -445,10 +445,12 @@
   function submitCartaForm(form) {
     var fd = new FormData(form);
     formSubmittedName = (fd.get('first_name') || '').trim();
-    var emailVal  = fd.get('email_address') || '';
-    var florVal   = fd.get('fields[flor]') || '';
+    var emailVal   = fd.get('email_address') || '';
+    var florVal    = fd.get('fields[flor]') || '';
     var mensajeVal = fd.get('fields[mensaje]') || '';
+    var ahoraVal   = new Date().toISOString(); // marca de tiempo de cada envío
 
+    // La confirmación siempre aparece — independientemente de si el email ya existe en Kit
     var show = function () {
       transitionTo(function () { formPhase = 2; render(); });
     };
@@ -465,19 +467,20 @@
       return;
     }
 
-    // Fallback: POST directo al endpoint con el UID del embed
+    // POST directo al endpoint con el UID del embed
     var payload = new URLSearchParams({
       email_address: emailVal,
       first_name: formSubmittedName,
       'fields[flor]': florVal,
-      'fields[mensaje]': mensajeVal
+      'fields[mensaje]': mensajeVal,
+      'fields[ultimo_envio]': ahoraVal // fecha del último envío visible en Kit
     });
+    // La confirmación se muestra siempre: email nuevo → suscripción, email repetido → actualiza datos en Kit
     fetch('https://app.kit.com/forms/91fd762686/subscriptions', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: payload.toString()
     }).then(show).catch(function () {
-      // Último recurso: beacon con form ID numérico
       navigator.sendBeacon('https://app.kit.com/forms/9602040/subscriptions', payload);
       show();
     });
