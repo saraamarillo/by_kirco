@@ -9,6 +9,10 @@
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
   <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+  <!-- Kit embed oculto — capta suscriptores con UID correcto -->
+  <div style="display:none;position:absolute;pointer-events:none" aria-hidden="true">
+    <script async data-uid="91fd762686" src="https://dogged-experimenter-3481.kit.com/91fd762686/index.js"></script>
+  </div>
   <style>
     :root {
       --kirco-green:        #A0D76B;
@@ -441,24 +445,41 @@
   function submitCartaForm(form) {
     var fd = new FormData(form);
     formSubmittedName = (fd.get('first_name') || '').trim();
-    var payload = new URLSearchParams({
-      email_address: fd.get('email_address') || '',
-      first_name: formSubmittedName,
-      'fields[flor]': fd.get('fields[flor]') || '',
-      'fields[mensaje]': fd.get('fields[mensaje]') || ''
-    });
+    var emailVal  = fd.get('email_address') || '';
+    var florVal   = fd.get('fields[flor]') || '';
+    var mensajeVal = fd.get('fields[mensaje]') || '';
+
     var show = function () {
       transitionTo(function () { formPhase = 2; render(); });
     };
-    var ok = navigator.sendBeacon('https://app.kit.com/forms/9602040/subscriptions', payload);
-    if (ok) { setTimeout(show, 400); return; }
-    fetch('https://app.kit.com/forms/9602040/subscriptions', {
+
+    // Intentar enviar a través del embed de Kit si ya está en el DOM
+    var kitForm = document.querySelector('[data-uid="91fd762686"] form, .formkit-form form');
+    if (kitForm) {
+      var kEmail = kitForm.querySelector('[name="email_address"]');
+      var kName  = kitForm.querySelector('[name="first_name"]');
+      if (kEmail) kEmail.value = emailVal;
+      if (kName)  kName.value  = formSubmittedName;
+      kitForm.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+      setTimeout(show, 600);
+      return;
+    }
+
+    // Fallback: POST directo al endpoint con el UID del embed
+    var payload = new URLSearchParams({
+      email_address: emailVal,
+      first_name: formSubmittedName,
+      'fields[flor]': florVal,
+      'fields[mensaje]': mensajeVal
+    });
+    fetch('https://app.kit.com/forms/91fd762686/subscriptions', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: payload.toString()
     }).then(show).catch(function () {
-      var btn = form.querySelector('[type=submit]');
-      if (btn) btn.textContent = 'Sin conexión. Inténtalo de nuevo.';
+      // Último recurso: beacon con form ID numérico
+      navigator.sendBeacon('https://app.kit.com/forms/9602040/subscriptions', payload);
+      show();
     });
   }
 
