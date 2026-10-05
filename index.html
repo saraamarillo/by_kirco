@@ -1,1173 +1,825 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>by_kirco — Queridos desconocidos</title>
-<meta name="description" content="Cartas anónimas escritas a mano que dejo para ti en algún lugar." />
-<meta property="og:title" content="by_kirco — Queridos desconocidos" />
-<meta property="og:description" content="Cartas anónimas escritas a mano que dejo para ti en algún lugar." />
-<!-- <meta property="og:image" content="/assets/og.jpg" /> -->
-<meta name="theme-color" content="#f7f1e3" />
-<link rel="icon" type="image/png" href="/assets/favicon.png" />
-<link rel="apple-touch-icon" href="/assets/favicon.png" />
-
-<!-- Lottie for loader -->
-<script src="https://unpkg.com/lottie-web@5.12.2/build/player/lottie.min.js"></script>
-<!-- Caveat for handwritten letter text -->
-<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&display=swap" rel="stylesheet" />
-
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>by_kirco — Cartas escritas a mano para desconocidos</title>
+<meta name="description" content="Cartas escritas a mano dejadas para desconocidos en las calles de Madrid. Para quien las necesite.">
+<link rel="icon" href="assets/favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Darumadrop+One&family=Indie+Flower&display=swap" rel="stylesheet">
+<link rel="preload" href="assets/01-tren.webp" as="image">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
 <style>
-/* ============================================================
-   TOKENS — by_kirco Design System
-   ============================================================ */
-@font-face {
-  font-family: "Visby Round CF";
-  src: url("fonts/VisbyRoundCF-Heavy.ttf") format("truetype");
-  font-weight: 800;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "OCR B Std";
-  src: url("fonts/OCRBStd.otf") format("opentype");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "OCR A Std";
-  src: url("fonts/OCRAStd.otf") format("opentype");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
 :root {
-  /* --- Colors --- */
-  --kirco-green:        #a0d76b;
-  --kirco-green-deep:   #6f9c3e;
-  --kirco-green-tint:   #ecf7df;
-  --kirco-orange:       #ffaa4d;
-  --kirco-orange-deep:  #d07f1f;
-  --kirco-orange-tint:  #fff2e2;
-  --kirco-yellow:       #fffa7d;
-  --kirco-yellow-tint:  #fffdda;
-  --kirco-white:        #ffffff;
-  --kirco-paper:        #f7f1e3;
-  --kirco-ink:          #2e2b25;
-  --kirco-ink-soft:     #6b6557;
-  --kirco-line:         #e8e1d2;
-
-  /* --- Semantic aliases --- */
-  --text-body:      var(--kirco-ink);
-  --text-muted:     var(--kirco-ink-soft);
-
-  /* --- Typography --- */
-  --font-display: "Visby Round CF", system-ui, sans-serif;
-  --font-mono:    "OCR B Std", "OCR A Std", monospace;
-  --font-body:    system-ui, -apple-system, "Segoe UI", sans-serif;
-  --track-mono:   0.16em;
-
-  /* --- Radii --- */
-  --radius-sm:   10px;
-  --radius-md:   16px;
-  --radius-lg:   28px;
-  --radius-pill: 999px;
-
-  /* --- Shadows --- */
-  --shadow-card:       0 2px 6px rgba(46,43,37,.06), 0 10px 28px rgba(46,43,37,.08);
-  --shadow-pop:        0 4px 12px rgba(46,43,37,.10), 0 18px 44px rgba(46,43,37,.14);
-}
-
-/* ============================================================
-   RESET & BASE
-   ============================================================ */
-*, *::before, *::after { box-sizing: border-box; }
-html { margin: 0; padding: 0; scroll-behavior: smooth; }
-body {
-  margin: 0; padding: 0;
-  background: var(--kirco-paper);
-  color: var(--text-body);
-  font-family: var(--font-body);
-  overflow-x: hidden;
-}
-.wrap { max-width: 1100px; margin: 0 auto; padding: 0 48px; }
-
-/* ============================================================
-   LOADER
-   ============================================================ */
-.loader {
-  position: fixed; inset: 0;
-  background: var(--kirco-paper);
-  display: flex; align-items: center; justify-content: center;
-  z-index: 1000;
-  transition: opacity 600ms ease-out;
-}
-.loader.hide { opacity: 0; pointer-events: none; }
-.loader-anim { width: min(320px, 64vw); height: min(320px, 64vw); }
-
-/* ============================================================
-   BRAND WATERMARK FLOWERS
-   ============================================================ */
-.flor-marca {
-  position: absolute;
-  background: no-repeat center / contain;
-  opacity: 0.07;
-  pointer-events: none;
-  z-index: 0;
-}
-.flor-marca.verde   { background-image: url("assets/monograma-verde.png"); }
-.flor-marca.naranja { background-image: url("assets/monograma-naranja.png?v=2"); }
-
-/* ============================================================
-   SITE HEADER
-   ============================================================ */
-.site-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 26px 48px 0;
-}
-.site-header .logo-link { display: flex; align-items: center; }
-.site-header .logo { height: 96px; display: block; }
-.site-header .handle {
-  font-family: var(--font-mono);
-  font-size: 13px;
-  letter-spacing: var(--track-mono);
-  color: var(--text-muted);
-}
-
-/* ============================================================
-   GLOBAL BUTTON
-   ============================================================ */
-.btn {
-  display: inline-block;
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 19px;
-  letter-spacing: 0.01em;
-  color: #ffffff;
-  background: var(--kirco-orange-deep);
-  border: 2px solid var(--kirco-orange-deep);
-  border-radius: var(--radius-pill);
-  padding: 17px 46px;
-  text-decoration: none;
-  cursor: pointer;
-  transition: transform 180ms ease-out, filter 180ms ease-out;
-  line-height: 1;
-}
-.btn:hover  { transform: translateY(-2px); filter: brightness(0.96); }
-.btn:active { transform: scale(0.98); }
-
-/* ============================================================
-   HERO
-   ============================================================ */
-.hero {
-  position: relative; overflow: hidden;
-  text-align: center;
-  padding: 100px 48px 130px;
-}
-.hero .flor-marca.h1f { width: 620px; height: 620px; top: -160px; left: -180px; transform: rotate(-14deg); }
-.hero .flor-marca.h2f { width: 340px; height: 340px; bottom: -60px; right: -90px; transform: rotate(12deg); }
-.hero .inner { position: relative; max-width: 900px; margin: 0 auto; }
-.hero h1 {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: clamp(64px, 9vw, 118px);
-  line-height: 0.98;
-  margin: 0;
-  color: var(--kirco-green-deep);
-  text-wrap: balance;
-}
-.hero .sub {
-  font-size: 24px;
-  line-height: 1.5;
-  color: var(--text-muted);
-  max-width: 520px;
-  margin: 32px auto 0;
-  text-wrap: pretty;
-}
-.hero .btn  { margin-top: 42px; }
-.hero .flor-sep {
-  display: block;
-  width: 30px; height: 30px;
-  margin: 52px auto 0;
-  opacity: 0.65;
-}
-
-/* ============================================================
-   CARTA ANIMADA (envelope)
-   ============================================================ */
-.carta-scene {
-  position: relative;
-  background: var(--kirco-paper);
-  padding: 110px 48px 150px;
-  text-align: center;
-  overflow: hidden;
-}
-.carta-scene .flor-marca.c1f { width: 480px; height: 480px; top: 60px; right: -150px; transform: rotate(16deg); }
-.carta-scene .flor-marca.c2f { width: 300px; height: 300px; bottom: -70px; left: -80px; transform: rotate(-10deg); }
-.carta-scene .label {
-  font-family: var(--font-mono);
-  font-size: 14px;
-  letter-spacing: var(--track-mono);
-  text-transform: uppercase;
-  color: var(--kirco-green-deep);
-  margin: 0 0 70px;
-  position: relative;
-}
-
-.envelope {
-  position: relative;
-  width: 480px; max-width: 86vw;
-  height: 300px;
-  margin: 290px auto 0;
-}
-.env-back {
-  position: absolute; inset: 0;
-  background: var(--kirco-orange);
-  border-radius: var(--radius-md);
-  z-index: 1;
-}
-.env-flap {
-  position: absolute; top: 0; left: 0;
-  width: 100%; height: 150px;
-  background: var(--kirco-orange-deep);
-  clip-path: polygon(0 0, 100% 0, 50% 100%);
-  border-radius: var(--radius-md) var(--radius-md) 0 0;
-  transform-origin: top center;
-  transition: transform 700ms cubic-bezier(0.4,0,0.2,1), z-index 0s 350ms;
-  z-index: 4;
-}
-.env-front {
-  position: absolute; inset: 0;
-  background: var(--kirco-orange);
-  clip-path: polygon(0 26%, 50% 62%, 100% 26%, 100% 100%, 0 100%);
-  border-radius: var(--radius-md);
-  z-index: 3;
-}
-.env-front .logo-sobre {
-  position: absolute;
-  left: 50%; bottom: 12px;
-  width: 152px;
-  transform: translateX(-50%);
-}
-.letter {
-  position: absolute;
-  left: 50%; bottom: 18px;
-  width: 400px; max-width: 78vw;
-  background: var(--kirco-white);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-pop);
-  padding: 26px 40px 20px;
-  text-align: left;
-  transform: translateX(-50%) translateY(10px) rotate(0deg);
-  transition: transform 900ms cubic-bezier(0.34,1.3,0.5,1) 420ms;
-  z-index: 2;
-}
-.letter .saludo {
-  font-family: 'Caveat', cursive;
-  font-weight: 600; font-size: 34px;
-  color: var(--kirco-orange-deep);
-  margin: 0 0 12px;
-}
-.letter p {
-  font-family: "Caveat", cursive;
-  font-weight: 500; font-size: 24px;
-  line-height: 1.5;
-  color: var(--text-body);
-  margin: 0 0 10px;
-}
-.hl {
-  background: var(--kirco-yellow);
-  border-radius: 6px;
-  padding: 0 6px;
-  color: var(--kirco-ink);
-  box-decoration-break: clone;
-  -webkit-box-decoration-break: clone;
-}
-.letter .flor-firma {
-  height: 30px; width: 30px;
-  margin-top: 16px; display: block;
-}
-.letter .saludo, .letter p, .letter .flor-firma {
-  opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 500ms ease-out, transform 500ms ease-out;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .envelope.open .env-flap  { transform: rotateX(180deg); z-index: 1; }
-  .envelope.open .letter    { transform: translateX(-50%) translateY(-218px) rotate(-1.6deg); }
-  .envelope.open .letter .saludo   { opacity: 1; transform: none; transition-delay: 900ms; }
-  .envelope.open .letter p.l1      { opacity: 1; transform: none; transition-delay: 1150ms; }
-  .envelope.open .letter p.l2      { opacity: 1; transform: none; transition-delay: 1450ms; }
-  .envelope.open .letter .flor-firma { opacity: 1; transform: none; transition-delay: 1750ms; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .env-flap  { transform: rotateX(180deg); z-index: 1; }
-  .letter    { transform: translateX(-50%) translateY(-218px) rotate(-1.6deg); }
-  .letter .saludo, .letter p, .letter .flor-firma { opacity: 1; transform: none; }
-}
-
-/* ============================================================
-   GALERÍA — polaroids
-   ============================================================ */
-.galeria {
-  position: relative; overflow: hidden;
-  padding: 120px 0 130px;
-}
-.galeria .flor-marca.g1f { width: 520px; height: 520px; top: -120px; left: -160px; transform: rotate(-12deg); }
-.galeria .flor-marca.g2f { width: 280px; height: 280px; bottom: -60px; right: -70px; transform: rotate(9deg); }
-.galeria .gal-header { max-width: 1100px; margin: 0 auto; padding: 0 48px; position: relative; }
-.galeria h2 {
-  font-family: var(--font-display);
-  font-weight: 800; font-size: 52px; line-height: 1.1;
-  color: var(--kirco-green-deep);
-  text-align: center; margin: 0;
-  text-wrap: balance;
-}
-.galeria .gal-sub {
-  font-family: var(--font-mono);
-  font-size: 13px; letter-spacing: var(--track-mono);
-  text-transform: uppercase;
-  color: var(--text-muted);
-  text-align: center; margin: 20px 0 0;
-}
-.gal-strip {
-  display: flex; gap: 36px;
-  justify-content: safe center;
-  margin-top: 70px;
-  padding: 30px 48px 50px;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none;
-}
-.gal-strip::-webkit-scrollbar { display: none; }
-
-.polaroid {
-  flex: 0 0 280px;
-  scroll-snap-align: center;
-  background: var(--kirco-white);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-card);
-  padding: 16px 16px 20px;
-  opacity: 0;
-  transform: translateY(36px);
-  transition: opacity 600ms ease-out,
-              transform 600ms cubic-bezier(0.34,1.3,0.5,1),
-              box-shadow 200ms ease-out;
-}
-.polaroid:hover { box-shadow: var(--shadow-pop); }
-.gal-strip.in .polaroid                { opacity: 1; }
-.gal-strip.in .polaroid:nth-child(odd)  { transform: translateY(0) rotate(-1.8deg); transition-delay: calc(var(--i) * 120ms); }
-.gal-strip.in .polaroid:nth-child(even) { transform: translateY(0) rotate(1.6deg);  transition-delay: calc(var(--i) * 120ms); }
-.gal-strip.in .polaroid:hover           { transform: translateY(-6px) rotate(0deg); transition-delay: 0ms; }
-
-.polaroid .foto {
-  display: block; width: 100%; height: 300px;
-  object-fit: cover;
-  border-radius: 12px;
-}
-.polaroid .pie {
-  display: flex; align-items: center; gap: 8px;
-  font-family: var(--font-mono);
-  font-size: 11px; letter-spacing: var(--track-mono);
-  text-transform: uppercase;
-  color: var(--text-muted);
-  margin-top: 14px;
-}
-.polaroid .pie img { width: 14px; height: 14px; }
-
-/* ============================================================
-   DESTINATARIOS PREVIEW
-   ============================================================ */
-.dest-preview {
-  position: relative;
-  background: var(--kirco-paper);
-  padding: 120px 48px 150px;
-  overflow: hidden;
-  text-align: center;
-}
-.dest-preview .flor-dp { width: 400px; height: 400px; top: -100px; right: -120px; transform: rotate(10deg); }
-.dest-preview h2 {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: clamp(40px, 6vw, 52px);
-  color: var(--kirco-green-deep);
-  margin: 0;
-  text-wrap: balance;
-}
-.dest-preview .dest-sub {
-  font-family: var(--font-mono);
-  font-size: 13px; letter-spacing: var(--track-mono);
-  text-transform: uppercase;
-  color: var(--text-muted);
-  margin: 18px 0 0;
-}
-.dest-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 36px;
-  max-width: 1000px;
-  margin: 70px auto 0;
-  text-align: left;
-  position: relative;
-}
-.dest-card { position: relative; }
-.dest-bubble {
-  border-radius: 24px;
-  padding: 30px 26px;
-  position: relative;
-  z-index: 2;
-  box-shadow: var(--shadow-card);
-  opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 560ms ease-out, transform 560ms ease-out;
-}
-.dest-bubble.in-view { opacity: 1; transform: none; }
-.dest-bubble.verde   { background: var(--kirco-green-deep); }
-.dest-bubble.naranja { background: var(--kirco-orange-deep); }
-.dest-bubble p {
-  font-size: 17px; line-height: 1.6;
-  color: #ffffff; margin: 0 0 20px;
-  text-wrap: pretty;
-}
-.dest-bubble p::before { content: '“'; }
-.dest-bubble p::after  { content: '”'; }
-.dest-bubble-footer {
-  display: flex; align-items: center; gap: 12px;
-}
-.dest-monograma {
-  width: 44px; height: 44px;
-  border-radius: 50%;
-  border: 2px solid rgba(255,255,255,0.6);
-  flex-shrink: 0;
-  object-fit: contain;
-  padding: 4px;
-}
-.dest-nombre {
-  font-family: var(--font-display);
-  font-weight: 800; font-size: 15px;
-  color: #ffffff; display: block; margin: 0;
-}
-.dest-fecha {
-  font-family: var(--font-mono);
-  font-size: 11px; letter-spacing: var(--track-mono);
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.8); display: block; margin: 2px 0 0;
-}
-.dest-tail {
-  position: absolute;
-  left: 36px; bottom: -9px;
-  width: 20px; height: 20px;
-  transform: rotate(45deg);
-  border-radius: 4px;
-  z-index: 1;
-}
-.dest-tail.verde   { background: var(--kirco-green-deep); }
-.dest-tail.naranja { background: var(--kirco-orange-deep); }
-.dest-preview .btn-dest {
-  display: inline-block;
-  margin-top: 60px;
-  font-family: var(--font-display);
-  font-weight: 800; font-size: 17px;
-  color: var(--kirco-green-deep);
-  background: transparent;
-  border: 2px solid var(--kirco-green);
-  border-radius: var(--radius-pill);
-  padding: 15px 34px;
-  text-decoration: none;
-  transition: background 150ms ease-out;
-}
-.dest-preview .btn-dest:hover { background: var(--kirco-green-tint); }
-.dest-card:nth-child(2) .dest-bubble { transition-delay: 130ms; }
-.dest-card:nth-child(3) .dest-bubble { transition-delay: 260ms; }
-
-/* ============================================================
-   SOBRE MÍ PREVIEW
-   ============================================================ */
-.sobre-preview {
-  position: relative;
-  background: var(--kirco-orange-tint);
-  padding: 120px 48px;
-  overflow: hidden;
-}
-.sobre-preview-inner {
-  max-width: 1000px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 64px;
-  align-items: center;
-}
-.sobre-preview .label-tag {
-  font-family: var(--font-mono);
-  font-size: 13px; letter-spacing: var(--track-mono);
-  text-transform: uppercase;
-  color: var(--kirco-orange-deep);
-  margin: 0 0 18px;
-}
-.sobre-preview h2 {
-  font-family: var(--font-display);
-  font-weight: 800; font-size: 40px; line-height: 1.15;
-  margin: 0; color: var(--kirco-orange-deep);
-  text-wrap: balance;
-}
-.sobre-preview .sobre-desc {
-  font-size: 18px; line-height: 1.65;
-  color: var(--kirco-ink);
-  max-width: 480px; margin: 22px 0 0;
-  text-wrap: pretty;
-}
-.sobre-preview .btn-sobre {
-  display: inline-block;
-  margin-top: 32px;
-  font-family: var(--font-display);
-  font-weight: 800; font-size: 17px;
-  color: #fff;
-  background: var(--kirco-orange-deep);
-  border: 2px solid var(--kirco-orange-deep);
-  border-radius: var(--radius-pill);
-  padding: 15px 34px;
-  text-decoration: none;
-  transition: transform 150ms ease-out;
-}
-.sobre-preview .btn-sobre:hover { transform: translateY(-2px); }
-.sobre-tiktok {
-  position: relative;
-  width: 280px; height: 280px;
-  border-radius: 50%;
-  overflow: hidden;
-  box-shadow: var(--shadow-pop);
-  border: 6px solid var(--kirco-white);
-  flex-shrink: 0;
-}
-.sobre-tiktok iframe {
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%) scale(1.55);
-  width: 325px; height: 580px;
-  border: none;
-  pointer-events: none;
-}
-
-/* ============================================================
-   COMUNIDAD DE ESCRITORES
-   ============================================================ */
-.comunidad {
-  position: relative;
-  background: var(--kirco-paper);
-  padding: 120px 48px 130px;
-  overflow: hidden;
-  text-align: center;
-}
-.comunidad .flor-marca.com1 { width: 420px; height: 420px; top: 40px; left: -130px; transform: rotate(-16deg); }
-.comunidad .flor-marca.com2 { width: 300px; height: 300px; bottom: -80px; right: -70px; transform: rotate(20deg); }
-.comunidad .label-tag {
-  font-family: var(--font-mono);
-  font-size: 13px; letter-spacing: var(--track-mono);
-  text-transform: uppercase;
-  color: var(--kirco-orange-deep);
-  margin: 0 0 18px;
-  position: relative;
-}
-.comunidad h2 {
-  font-family: var(--font-display);
-  font-weight: 800; font-size: 44px; line-height: 1.15;
-  margin: 0 auto; color: var(--kirco-green-deep);
-  max-width: 680px;
-  text-wrap: balance;
-  position: relative;
-}
-.comunidad .com-desc {
-  font-size: 19px; line-height: 1.7;
-  color: var(--text-body);
-  max-width: 680px; margin: 30px auto 0;
-  text-wrap: pretty;
-  position: relative;
-}
-.com-form-wrap {
-  background: var(--kirco-green-deep);
-  border-radius: 24px;
-  box-shadow: var(--shadow-pop);
-  max-width: 480px;
-  margin: 56px auto 0;
-  padding: 48px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-  position: relative;
-}
-.com-form-wrap label {
-  font-family: var(--font-mono);
-  font-size: 12px; letter-spacing: var(--track-mono);
-  text-transform: uppercase;
-  color: var(--kirco-paper);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-}
-.com-form-wrap input,
-.com-form-wrap textarea {
-  font-family: var(--font-body);
-  font-size: 17px;
-  color: var(--text-body);
-  background: var(--kirco-paper);
-  border: 2px solid var(--kirco-line);
-  border-radius: 14px;
-  padding: 14px 18px;
-  outline: none;
-  width: 100%;
-  text-align: center;
-  transition: border-color 200ms ease-out;
-}
-.com-form-wrap input:focus,
-.com-form-wrap textarea:focus { border-color: var(--kirco-green); }
-.com-form-wrap textarea { resize: vertical; }
-.com-form-wrap .btn-com {
-  align-self: center;
-  margin-top: 6px;
-  font-family: var(--font-display);
-  font-weight: 800; font-size: 19px;
-  color: var(--kirco-green-deep);
-  background: var(--kirco-paper);
-  border: 2px solid var(--kirco-paper);
-  border-radius: var(--radius-pill);
-  padding: 17px 42px;
-  cursor: pointer;
-  transition: transform 180ms ease-out;
-  line-height: 1;
-}
-.com-form-wrap .btn-com:hover { transform: translateY(-2px); }
-.com-form-note {
-  font-size: 14px; color: var(--kirco-paper);
-  opacity: 0.85; text-align: center;
-  margin: 4px 0 0;
-}
-.com-success {
-  background: var(--kirco-green-deep);
-  border-radius: 24px;
-  padding: 48px;
-  max-width: 480px;
-  margin: 56px auto 0;
-  text-align: center;
-  box-shadow: var(--shadow-pop);
-  display: none;
-  position: relative;
-}
-.com-success.visible { display: block; }
-.com-success .success-logo {
-  width: 48px; height: 48px;
-  filter: brightness(0) invert(1);
-  opacity: 0.9;
-  margin: 0 auto 18px;
-  display: block;
-}
-.com-success h3 {
-  font-family: var(--font-display);
-  font-weight: 800; font-size: 24px;
-  color: var(--kirco-paper); margin: 0;
-}
-.com-success p {
-  font-size: 16px; line-height: 1.6;
-  color: var(--kirco-paper); opacity: 0.9;
-  margin: 14px 0 0;
-}
-
-/* ============================================================
-   FOOTER
-   ============================================================ */
-footer {
-  background: var(--kirco-orange-deep);
-  padding: 90px 0 60px;
-  color: var(--kirco-paper);
-}
-.footer-grid {
-  display: grid;
-  grid-template-columns: 1.2fr 1fr 1.3fr;
-  gap: 64px; align-items: start;
-}
-.logo-foot { height: 84px; }
-footer .claim {
-  font-size: 16px; line-height: 1.6;
-  color: var(--kirco-paper); opacity: 0.92;
-  margin: 18px 0 0; max-width: 280px;
-}
-footer h4 {
-  font-family: var(--font-mono);
-  font-size: 12px; font-weight: 400;
-  letter-spacing: var(--track-mono);
-  text-transform: uppercase;
-  color: var(--kirco-paper); opacity: 0.8;
-  margin: 0 0 20px;
-}
-.foot-links { display: flex; flex-direction: column; gap: 12px; }
-.foot-links a {
-  font-family: var(--font-display);
-  font-weight: 800; font-size: 17px;
-  color: var(--kirco-paper); text-decoration: none;
-  transition: opacity 150ms ease-out;
-}
-.foot-links a:hover { opacity: 0.85; }
-.redes { display: flex; gap: 12px; flex-wrap: wrap; }
-.redes a {
-  font-family: var(--font-display);
-  font-weight: 800; font-size: 16px;
-  color: var(--kirco-orange-deep);
-  background: var(--kirco-paper);
-  border-radius: var(--radius-pill);
-  padding: 11px 24px;
-  text-decoration: none;
-  transition: transform 150ms ease-out;
-}
-.redes a:hover { transform: translateY(-2px); }
-.legal {
-  display: flex; align-items: center;
-  justify-content: space-between; gap: 24px;
-  flex-wrap: wrap;
-  border-top: 2px solid rgba(247,241,227,.35);
-  margin-top: 70px; padding-top: 28px;
-  font-family: var(--font-mono);
-  font-size: 12px; letter-spacing: var(--track-mono);
-  text-transform: uppercase;
-  color: var(--kirco-paper);
-}
-.legal a { color: var(--kirco-paper); text-decoration: none; }
-.legal a:hover { text-decoration: underline; }
-.legal-links { display: flex; gap: 22px; }
-
-/* ============================================================
-   RESPONSIVE
-   ============================================================ */
-@media (max-width: 900px) {
-  .wrap { padding: 0 28px; }
-  .site-header { padding: 20px 28px 0; }
-  .hero { padding: 80px 28px 100px; }
-  .carta-scene { padding: 80px 28px 110px; }
-  .dest-preview { padding: 80px 28px 100px; }
-  .sobre-preview { padding: 80px 28px; }
-  .sobre-preview-inner { grid-template-columns: 1fr; gap: 40px; }
-  .sobre-tiktok { width: 200px; height: 200px; }
-  .sobre-tiktok iframe { transform: translate(-50%, -50%) scale(1.1); }
-  .comunidad { padding: 80px 28px 100px; }
-  .footer-grid { grid-template-columns: 1fr 1fr; gap: 44px; }
-  .galeria h2 { font-size: 42px; }
-}
-
-@media (max-width: 700px) {
-  .dest-grid { grid-template-columns: 1fr; max-width: 420px; margin-left: auto; margin-right: auto; }
-  .footer-grid { grid-template-columns: 1fr; gap: 36px; }
-}
-
-@media (max-width: 640px) {
-  .site-header { padding: 18px 20px 0; }
-  .site-header .logo { height: 64px; }
-  .site-header .handle { font-size: 11px; }
-
-  .hero { padding: 48px 20px 64px; }
-  .hero h1 { font-size: clamp(44px, 13vw, 72px); }
-  .hero .sub { font-size: 18px; }
-  .hero .btn { font-size: 17px; padding: 14px 32px; margin-top: 32px; }
-
-  .carta-scene { padding: 72px 20px 88px; }
-  .envelope { margin-top: 200px; }
-  .letter { padding: 18px 22px 14px; }
-  .letter .saludo { font-size: 26px; }
-  .letter p { font-size: 18px; }
-
-  .galeria { padding: 80px 0 90px; }
-  .galeria .gal-header { padding: 0 20px; }
-  .galeria h2 { font-size: 34px; }
-  .gal-strip {
-    flex-direction: column;
-    align-items: center;
-    overflow-x: visible;
-    scroll-snap-type: none;
-    gap: 28px;
-    padding: 20px 20px 36px;
-    margin-top: 40px;
-  }
-  .polaroid { flex: 0 0 auto; width: 100%; max-width: 340px; }
-  .polaroid .foto { height: 260px; }
-
-  .dest-preview { padding: 60px 20px 80px; }
-  .sobre-preview { padding: 60px 20px; }
-  .sobre-tiktok { display: none; }
-  .sobre-preview-inner { grid-template-columns: 1fr; }
-
-  .comunidad { padding: 60px 20px 80px; }
-  .comunidad h2 { font-size: 34px; }
-  .com-form-wrap { padding: 32px 24px; }
-
-  footer { padding: 60px 0 44px; }
-  .legal { flex-direction: column; align-items: flex-start; gap: 14px; }
-  .legal-links { flex-direction: column; gap: 10px; }
-}
+  --kirco-green:#A0D76B;
+  --kirco-green-deep:#6F9C3E;
+  --kirco-green-tint:#ECF7DF;
+  --kirco-orange:#FFAA4D;
+  --kirco-orange-deep:#D07F1F;
+  --kirco-orange-tint:#FFF2E2;
+  --kirco-yellow:#FFFA7D;
+  --kirco-paper:#F7F1E3;
+  --kirco-ink:#2E2B25;
+  --kirco-line:rgba(46,43,37,0.18);
+  --font-display:'Darumadrop One',sans-serif;
+  --font-hand:'Indie Flower',cursive;
+  --font-mono:'OCR B Std','OCR-B Std','OCR B',monospace;
+  --font-ocr:'OCR A Std','OCR A',monospace;
+  --font-body:'Indie Flower',cursive;
+  --track-mono:0.16em;
+  --shadow-card:0 4px 20px rgba(46,43,37,0.12);
+  --shadow-pop:0 8px 40px rgba(46,43,37,0.22);
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background-color:#F7F1E3;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.45 0 0 0 0 0.36 0 0 0 0 0.2 0 0 0 0.09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  color:var(--kirco-ink);
+  font-family:var(--font-body);
+  overflow-x:clip;
+}
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto !important}
+.lenis.lenis-stopped{overflow:hidden}
+@media (pointer:fine){html.kirco-cursor,html.kirco-cursor *{cursor:none !important}}
+a{color:inherit}
+button{cursor:pointer;border:none;background:none;padding:0}
 </style>
 </head>
 <body>
 
+<!-- SVG symbol for flower -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="florK" viewBox="260 320 480 440">
+    <path fill="currentColor" fill-rule="evenodd" d="M389.96,369.21c-63.67-2.14-139.75,78.26-99.68,140.24,12.94,20.03,33.63,34.41,55.29,44.83-2.91,1.88-5.63,3.77-8.02,5.59-18.12,13.77-34.28,32.49-38.29,55.57-12.11,69.61,78.82,133.9,141.52,120.27,28.18-6.13,50.24-26.74,65.23-50.58,12.95,12.53,27.87,22.81,45.17,28.98,32.46,11.57,68.04,5.5,94.52-16.66,25.79-21.58,50.21-55.51,42.97-90.83-6.97-34-38.03-57.57-67.26-72.98,19.31-12.48,37.23-28.03,48.45-47.4,24.06-41.54.86-80.47-34.21-106.37-44.1-32.56-105.44-46.64-147.16-3.18-8.33,8.68-14.96,18.55-20.48,29.08-20.44-21.03-48.56-35.56-78.04-36.55ZM381.08,671.6c-18.39-20.26-25.55-43.53-7.45-66.11,9.5-11.86,22.24-20.07,35.23-27.76,12.29,21.52,32.54,39.06,55.47,48.3-.09.14-.2.26-.29.4l-.48.48c-.86,1.72-1.48,3.05-1.89,4.02-1.35,3.06-2.42,6.32-3.82,9.57-5.05,11.7-11.61,23.22-19.64,33.13-5.39,6.65-13.68,16.31-22.4,18.41-13.52,3.26-26.67-11.58-34.72-20.45ZM583.79,560.7c11.22,7.19,23.02,15.55,31.5,25.98,21.58,26.54,3.7,56.38-18.56,76.35-4.83,4.33-10.1,8.66-16.25,10.95-1.18.44-6.38.61-6.28.88-4.93-1.09-13.71-7.56-20.87-14.9-6.36-6.53-11.77-13.58-16.62-21.29-2.37-3.77-4.91-7.62-7.66-11.31,27.83-11.22,47.88-37.64,50.76-69.04,1.34.78,2.7,1.54,3.99,2.37ZM564.46,393.35c13.37.73,31.11,15.97,39.92,25.29,31.67,33.49-11.56,69.31-39.45,85.67-12.35-19.86-31-35.84-52.83-44.46,9.15-16.31,14.52-35.25,26.79-50.04,6.13-7.39,15.05-17.04,25.57-16.47ZM400.47,414.25c4.91,1.74,7.74,3.64,12.95,7.61,9.13,6.96,18,16.45,25.46,25.77,3.21,4.01,6.41,7.63,9.7,10.93-28.01,10.95-49.06,36.92-51.8,68.04-10.34-3.6-19.81-7.34-28.36-12.52-25.23-15.27-31.5-37.59-15.2-63.26,9.39-14.78,24.27-33.02,42.3-36.86,1.94-.41,3.43-.28,4.95.26Z"/>
+  </symbol>
+</svg>
+
 <!-- LOADER -->
-<div class="loader" id="loader">
-  <div class="loader-anim" id="loaderAnim"></div>
+<div id="loader" style="position:fixed;inset:0;z-index:9000;background:#F7F1E3;display:flex;align-items:center;justify-content:center;will-change:transform">
+  <div id="lottie-box" style="width:min(420px,72vw);aspect-ratio:1/1"></div>
+  <div id="loader-curve" style="position:absolute;left:-10%;right:-10%;top:calc(100% - 1px);height:22vh;background:#F7F1E3;border-radius:0 0 50% 50%;transform-origin:top center"></div>
 </div>
 
-<!-- HEADER -->
-<header class="site-header">
-  <a href="/" class="logo-link"><img class="logo" src="assets/logo-verde.png" alt="by_kirco" id="headerLogo" /></a>
-  <span class="handle">@BY_KIRCO</span>
-</header>
-
-<!-- ===== HERO ===== -->
-<section class="hero">
-  <div class="flor-marca verde h1f"></div>
-  <div class="flor-marca verde h2f"></div>
-  <div class="inner">
-    <h1>Queridos<br />desconocidos</h1>
-    <p class="sub">Tengo un mensaje.</p>
-    <a class="btn" href="/quiz.html">Para ti</a>
-    <img class="flor-sep" src="assets/monograma-verde.png" alt="" aria-hidden="true" />
+<!-- CUSTOM CURSOR -->
+<div id="cursor" style="position:fixed;top:0;left:0;width:27px;height:27px;margin:-13.5px 0 0 -13.5px;pointer-events:none;z-index:10000;display:none;will-change:transform">
+  <div id="cursor-inner" style="width:27px;height:27px;color:var(--kirco-orange);transition:color 250ms ease-out">
+    <svg width="27" height="27" style="display:block;overflow:visible"><use href="#florK" width="27" height="27"></use></svg>
   </div>
-</section>
+</div>
 
-<!-- ===== CARTA ANIMADA ===== -->
-<section class="carta-scene">
-  <div class="flor-marca naranja c1f"></div>
-  <div class="flor-marca naranja c2f"></div>
-  <p class="label">Para todo el que llega nuevo aquí</p>
-  <div class="envelope" id="envelope">
-    <div class="env-back"></div>
-    <div class="letter">
-      <p class="saludo">Querido desconocido,</p>
-      <p class="l1">si estás leyendo esto por primera vez, esta cartita también es para ti.</p>
-      <p class="l2"><span class="hl">bienvenido a este rincón. gracias por quedarte un ratito.</span></p>
-      <img class="flor-firma" src="assets/monograma-verde.png" alt="by_kirco" />
-    </div>
-    <div class="env-front">
-      <img class="logo-sobre" src="assets/logo-naranja-negativo.png" alt="by_kirco" />
-    </div>
-    <div class="env-flap"></div>
-  </div>
-</section>
+<!-- HERO -->
+<section id="hero" style="position:relative;z-index:20;height:100vh;min-height:620px">
+  <div id="hero-page" style="position:absolute;inset:0;overflow:hidden;background:var(--kirco-ink);transform-origin:50% 0%;will-change:transform">
+    <div class="slide" style="position:absolute;inset:0;opacity:1;z-index:1;will-change:opacity"><img class="kb" src="assets/01-tren.webp" alt="Cartita naranja en la ventana de un tren al atardecer" style="width:100%;height:100%;object-fit:cover;display:block;will-change:transform"></div>
+    <div class="slide" style="position:absolute;inset:0;opacity:0;z-index:0;will-change:opacity"><img class="kb" src="assets/02-cafe.webp" alt="Cartita naranja en la mesa de un café" style="width:100%;height:100%;object-fit:cover;display:block;will-change:transform"></div>
+    <div class="slide" style="position:absolute;inset:0;opacity:0;z-index:0;will-change:opacity"><img class="kb" src="assets/03-arte-simple.webp" alt="Cartita naranja colgada de una planta" style="width:100%;height:100%;object-fit:cover;display:block;will-change:transform"></div>
+    <div class="slide" style="position:absolute;inset:0;opacity:0;z-index:0;will-change:opacity"><img class="kb" src="assets/04-obra-de-arte.webp" alt="Cartita naranja en un banco del parque" style="width:100%;height:100%;object-fit:cover;display:block;will-change:transform"></div>
+    <div class="slide" style="position:absolute;inset:0;opacity:0;z-index:0;will-change:opacity"><img class="kb" src="assets/05-metro.webp" alt="Cartita naranja en un asiento del metro" style="width:100%;height:100%;object-fit:cover;display:block;will-change:transform"></div>
+    <div style="position:absolute;inset:0;background:var(--kirco-orange-deep);opacity:0.5;pointer-events:none"></div>
+    <div id="hero-shade" style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(46,43,37,0) 0%,rgba(46,43,37,0.7) 100%);opacity:0;pointer-events:none;z-index:6"></div>
 
-<!-- ===== GALERÍA ===== -->
-<section class="galeria">
-  <div class="flor-marca verde g1f"></div>
-  <div class="flor-marca verde g2f"></div>
-  <div class="gal-header">
-    <h2>Cartitas que ya encontraron a alguien</h2>
-    <p class="gal-sub">Dejadas por ahí, con cariño</p>
-  </div>
-  <div class="gal-strip" id="galStrip">
-    <div class="polaroid" style="--i:0">
-      <img class="foto" src="assets/galeria/02-naturaleza.png" alt="Cartita naranja entre la hierba" />
-      <div class="pie"><img src="assets/monograma-verde.png" alt="" /><span>Banco del parque</span></div>
-    </div>
-    <div class="polaroid" style="--i:1">
-      <img class="foto" src="assets/galeria/04-metro.png" alt="Cartita verde en la estación" />
-      <div class="pie"><img src="assets/monograma-verde.png" alt="" /><span>Estación de tren</span></div>
-    </div>
-    <div class="polaroid" style="--i:2">
-      <img class="foto" src="assets/galeria/03-prota.png" alt="Cartita naranja: tú eres el/la prota" />
-      <div class="pie"><img src="assets/monograma-verde.png" alt="" /><span>Entre dos libros</span></div>
-    </div>
-    <div class="polaroid" style="--i:3">
-      <img class="foto" src="assets/galeria/06-metro-nota.png" alt="Cartita verde en el metro" />
-      <div class="pie"><img src="assets/monograma-verde.png" alt="" /><span>En el metro</span></div>
-    </div>
-    <div class="polaroid" style="--i:4">
-      <img class="foto" src="assets/galeria/05-tren.png" alt="Cartita naranja en un tren" />
-      <div class="pie"><img src="assets/monograma-verde.png" alt="" /><span>Vagón de tren</span></div>
-    </div>
-    <div class="polaroid" style="--i:5">
-      <img class="foto" src="assets/galeria/01-calle.png" alt="Cartita en la calle" />
-      <div class="pie"><img src="assets/monograma-verde.png" alt="" /><span>Esquina cualquiera</span></div>
-    </div>
-  </div>
-</section>
+    <header style="position:absolute;top:0;left:0;right:0;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:22px clamp(20px,4vw,48px)">
+      <img src="assets/logo-naranja-negativo.png" alt="by_kirco" style="height:84px;display:block">
+      <nav style="display:flex;gap:28px;font-family:var(--font-mono);font-size:13px;letter-spacing:var(--track-mono);text-transform:uppercase">
+        <a href="/sobre-mi.html" style="color:var(--kirco-paper);text-decoration:none;transition:color 180ms ease-out" onmouseover="this.style.color='var(--kirco-yellow)'" onmouseout="this.style.color='var(--kirco-paper)'">Sobre mí</a>
+        <a href="/destinatarios.html" style="color:var(--kirco-paper);text-decoration:none;transition:color 180ms ease-out" onmouseover="this.style.color='var(--kirco-yellow)'" onmouseout="this.style.color='var(--kirco-paper)'">Destinatarios</a>
+      </nav>
+    </header>
 
-<!-- ===== DESTINATARIOS PREVIEW ===== -->
-<section class="dest-preview">
-  <div class="flor-marca naranja flor-dp"></div>
-  <div style="max-width:1000px;margin:0 auto;position:relative">
-    <h2>Destinatarios</h2>
-    <p class="dest-sub">De mis cartitas</p>
-    <div class="dest-grid">
-
-      <div class="dest-card">
-        <div class="dest-bubble verde">
-          <p>La encontré un día horrible y la leí tres veces seguidas. Todavía la guardo en la cartera.</p>
-          <div class="dest-bubble-footer">
-            <img class="dest-monograma" src="assets/monograma-verde.png" alt="" />
-            <div>
-              <span class="dest-nombre">Marta</span>
-              <span class="dest-fecha">3 feb 2026</span>
-            </div>
-          </div>
-        </div>
-        <div class="dest-tail verde"></div>
+    <div style="position:absolute;inset:0;z-index:4;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 clamp(20px,5vw,72px);text-align:center">
+      <h1 aria-label="Queridos Desconocidos" style="font-family:var(--font-display);font-weight:400;font-size:clamp(52px,8.4vw,128px);line-height:0.98;margin:0;color:var(--kirco-paper);text-shadow:0 4px 30px rgba(46,43,37,0.4)">
+        <span style="display:block;white-space:nowrap"><span data-ch style="display:inline-block">Q</span><span data-ch style="display:inline-block">u</span><span data-ch style="display:inline-block">e</span><span data-ch style="display:inline-block">r</span><span data-ch style="display:inline-block">i</span><span data-ch style="display:inline-block">d</span><span data-ch style="display:inline-block">o</span><span data-ch style="display:inline-block">s</span></span>
+        <span style="display:block;white-space:nowrap"><span data-ch style="display:inline-block">D</span><span data-ch style="display:inline-block">e</span><span data-ch style="display:inline-block">s</span><span data-ch style="display:inline-block">c</span><span data-ch style="display:inline-block">o</span><span data-ch style="display:inline-block">n</span><span data-ch style="display:inline-block">o</span><span data-ch style="display:inline-block">c</span><span data-ch style="display:inline-block">i</span><span data-ch style="display:inline-block">d</span><span data-ch style="display:inline-block">o</span><span data-ch style="display:inline-block">s</span></span>
+      </h1>
+      <p data-hero-fade style="font-family:var(--font-hand);font-size:clamp(24px,2.6vw,34px);color:var(--kirco-paper);margin:20px 0 0;text-shadow:0 2px 14px rgba(46,43,37,0.5)">tengo un mensaje</p>
+      <div data-hero-fade style="margin-top:24px">
+        <button id="btn-quiz-hero" style="font-family:var(--font-display);font-size:24px;color:#fff;background:var(--kirco-green);border:2px solid var(--kirco-green);border-radius:999px;padding:14px 48px;transition:transform 180ms ease-out,filter 180ms ease-out" onmouseover="this.style.transform='translateY(-2px)';this.style.filter='brightness(1.05)'" onmouseout="this.style.transform='';this.style.filter=''">para ti</button>
       </div>
-
-      <div class="dest-card">
-        <div class="dest-bubble naranja">
-          <p>No sé quién la escribió, pero llegó justo cuando la necesitaba. Gracias, quien seas.</p>
-          <div class="dest-bubble-footer">
-            <img class="dest-monograma" src="assets/monograma-naranja.png" alt="" />
-            <div>
-              <span class="dest-nombre">Diego</span>
-              <span class="dest-fecha">18 mar 2026</span>
-            </div>
-          </div>
-        </div>
-        <div class="dest-tail naranja"></div>
-      </div>
-
-      <div class="dest-card">
-        <div class="dest-bubble verde">
-          <p>Le hice una foto antes de guardármela. Me la reencuentro cada vez que dudo de mí.</p>
-          <div class="dest-bubble-footer">
-            <img class="dest-monograma" src="assets/monograma-verde.png" alt="" />
-            <div>
-              <span class="dest-nombre">Aroa</span>
-              <span class="dest-fecha">27 abr 2026</span>
-            </div>
-          </div>
-        </div>
-        <div class="dest-tail verde"></div>
-      </div>
-
     </div>
-    <a href="/destinatarios.html" class="btn-dest">Ver todos los destinatarios</a>
   </div>
 </section>
 
-<!-- ===== SOBRE MÍ PREVIEW ===== -->
-<section class="sobre-preview">
-  <div class="sobre-preview-inner">
+<!-- DESDE 2021 / ESCRIBO PARA TI / SIN CONOCERTE -->
+<section id="phrase-section" style="position:relative;z-index:1;min-height:115vh;padding:70px 0 120px;overflow:hidden;display:flex;flex-direction:column;justify-content:center">
+  <div data-reveal aria-hidden="true" style="position:relative;z-index:0;display:flex;flex-direction:column;align-items:center;gap:0;font-family:var(--font-ocr);font-size:clamp(36px,7.4vw,140px);line-height:1;white-space:nowrap;pointer-events:none">
+    <div data-marquee="1" style="color:transparent;-webkit-text-stroke:2px var(--kirco-green);will-change:transform">DESDE 2021</div>
+    <div data-marquee="-1" style="color:var(--kirco-orange-deep);will-change:transform">ESCRIBO PARA TI</div>
+    <div data-marquee="1" style="color:var(--kirco-green-deep);will-change:transform">SIN CONOCERTE</div>
+  </div>
+
+  <!-- Polaroids desktop -->
+  <div id="polas-wide">
+    <div data-speed="1.5" style="position:absolute;z-index:3;left:5%;top:8%;width:clamp(190px,17vw,240px);will-change:transform"><div data-float style="will-change:transform"><div data-tilt style="background:#fff;border-radius:6px;padding:12px 12px 46px;box-shadow:var(--shadow-pop);transform:rotate(-5deg);will-change:transform"><div style="overflow:hidden;border-radius:2px"><img src="assets/01-tren.webp" alt="Cartita en la ventana de un tren" style="display:block;width:100%;aspect-ratio:1/1;object-fit:cover;transition:transform 600ms cubic-bezier(0.22,1,0.36,1)"></div></div></div></div>
+    <div data-speed="0.9" style="position:absolute;z-index:3;right:7%;top:14%;width:clamp(190px,17vw,240px);will-change:transform"><div data-float style="will-change:transform"><div data-tilt style="background:#fff;border-radius:6px;padding:12px 12px 46px;box-shadow:var(--shadow-pop);transform:rotate(4deg);will-change:transform"><div style="overflow:hidden;border-radius:2px"><img src="assets/02-cafe.webp" alt="Cartita en un café" style="display:block;width:100%;aspect-ratio:1/1;object-fit:cover;transition:transform 600ms cubic-bezier(0.22,1,0.36,1)"></div></div></div></div>
+    <div data-speed="1.8" style="position:absolute;z-index:3;left:40%;top:38%;width:clamp(190px,17vw,240px);will-change:transform"><div data-float style="will-change:transform"><div data-tilt style="background:#fff;border-radius:6px;padding:12px 12px 46px;box-shadow:var(--shadow-pop);transform:rotate(3deg);will-change:transform"><div style="overflow:hidden;border-radius:2px"><img src="assets/03-arte-simple.webp" alt="Cartita colgada de una planta" style="display:block;width:100%;aspect-ratio:1/1;object-fit:cover;transition:transform 600ms cubic-bezier(0.22,1,0.36,1)"></div></div></div></div>
+    <div data-speed="1.2" style="position:absolute;z-index:3;left:14%;top:60%;width:clamp(190px,17vw,240px);will-change:transform"><div data-float style="will-change:transform"><div data-tilt style="background:#fff;border-radius:6px;padding:12px 12px 46px;box-shadow:var(--shadow-pop);transform:rotate(-3deg);will-change:transform"><div style="overflow:hidden;border-radius:2px"><img src="assets/04-obra-de-arte.webp" alt="Cartita en un banco" style="display:block;width:100%;aspect-ratio:1/1;object-fit:cover;transition:transform 600ms cubic-bezier(0.22,1,0.36,1)"></div></div></div></div>
+    <div data-speed="0.7" style="position:absolute;z-index:3;right:15%;top:62%;width:clamp(190px,17vw,240px);will-change:transform"><div data-float style="will-change:transform"><div data-tilt style="background:#fff;border-radius:6px;padding:12px 12px 46px;box-shadow:var(--shadow-pop);transform:rotate(5deg);will-change:transform"><div style="overflow:hidden;border-radius:2px"><img src="assets/05-metro.webp" alt="Cartita en el metro" style="display:block;width:100%;aspect-ratio:1/1;object-fit:cover;transition:transform 600ms cubic-bezier(0.22,1,0.36,1)"></div></div></div></div>
+  </div>
+
+  <!-- Polaroids mobile grid -->
+  <div id="polas-narrow" style="display:none;position:relative;z-index:3;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:20px;max-width:640px;margin:48px auto 0;padding:0 20px">
+    <div style="background:#fff;border-radius:6px;padding:10px 10px 36px;box-shadow:var(--shadow-pop);transform:rotate(-5deg)"><div style="overflow:hidden;border-radius:2px"><img src="assets/01-tren.webp" alt="" style="display:block;width:100%;aspect-ratio:1/1;object-fit:cover"></div></div>
+    <div style="background:#fff;border-radius:6px;padding:10px 10px 36px;box-shadow:var(--shadow-pop);transform:rotate(4deg)"><div style="overflow:hidden;border-radius:2px"><img src="assets/02-cafe.webp" alt="" style="display:block;width:100%;aspect-ratio:1/1;object-fit:cover"></div></div>
+    <div style="background:#fff;border-radius:6px;padding:10px 10px 36px;box-shadow:var(--shadow-pop);transform:rotate(3deg)"><div style="overflow:hidden;border-radius:2px"><img src="assets/03-arte-simple.webp" alt="" style="display:block;width:100%;aspect-ratio:1/1;object-fit:cover"></div></div>
+    <div style="background:#fff;border-radius:6px;padding:10px 10px 36px;box-shadow:var(--shadow-pop);transform:rotate(-3deg)"><div style="overflow:hidden;border-radius:2px"><img src="assets/04-obra-de-arte.webp" alt="" style="display:block;width:100%;aspect-ratio:1/1;object-fit:cover"></div></div>
+    <div style="background:#fff;border-radius:6px;padding:10px 10px 36px;box-shadow:var(--shadow-pop);transform:rotate(5deg)"><div style="overflow:hidden;border-radius:2px"><img src="assets/05-metro.webp" alt="" style="display:block;width:100%;aspect-ratio:1/1;object-fit:cover"></div></div>
+  </div>
+</section>
+
+<!-- SOBRE MÍ: BOOK FLIP -->
+<section style="position:relative;z-index:1;padding:90px clamp(20px,5vw,72px) 130px">
+  <p data-reveal style="font-family:var(--font-mono);font-size:13px;letter-spacing:var(--track-mono);text-transform:uppercase;color:var(--kirco-orange-deep);margin:0 0 44px;text-align:center">Sobre mí</p>
+
+  <!-- Wide book flip -->
+  <div id="sobremi-wide" data-reveal style="position:relative;max-width:1100px;height:640px;margin:0 auto;perspective:2400px">
+    <div id="book" role="button" aria-label="Abrir o cerrar la cartita" tabindex="0" style="position:absolute;inset:0;transform-style:preserve-3d;transform:translateX(-25%);transition:transform 1000ms cubic-bezier(0.65,0,0.35,1);cursor:pointer">
+      <!-- Back half (right side, always visible) -->
+      <div style="position:absolute;top:0;bottom:0;left:50%;width:50%;background:var(--kirco-orange);border-radius:0 32px 32px 0;padding:44px 66px 44px 48px;box-sizing:border-box;box-shadow:var(--shadow-pop);display:flex;flex-direction:column;justify-content:center">
+        <div style="position:absolute;right:22px;top:50%;width:18px;height:18px;margin-top:-9px;border-radius:50%;background:#F7F1E3;box-shadow:inset 0 2px 4px rgba(46,43,37,0.35);z-index:2"></div>
+        <p style="font-family:var(--font-hand);font-size:clamp(24px,2.2vw,30px);line-height:1.2;color:var(--kirco-ink);margin:0 0 14px">Querido desconocido,</p>
+        <p style="font-family:var(--font-hand);font-size:clamp(17px,1.45vw,20px);line-height:1.42;color:var(--kirco-ink);margin:0 0 10px">Si has llegado hasta aquí es tu señal para conocerme.</p>
+        <p style="font-family:var(--font-hand);font-size:clamp(17px,1.45vw,20px);line-height:1.42;color:var(--kirco-ink);margin:0 0 10px">Soy Kirco y llevo escribiendo cartitas a desconocidos desde 2021. Luego camino por la calle buscando el lugar más especial para dejarla, un banco del parque, un asiento de metro o incluso colgado de una ramita de un árbol...</p>
+        <p style="font-family:var(--font-hand);font-size:clamp(17px,1.45vw,20px);line-height:1.42;color:var(--kirco-ink);margin:0 0 10px">Todas mis cartitas son 100% humanas, sin IA. Las dejo por Madrid para quién las necesite.</p>
+        <p style="font-family:var(--font-hand);font-size:clamp(17px,1.45vw,20px);line-height:1.42;color:var(--kirco-ink);margin:0 0 10px">Y quién sabe, igual tú eres el próximo en encontrarla.</p>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:16px">
+          <p style="font-family:var(--font-hand);font-size:clamp(19px,1.6vw,22px);line-height:1.2;color:var(--kirco-ink);margin:0">Att. @by_kirco</p>
+          <a href="/sobre-mi.html" style="font-family:var(--font-display);font-size:20px;color:var(--kirco-orange-deep);background:#fff;border-radius:999px;padding:10px 28px;text-decoration:none;box-shadow:var(--shadow-card);transition:transform 180ms ease-out" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">mi historia</a>
+        </div>
+      </div>
+      <!-- Lazo abierto left -->
+      <img id="lazo-open-l" src="assets/lazo-abierto.png" alt="" aria-hidden="true" onerror="this.style.display='none'" style="position:absolute;left:calc(100% - 31px);top:calc(50% - 116px);width:260px;height:auto;z-index:5;pointer-events:none;opacity:0;clip-path:inset(0 100% 0 0);transition:opacity 300ms ease-out 900ms,clip-path 900ms ease-out 900ms">
+      <!-- Lazo abierto right -->
+      <img id="lazo-open-r" src="assets/lazo-abierto.png" alt="" aria-hidden="true" onerror="this.style.display='none'" style="position:absolute;right:calc(100% - 31px);top:calc(50% - 116px);width:260px;height:auto;z-index:5;pointer-events:none;transform:scaleX(-1);opacity:0;clip-path:inset(0 100% 0 0);transition:opacity 300ms ease-out 1000ms,clip-path 900ms ease-out 1000ms">
+      <!-- Cover (flips) -->
+      <div id="cover" style="position:absolute;top:0;bottom:0;left:50%;width:50%;transform-origin:left center;transform-style:preserve-3d;transform:rotateY(0deg);transition:transform 1100ms cubic-bezier(0.65,0,0.35,1);z-index:3">
+        <!-- Cover front -->
+        <div style="position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:var(--kirco-orange);border-radius:32px;box-shadow:var(--shadow-pop);display:flex;align-items:center;padding:56px 90px 56px 64px;box-sizing:border-box">
+          <h2 style="font-family:var(--font-display);font-weight:400;font-size:clamp(48px,5vw,74px);line-height:1.04;margin:0;color:#fff;text-shadow:0 2px 0 rgba(224,126,28,0.45)">Cada cartita la escribo yo, a mano.</h2>
+          <img id="lazo-closed" src="assets/lazo-cerrado.png" alt="" aria-hidden="true" onerror="this.style.display='none'" style="position:absolute;right:-62px;top:50%;width:140px;height:auto;transform:translateY(-38%) rotate(-8deg);transition:opacity 300ms ease-out;pointer-events:none">
+        </div>
+        <!-- Cover back (photo) -->
+        <div style="position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;transform:rotateY(180deg);background:var(--kirco-orange);border-radius:32px 0 0 32px;padding:24px 24px 24px 56px;box-sizing:border-box;box-shadow:var(--shadow-pop)">
+          <div style="position:absolute;left:22px;top:50%;width:18px;height:18px;margin-top:-9px;border-radius:50%;background:#F7F1E3;box-shadow:inset 0 2px 4px rgba(46,43,37,0.35);z-index:2"></div>
+          <img src="assets/sobre-mi-header.webp" alt="Una chica lee una cartita de by_kirco en un banco del parque" style="display:block;width:100%;height:100%;object-fit:cover;border-radius:20px">
+        </div>
+      </div>
+      <!-- Spine divider -->
+      <div id="spine-line" style="position:absolute;left:50%;top:36px;bottom:36px;width:2px;margin-left:-1px;background:rgba(255,255,255,0.7);z-index:4;opacity:0;transition:opacity 400ms ease-out 700ms;pointer-events:none"></div>
+    </div>
+  </div>
+  <p id="card-hint" style="font-family:var(--font-hand);font-size:24px;color:var(--kirco-orange-deep);text-align:center;margin:28px 0 0">↑ toca la cartita para abrirla</p>
+
+  <!-- Narrow (mobile) -->
+  <div id="sobremi-narrow" style="display:none;max-width:560px;margin:0 auto;background:var(--kirco-orange);border-radius:32px;padding:22px;box-shadow:var(--shadow-pop)">
+    <img src="assets/sobre-mi-header.webp" alt="Una chica lee una cartita de by_kirco" style="display:block;width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:20px">
+    <div style="padding:26px 10px 10px">
+      <p style="font-family:var(--font-hand);font-size:clamp(24px,2.2vw,30px);line-height:1.2;color:var(--kirco-ink);margin:0 0 14px">Querido desconocido,</p>
+      <p style="font-family:var(--font-hand);font-size:clamp(17px,1.45vw,20px);line-height:1.42;color:var(--kirco-ink);margin:0 0 10px">Soy Kirco y llevo escribiendo cartitas a desconocidos desde 2021. Las dejo por Madrid para quién las necesite.</p>
+      <p style="font-family:var(--font-hand);font-size:clamp(17px,1.45vw,20px);line-height:1.42;color:var(--kirco-ink);margin:0 0 10px">Y quién sabe, igual tú eres el próximo en encontrarla.</p>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:16px">
+        <p style="font-family:var(--font-hand);font-size:clamp(19px,1.6vw,22px);line-height:1.2;color:var(--kirco-ink);margin:0">Att. @by_kirco</p>
+        <a href="/sobre-mi.html" style="font-family:var(--font-display);font-size:20px;color:var(--kirco-orange-deep);background:#fff;border-radius:999px;padding:10px 28px;text-decoration:none;box-shadow:var(--shadow-card)">mi historia</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SI LA ENCUENTRAS / ME ALEGRARÁ SABERLO -->
+<section style="position:relative;z-index:1;min-height:90vh;padding:120px 0 140px;overflow:hidden;display:flex;flex-direction:column;justify-content:center">
+  <div data-reveal aria-hidden="true" style="display:flex;flex-direction:column;align-items:center;font-family:var(--font-ocr);font-size:clamp(30px,6.2vw,120px);line-height:1;white-space:nowrap;pointer-events:none">
+    <div data-marquee="1" style="color:var(--kirco-green-deep);will-change:transform">SI LA ENCUENTRAS</div>
+    <div data-marquee="-1" style="color:var(--kirco-orange-deep);will-change:transform">ME ALEGRARÁ SABERLO</div>
+  </div>
+  <p data-reveal style="position:relative;z-index:4;font-family:var(--font-hand);font-size:clamp(22px,2vw,28px);line-height:1.35;color:var(--kirco-green-deep);text-align:center;margin:30px auto 0;max-width:640px;padding:0 20px">Escríbeme en mis redes sociales si encontraste una cartita</p>
+
+  <!-- notas2 bubbles (desktop only) -->
+  <div id="notas2-wide">
+    <div data-speed="1.3" style="position:absolute;z-index:3;left:5%;top:10%;width:clamp(200px,18vw,250px);will-change:transform"><div data-float style="will-change:transform"><div data-tilt style="position:relative;background:var(--kirco-green-deep);border-radius:24px;padding:22px 24px 18px;box-shadow:var(--shadow-pop);transform:rotate(-3deg);will-change:transform"><p style="font-family:var(--font-ocr);font-size:15px;line-height:1.55;color:#fff;margin:0 0 14px">&ldquo;La encontré en el metro y le hice foto para mandártela.&rdquo;</p><p style="font-family:var(--font-ocr);font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:#fff;margin:0">Lucía · 2 jul 2026</p><div style="position:absolute;left:32px;bottom:-9px;width:20px;height:20px;background:var(--kirco-green-deep);transform:rotate(45deg);border-radius:4px"></div></div></div></div>
+    <div data-speed="0.8" style="position:absolute;z-index:3;right:6%;top:16%;width:clamp(200px,18vw,250px);will-change:transform"><div data-float style="will-change:transform"><div data-tilt style="position:relative;background:var(--kirco-green-deep);border-radius:24px;padding:22px 24px 18px;box-shadow:var(--shadow-pop);transform:rotate(4deg);will-change:transform"><p style="font-family:var(--font-ocr);font-size:15px;line-height:1.55;color:#fff;margin:0 0 14px">&ldquo;Estaba colgada de un árbol. Pensé que era para mí.&rdquo;</p><p style="font-family:var(--font-ocr);font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:#fff;margin:0">Pablo · 19 jul 2026</p><div style="position:absolute;left:32px;bottom:-9px;width:20px;height:20px;background:var(--kirco-green-deep);transform:rotate(45deg);border-radius:4px"></div></div></div></div>
+    <div data-speed="1.6" style="position:absolute;z-index:3;left:22%;top:62%;width:clamp(200px,18vw,250px);will-change:transform"><div data-float style="will-change:transform"><div data-tilt style="position:relative;background:var(--kirco-green-deep);border-radius:24px;padding:22px 24px 18px;box-shadow:var(--shadow-pop);transform:rotate(2deg);will-change:transform"><p style="font-family:var(--font-ocr);font-size:15px;line-height:1.55;color:#fff;margin:0 0 14px">&ldquo;Te escribí por Instagram nada más leerla. Gracias.&rdquo;</p><p style="font-family:var(--font-ocr);font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:#fff;margin:0">Irene · 8 ago 2026</p><div style="position:absolute;left:32px;bottom:-9px;width:20px;height:20px;background:var(--kirco-green-deep);transform:rotate(45deg);border-radius:4px"></div></div></div></div>
+    <div data-speed="1.0" style="position:absolute;z-index:3;right:18%;top:66%;width:clamp(200px,18vw,250px);will-change:transform"><div data-float style="will-change:transform"><div data-tilt style="position:relative;background:var(--kirco-green-deep);border-radius:24px;padding:22px 24px 18px;box-shadow:var(--shadow-pop);transform:rotate(-4deg);will-change:transform"><p style="font-family:var(--font-ocr);font-size:15px;line-height:1.55;color:#fff;margin:0 0 14px">&ldquo;Ahora la tengo pegada en la nevera.&rdquo;</p><p style="font-family:var(--font-ocr);font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:#fff;margin:0">Hugo · 30 ago 2026</p><div style="position:absolute;left:32px;bottom:-9px;width:20px;height:20px;background:var(--kirco-green-deep);transform:rotate(45deg);border-radius:4px"></div></div></div></div>
+  </div>
+</section>
+
+<!-- SOBRE: CARTA PERSONALIZADA -->
+<section style="position:relative;z-index:1;padding:300px clamp(20px,5vw,72px) 120px;display:flex;flex-direction:column;align-items:center">
+  <div id="envelope" data-reveal role="button" aria-label="Abrir el sobre" tabindex="0" style="position:relative;width:min(540px,88vw);aspect-ratio:540/330;cursor:pointer">
+    <div style="position:absolute;inset:0;background:#C96A12;border-radius:22px;z-index:1"></div>
+    <!-- Letter -->
+    <div id="env-letter" style="position:absolute;left:6%;right:6%;bottom:16px;height:92%;background:#FFFDF6;border-radius:18px;box-shadow:var(--shadow-pop);padding:28px 34px;box-sizing:border-box;z-index:2;display:flex;flex-direction:column;justify-content:center;gap:14px;transform:translateY(10px);transition:transform 900ms cubic-bezier(0.34,1.25,0.5,1) 380ms">
+      <p id="env-p1" style="font-family:var(--font-hand);font-size:clamp(24px,2.4vw,30px);color:var(--kirco-orange-deep);margin:0;opacity:0;transition:opacity 400ms ease-out 900ms">Querido Desconocido,</p>
+      <p id="env-p2" style="font-family:var(--font-hand);font-size:clamp(19px,1.8vw,23px);line-height:1.4;color:var(--kirco-ink);margin:0;opacity:0;transition:opacity 400ms ease-out 1100ms">he preparado un test para ti y así sabré la carta que necesitas leer.</p>
+      <button id="env-btn" style="align-self:flex-start;font-family:var(--font-display);font-size:21px;color:#fff;background:var(--kirco-orange-deep);border:none;border-radius:999px;padding:10px 32px;opacity:0;transition:opacity 400ms ease-out 1300ms,transform 180ms ease-out" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">haz el test</button>
+    </div>
+    <!-- Bottom -->
+    <div style="position:absolute;inset:0;background:var(--kirco-orange-deep);clip-path:polygon(0 30%, 50% 64%, 100% 30%, 100% 100%, 0 100%);border-radius:22px;z-index:3;display:flex;align-items:flex-end;justify-content:center;padding:0 24px 30px;box-sizing:border-box">
+      <p style="font-family:var(--font-display);font-size:clamp(22px,2.6vw,32px);line-height:1.1;color:#fff;margin:0;text-align:center">¿Quieres recibir una carta personalizada?</p>
+    </div>
+    <!-- Flap -->
+    <div id="env-flap" style="position:absolute;top:0;left:0;width:100%;height:56%;background:#D9741A;clip-path:polygon(0 0, 100% 0, 50% 100%);border-radius:22px 22px 0 0;transform-origin:top center;transform:perspective(1200px) rotateX(0deg);transition:transform 700ms cubic-bezier(0.4,0,0.2,1);z-index:4"></div>
+    <!-- Monograma hint -->
+    <img id="env-mono" src="assets/monograma-verde.png" alt="" aria-hidden="true" style="position:absolute;left:50%;top:44%;width:46px;height:46px;margin-left:-23px;z-index:5;transition:opacity 250ms ease-out;pointer-events:none">
+  </div>
+  <p id="env-hint-text" style="font-family:var(--font-hand);font-size:22px;color:var(--kirco-orange-deep);margin:26px 0 0;transition:opacity 250ms ease-out">↑ toca el sobre para abrirlo</p>
+</section>
+
+<!-- INSTAGRAM -->
+<section style="position:relative;z-index:1;padding:110px clamp(20px,5vw,72px) 140px;overflow:hidden">
+  <img src="assets/monograma-verde.png" alt="" style="position:absolute;width:420px;height:420px;top:-60px;right:-120px;transform:rotate(14deg);opacity:0.1;pointer-events:none">
+  <div style="max-width:1100px;margin:0 auto;position:relative">
+    <p data-reveal style="font-family:var(--font-mono);font-size:13px;letter-spacing:var(--track-mono);text-transform:uppercase;color:var(--kirco-green-deep);margin:0 0 18px;text-align:center">@by_kirco // Instagram</p>
+    <h2 data-hand style="font-family:var(--font-hand);font-weight:400;font-size:clamp(32px,4.2vw,56px);line-height:1.2;margin:0 auto;max-width:900px;text-align:center;color:var(--kirco-green-deep)">
+      <span data-word style="display:inline-block">Sígueme</span> <span data-word style="display:inline-block">en</span> <span data-word style="display:inline-block">redes</span> <span data-word style="display:inline-block">sociales</span> <span data-word style="display:inline-block">para</span> <span data-word style="display:inline-block">no</span> <span data-word style="display:inline-block">perderte</span> <span data-word style="display:inline-block">dónde</span> <span data-word style="display:inline-block">dejaré</span> <span data-word style="display:inline-block">la</span> <span data-word style="display:inline-block">próxima</span> <span data-word style="display:inline-block;color:var(--kirco-orange-deep)">cartita</span>
+    </h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:28px;margin-top:64px;align-items:stretch">
+      <div data-insta-card style="height:600px;background:var(--kirco-paper);border-radius:24px;overflow:hidden;box-shadow:var(--shadow-card)">
+        <iframe src="https://www.instagram.com/p/DdpEpYPCLMS/embed/" title="Post de Instagram de by_kirco" loading="lazy" style="width:100%;height:100%;border:none;display:block" scrolling="no" allowtransparency="true"></iframe>
+      </div>
+      <div data-insta-card style="height:600px;background:var(--kirco-paper);border-radius:24px;overflow:hidden;box-shadow:var(--shadow-card)">
+        <iframe src="https://www.instagram.com/reel/DdPUprSoZao/embed/" title="Reel de Instagram de by_kirco" loading="lazy" style="width:100%;height:100%;border:none;display:block" scrolling="no" allowtransparency="true"></iframe>
+      </div>
+      <a data-insta-card href="https://www.instagram.com/by_kirco/" target="_blank" rel="noopener" style="height:600px;background:var(--kirco-orange-deep);border-radius:24px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;text-decoration:none;padding:32px;box-sizing:border-box;transition:transform 200ms ease-out" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform=''">
+        <img src="assets/logo-naranja-negativo.png" alt="by_kirco" style="width:180px">
+        <span style="font-family:var(--font-display);font-size:30px;color:var(--kirco-paper)">@by_kirco</span>
+        <span style="font-family:var(--font-mono);font-size:12px;letter-spacing:var(--track-mono);text-transform:uppercase;color:var(--kirco-paper);border:2px solid var(--kirco-paper);border-radius:999px;padding:10px 22px">Ver perfil</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- COMUNIDAD DE ESCRITORES -->
+<section style="position:relative;z-index:1;padding:110px clamp(20px,5vw,72px) 140px;overflow:hidden">
+  <img src="assets/monograma-naranja.png" alt="" style="position:absolute;width:420px;height:420px;top:40px;left:-130px;transform:rotate(-16deg);opacity:0.08;pointer-events:none">
+  <p data-reveal style="position:relative;font-family:var(--font-mono);font-size:13px;letter-spacing:var(--track-mono);text-transform:uppercase;color:var(--kirco-green-deep);margin:0 0 44px;text-align:center">Para quien quiera escribir</p>
+
+  <!-- Wide book flip -->
+  <div id="comunidad-wide" data-reveal style="position:relative;max-width:1100px;height:680px;margin:0 auto;perspective:2400px">
+    <div id="com-book" role="button" aria-label="Abrir o cerrar la cartita de la comunidad" tabindex="0" style="position:absolute;inset:0;transform-style:preserve-3d;transform:translateX(-25%);transition:transform 1000ms cubic-bezier(0.65,0,0.35,1);cursor:pointer">
+      <!-- Back half (right) -->
+      <div style="position:absolute;top:0;bottom:0;left:50%;width:50%;background:var(--kirco-green);border-radius:0 32px 32px 0;padding:36px 66px 36px 44px;box-sizing:border-box;box-shadow:var(--shadow-pop);display:flex;flex-direction:column;justify-content:center">
+        <div style="position:absolute;right:22px;top:50%;width:18px;height:18px;margin-top:-9px;border-radius:50%;background:#F7F1E3;box-shadow:inset 0 2px 4px rgba(46,43,37,0.35);z-index:2"></div>
+        <!-- Success state -->
+        <div id="com-success" style="display:none;text-align:center">
+          <p style="font-family:var(--font-display);font-size:38px;color:#fff;margin:0">¡Gracias por escribir!</p>
+          <p style="font-family:var(--font-hand);font-size:22px;line-height:1.4;color:var(--kirco-ink);margin:14px 0 0">Te escribiré pronto a tu correo con las directrices y todo lo que necesitas para empezar.</p>
+        </div>
+        <!-- Form -->
+        <form id="com-form" style="display:flex;flex-direction:column;gap:12px">
+          <label style="font-family:var(--font-hand);font-size:21px;color:var(--kirco-ink);display:flex;flex-direction:column;gap:4px">Nombre<input type="text" name="first_name" required placeholder="tu nombre" style="font-family:var(--font-hand);font-size:20px;color:var(--kirco-ink);background:rgba(255,255,255,0.85);border:2px solid rgba(46,43,37,0.12);border-radius:14px;padding:8px 16px;outline:none;width:100%;box-sizing:border-box"></label>
+          <label style="font-family:var(--font-hand);font-size:21px;color:var(--kirco-ink);display:flex;flex-direction:column;gap:4px">Apellido<input type="text" name="last_name" required placeholder="tu apellido" style="font-family:var(--font-hand);font-size:20px;color:var(--kirco-ink);background:rgba(255,255,255,0.85);border:2px solid rgba(46,43,37,0.12);border-radius:14px;padding:8px 16px;outline:none;width:100%;box-sizing:border-box"></label>
+          <label style="font-family:var(--font-hand);font-size:21px;color:var(--kirco-ink);display:flex;flex-direction:column;gap:4px">Correo<input type="email" name="email_address" required placeholder="tu@correo.com" style="font-family:var(--font-hand);font-size:20px;color:var(--kirco-ink);background:rgba(255,255,255,0.85);border:2px solid rgba(46,43,37,0.12);border-radius:14px;padding:8px 16px;outline:none;width:100%;box-sizing:border-box"></label>
+          <label style="font-family:var(--font-hand);font-size:21px;color:var(--kirco-ink);display:flex;flex-direction:column;gap:4px">¿Por qué te gustaría unirte al proyecto?<textarea rows="3" name="fields[motivo]" required placeholder="cuéntame un poco de ti…" style="font-family:var(--font-hand);font-size:20px;color:var(--kirco-ink);background:rgba(255,255,255,0.85);border:2px solid rgba(46,43,37,0.12);border-radius:14px;padding:8px 16px;outline:none;width:100%;box-sizing:border-box;resize:none"></textarea></label>
+          <button type="submit" id="com-submit" style="align-self:center;margin-top:8px;font-family:var(--font-display);font-size:22px;color:var(--kirco-green-deep);background:#fff;border:none;border-radius:999px;padding:11px 40px;box-shadow:var(--shadow-card);transition:transform 180ms ease-out" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">quiero unirme</button>
+        </form>
+      </div>
+      <!-- Lazo abierto left -->
+      <img id="com-lazo-l" src="assets/lazo-abierto.png" alt="" aria-hidden="true" onerror="this.style.display='none'" style="position:absolute;left:calc(100% - 31px);top:calc(50% - 116px);width:260px;height:auto;z-index:5;pointer-events:none;filter:hue-rotate(-62deg) saturate(1.7) brightness(1.08);opacity:0;clip-path:inset(0 100% 0 0);transition:opacity 300ms ease-out 900ms,clip-path 900ms ease-out 900ms">
+      <!-- Lazo abierto right -->
+      <img id="com-lazo-r" src="assets/lazo-abierto.png" alt="" aria-hidden="true" onerror="this.style.display='none'" style="position:absolute;right:calc(100% - 31px);top:calc(50% - 116px);width:260px;height:auto;z-index:5;pointer-events:none;transform:scaleX(-1);filter:hue-rotate(-62deg) saturate(1.7) brightness(1.08);opacity:0;clip-path:inset(0 100% 0 0);transition:opacity 300ms ease-out 1000ms,clip-path 900ms ease-out 1000ms">
+      <!-- Cover -->
+      <div id="com-cover" style="position:absolute;top:0;bottom:0;left:50%;width:50%;transform-origin:left center;transform-style:preserve-3d;transform:rotateY(0deg);transition:transform 1100ms cubic-bezier(0.65,0,0.35,1);z-index:3">
+        <!-- Cover front -->
+        <div style="position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:var(--kirco-green);border-radius:32px;box-shadow:var(--shadow-pop);display:flex;align-items:center;padding:56px 90px 56px 64px;box-sizing:border-box">
+          <h2 style="font-family:var(--font-display);font-weight:400;font-size:clamp(46px,4.8vw,70px);line-height:1.04;margin:0;color:#fff;text-shadow:0 2px 0 rgba(92,138,46,0.45)">Únete a la comunidad de cartitas anónimas</h2>
+          <img id="com-lazo-closed" src="assets/lazo-cerrado.png" alt="" aria-hidden="true" onerror="this.style.display='none'" style="position:absolute;right:-62px;top:50%;width:140px;height:auto;transform:translateY(-38%) rotate(-8deg);filter:hue-rotate(-62deg) saturate(1.7) brightness(1.08);transition:opacity 300ms ease-out;pointer-events:none">
+        </div>
+        <!-- Cover back (text) -->
+        <div style="position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;transform:rotateY(180deg);background:var(--kirco-green);border-radius:32px 0 0 32px;padding:48px 44px 48px 66px;box-sizing:border-box;box-shadow:var(--shadow-pop);display:flex;flex-direction:column;justify-content:center">
+          <div style="position:absolute;left:22px;top:50%;width:18px;height:18px;margin-top:-9px;border-radius:50%;background:#F7F1E3;box-shadow:inset 0 2px 4px rgba(46,43,37,0.35);z-index:2"></div>
+          <p style="font-family:var(--font-hand);font-size:clamp(24px,2.3vw,32px);line-height:1.25;color:var(--kirco-ink);margin:0 0 16px">Si has llegado hasta aquí, es una señal.</p>
+          <p style="font-family:var(--font-hand);font-size:clamp(19px,1.7vw,23px);line-height:1.45;color:var(--kirco-ink);margin:0 0 16px">Si te gusta escribir, eres una persona empática, detallista, creativa y tienes buena letra&hellip; ¿a qué esperas para dejar tus cartitas por el mundo?</p>
+          <p style="font-family:var(--font-hand);font-size:clamp(17px,1.45vw,20px);line-height:1.45;color:var(--kirco-ink);margin:0">Cuando rellenes el formulario te mandaré un correo con las directrices, lo que tienes que hacer y el material que necesitas para dejar tus cartitas.</p>
+        </div>
+      </div>
+      <!-- Spine -->
+      <div id="com-spine" style="position:absolute;left:50%;top:36px;bottom:36px;width:2px;margin-left:-1px;background:rgba(255,255,255,0.7);z-index:4;opacity:0;transition:opacity 400ms ease-out 700ms;pointer-events:none"></div>
+    </div>
+  </div>
+  <p id="com-hint" style="font-family:var(--font-hand);font-size:24px;color:var(--kirco-green-deep);text-align:center;margin:28px 0 0">↑ toca la cartita para abrirla</p>
+
+  <!-- Narrow (mobile) -->
+  <div id="comunidad-narrow" style="display:none;max-width:560px;margin:0 auto;background:var(--kirco-green);border-radius:32px;padding:32px 26px;box-shadow:var(--shadow-pop);display:flex;flex-direction:column;gap:28px">
+    <h2 style="font-family:var(--font-display);font-weight:400;font-size:40px;line-height:1.05;margin:0;color:#fff">Únete a la comunidad de cartitas anónimas</h2>
     <div>
-      <p class="label-tag">Sobre mí</p>
-      <h2>Escribo cada cartita yo, a mano.</h2>
-      <p class="sobre-desc">Nada de plantillas ni inteligencia artificial: cada carta es 100% humana, pensada para alguien que ni siquiera conozco todavía. Las dejo por ahí con la esperanza de que lleguen a quien las necesita.</p>
-      <a href="/sobre-mi.html" class="btn-sobre">Ver más sobre mí</a>
+      <p style="font-family:var(--font-hand);font-size:clamp(24px,2.3vw,32px);line-height:1.25;color:var(--kirco-ink);margin:0 0 16px">Si has llegado hasta aquí, es una señal.</p>
+      <p style="font-family:var(--font-hand);font-size:clamp(19px,1.7vw,23px);line-height:1.45;color:var(--kirco-ink);margin:0 0 16px">Si te gusta escribir, eres una persona empática, detallista, creativa y tienes buena letra&hellip; ¿a qué esperas?</p>
     </div>
-    <div class="sobre-tiktok">
-      <iframe
-        src="https://www.tiktok.com/embed/v2/7503206472214449430"
-        scrolling="no"
-        allow="autoplay; encrypted-media"
-        title="Vídeo de by_kirco en TikTok"
-      ></iframe>
+    <div style="border-top:2px solid rgba(255,255,255,0.7);padding-top:24px">
+      <div id="com-success-narrow" style="display:none;text-align:center">
+        <p style="font-family:var(--font-display);font-size:32px;color:#fff;margin:0">¡Gracias por escribir!</p>
+        <p style="font-family:var(--font-hand);font-size:20px;line-height:1.4;color:var(--kirco-ink);margin:14px 0 0">Te escribiré pronto a tu correo con todo lo que necesitas.</p>
+      </div>
+      <form id="com-form-narrow" style="display:flex;flex-direction:column;gap:12px">
+        <label style="font-family:var(--font-hand);font-size:21px;color:var(--kirco-ink);display:flex;flex-direction:column;gap:4px">Nombre<input type="text" name="first_name" required placeholder="tu nombre" style="font-family:var(--font-hand);font-size:20px;color:var(--kirco-ink);background:rgba(255,255,255,0.85);border:2px solid rgba(46,43,37,0.12);border-radius:14px;padding:8px 16px;outline:none;width:100%;box-sizing:border-box"></label>
+        <label style="font-family:var(--font-hand);font-size:21px;color:var(--kirco-ink);display:flex;flex-direction:column;gap:4px">Apellido<input type="text" name="last_name" required placeholder="tu apellido" style="font-family:var(--font-hand);font-size:20px;color:var(--kirco-ink);background:rgba(255,255,255,0.85);border:2px solid rgba(46,43,37,0.12);border-radius:14px;padding:8px 16px;outline:none;width:100%;box-sizing:border-box"></label>
+        <label style="font-family:var(--font-hand);font-size:21px;color:var(--kirco-ink);display:flex;flex-direction:column;gap:4px">Correo<input type="email" name="email_address" required placeholder="tu@correo.com" style="font-family:var(--font-hand);font-size:20px;color:var(--kirco-ink);background:rgba(255,255,255,0.85);border:2px solid rgba(46,43,37,0.12);border-radius:14px;padding:8px 16px;outline:none;width:100%;box-sizing:border-box"></label>
+        <label style="font-family:var(--font-hand);font-size:21px;color:var(--kirco-ink);display:flex;flex-direction:column;gap:4px">¿Por qué te gustaría unirte?<textarea rows="3" name="fields[motivo]" required placeholder="cuéntame un poco de ti…" style="font-family:var(--font-hand);font-size:20px;color:var(--kirco-ink);background:rgba(255,255,255,0.85);border:2px solid rgba(46,43,37,0.12);border-radius:14px;padding:8px 16px;outline:none;width:100%;box-sizing:border-box;resize:none"></textarea></label>
+        <button type="submit" style="align-self:center;margin-top:8px;font-family:var(--font-display);font-size:22px;color:var(--kirco-green-deep);background:#fff;border:none;border-radius:999px;padding:11px 40px;box-shadow:var(--shadow-card)">quiero unirme</button>
+      </form>
     </div>
   </div>
 </section>
 
-<!-- ===== COMUNIDAD DE ESCRITORES ===== -->
-<section class="comunidad">
-  <div class="flor-marca naranja com1"></div>
-  <div class="flor-marca naranja com2"></div>
-  <p class="label-tag">Para quien quiera escribir</p>
-  <h2>Únete a la comunidad de cartitas anónimas</h2>
-  <p class="com-desc">Si has llegado hasta aquí, es una señal. Si te gusta escribir, eres una persona empática, detallista, creativa y tienes buena letra… <strong>¿a qué esperas para dejar tus cartitas por el mundo?</strong></p>
-
-  <div class="com-success" id="comSuccess">
-    <img class="success-logo" src="assets/monograma-verde.png" alt="" />
-    <h3>¡Gracias por escribir!</h3>
-    <p>Te escribiré pronto a tu correo con las directrices y todo lo que necesitas para empezar.</p>
-  </div>
-
-  <form class="com-form-wrap" id="comForm" novalidate>
-    <label>Nombre
-      <input type="text" name="first_name" placeholder="Tu nombre" required />
-    </label>
-    <label>Apellido
-      <input type="text" name="last_name" placeholder="Tu apellido" required />
-    </label>
-    <label>Correo
-      <input type="email" name="email_address" placeholder="tu@correo.com" required />
-    </label>
-    <label>¿Por qué te gustaría unirte al proyecto?
-      <textarea name="fields[motivo]" rows="4" placeholder="Cuéntame un poco de ti y por qué quieres dejar cartitas por el mundo…" required></textarea>
-    </label>
-    <button type="submit" class="btn-com">Quiero unirme</button>
-    <p class="com-form-note">Al enviarlo, te escribiré por correo con las directrices, el material y todo lo que necesites para dejar tus cartitas.</p>
-    <p class="com-form-note" id="comStatus" aria-live="polite"></p>
-  </form>
-</section>
-
-<!-- ===== FOOTER ===== -->
-<footer>
-  <div class="wrap">
-    <div class="footer-grid">
-      <div>
-        <img class="logo-foot" src="assets/logo-naranja-negativo.png" alt="by_kirco" />
-        <p class="claim">Cartas anónimas escritas a mano, repartidas por el mundo para quien las necesite.</p>
-      </div>
-      <div>
-        <h4>Explora</h4>
-        <div class="foot-links">
-          <a href="/destinatarios.html">Destinatarios</a>
-          <a href="/sobre-mi.html">Sobre mí</a>
-          <a href="/quiz.html">Haz el test</a>
-        </div>
-      </div>
-      <div>
-        <h4>Sígueme</h4>
-        <div class="redes">
-          <a href="https://www.tiktok.com/@by_kirco" target="_blank" rel="noopener">TikTok</a>
-          <a href="https://www.instagram.com/by_kirco/" target="_blank" rel="noopener">Instagram</a>
-        </div>
-        <h4 style="margin-top:28px">Legal</h4>
-        <div class="foot-links">
-          <a href="/aviso-legal.html">Aviso legal</a>
-          <a href="/politica-privacidad.html">Privacidad</a>
-          <a href="/politica-cookies.html">Cookies</a>
-        </div>
-      </div>
+<!-- FOOTER -->
+<footer style="position:relative;z-index:1;background:var(--kirco-orange-deep);padding:80px clamp(20px,5vw,72px) 50px;color:var(--kirco-paper)">
+  <div data-reveal style="max-width:1100px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:32px">
+    <img src="assets/logo-naranja-negativo.png" alt="by_kirco" style="height:84px">
+    <div style="display:flex;gap:14px;align-items:center">
+      <a href="https://www.instagram.com/by_kirco/" target="_blank" rel="noopener" aria-label="Instagram" style="display:block;width:58px;height:58px;transition:transform 180ms ease-out" onmouseover="this.style.transform='translateY(-3px) rotate(-8deg)'" onmouseout="this.style.transform=''"><img src="assets/icons/instagram.svg" alt="Instagram" style="width:100%;height:100%;display:block"></a>
+      <a href="https://www.facebook.com/profile.php?id=61567524682650" target="_blank" rel="noopener" aria-label="Facebook" style="display:block;width:58px;height:58px;transition:transform 180ms ease-out" onmouseover="this.style.transform='translateY(-3px) rotate(-8deg)'" onmouseout="this.style.transform=''"><img src="assets/icons/facebook.svg" alt="Facebook" style="width:100%;height:100%;display:block"></a>
+      <a href="https://www.tiktok.com/@by_kirco" target="_blank" rel="noopener" aria-label="TikTok" style="display:block;width:58px;height:58px;transition:transform 180ms ease-out" onmouseover="this.style.transform='translateY(-3px) rotate(-8deg)'" onmouseout="this.style.transform=''"><img src="assets/icons/tiktok.svg" alt="TikTok" style="width:100%;height:100%;display:block"></a>
     </div>
-    <div class="legal">
-      <span>© 2026 by_kirco — Cartas con cariño</span>
-      <span>@BY_KIRCO</span>
+  </div>
+  <div style="max-width:1100px;margin:50px auto 0;border-top:2px solid rgba(247,241,227,0.35);padding-top:24px;display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between">
+    <p style="font-family:var(--font-mono);font-size:12px;letter-spacing:var(--track-mono);text-transform:uppercase;margin:0">© 2026 by_kirco · Cartas con cariño</p>
+    <div style="display:flex;gap:20px;font-family:var(--font-mono);font-size:11px;letter-spacing:var(--track-mono);text-transform:uppercase">
+      <a href="/aviso-legal.html" style="color:var(--kirco-paper);text-decoration:none;opacity:0.7">Aviso legal</a>
+      <a href="/politica-privacidad.html" style="color:var(--kirco-paper);text-decoration:none;opacity:0.7">Privacidad</a>
+      <a href="/politica-cookies.html" style="color:var(--kirco-paper);text-decoration:none;opacity:0.7">Cookies</a>
     </div>
   </div>
 </footer>
 
+<!-- SELLO FLOTANTE -->
+<div style="position:fixed;right:clamp(16px,3vw,32px);bottom:clamp(16px,3vw,32px);z-index:60;display:flex;align-items:center;gap:14px">
+  <div id="bubble-tip" style="font-family:var(--font-hand);font-size:19px;line-height:1.25;color:var(--kirco-ink);background:var(--kirco-paper);border:2px solid var(--kirco-line);border-radius:20px 20px 6px 20px;padding:10px 16px;box-shadow:var(--shadow-card);max-width:200px;opacity:0;transform:translateX(12px);transition:opacity 220ms ease-out,transform 220ms ease-out;pointer-events:none">¿Qué carta necesitas hoy? Haz el test</div>
+  <button id="btn-seal" aria-label="Haz el test ¿Qué flor eres?" style="width:72px;height:72px;border-radius:50%;background:var(--kirco-orange-deep);border:3px dashed rgba(247,241,227,0.7);box-shadow:var(--shadow-pop);display:flex;align-items:center;justify-content:center;padding:0;transition:transform 200ms ease-out" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform=''">
+    <span id="seal-inner" style="display:block;width:38px;height:38px;color:var(--kirco-paper)"><svg width="38" height="38" style="display:block;overflow:visible"><use href="#florK" width="38" height="38"></use></svg></span>
+  </button>
+</div>
+
+<!-- QUIZ MODAL -->
+<div id="quiz-overlay" style="position:fixed;inset:0;z-index:8000;background:rgba(46,43,37,0.55);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity 300ms ease-out">
+  <div id="quiz-modal" style="position:relative;width:100%;max-width:780px;height:min(88vh,860px);background:#F7F1E3;border:2px solid var(--kirco-line);border-radius:28px;box-shadow:var(--shadow-pop);overflow:hidden;display:flex;flex-direction:column;transform:translateY(40px) rotate(-1.5deg);transition:transform 420ms cubic-bezier(0.22,1,0.36,1)">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 20px;border-bottom:2px dashed var(--kirco-line)">
+      <span style="font-family:var(--font-mono);font-size:12px;letter-spacing:var(--track-mono);text-transform:uppercase;color:var(--kirco-orange-deep)">Test // ¿Qué flor eres?</span>
+      <button id="btn-quiz-close" aria-label="Cerrar" style="width:40px;height:40px;border-radius:50%;border:2px solid var(--kirco-line);background:var(--kirco-paper);font-family:var(--font-mono);font-size:16px;color:var(--kirco-ink);display:flex;align-items:center;justify-content:center;transition:background 180ms ease-out" onmouseover="this.style.background='var(--kirco-orange-tint)'" onmouseout="this.style.background='var(--kirco-paper)'">✕</button>
+    </div>
+    <iframe id="quiz-iframe" title="Test ¿Qué flor eres?" style="flex:1;width:100%;border:none;display:block"></iframe>
+  </div>
+</div>
+
 <script>
-/* ---------------------------------------------------------------
-   LOADER — animated logo
---------------------------------------------------------------- */
-(function () {
-  var loader = document.getElementById('loader');
-  var loaderDone = false;
-  function hideLoader() {
-    if (loaderDone) return;
-    loaderDone = true;
-    loader.classList.add('hide');
-    setTimeout(function () { loader.remove(); }, 700);
-  }
-  if (window.lottie) {
-    try {
-      var anim = lottie.loadAnimation({
-        container: document.getElementById('loaderAnim'),
-        renderer: 'svg', loop: false, autoplay: true,
-        path: 'assets/anim-logo.json'
-      });
-      anim.setSpeed(1.4);
-      anim.addEventListener('complete', function () { setTimeout(hideLoader, 250); });
-      anim.addEventListener('data_failed', hideLoader);
-      setTimeout(hideLoader, 6000);
-    } catch (e) { hideLoader(); }
-  } else {
-    setTimeout(hideLoader, 600);
-  }
-})();
+(function() {
+  var gsap, ST, lenis;
+  var timers = [], cleanups = [];
+  var wide = window.innerWidth >= 960;
+  var cardOpen = false, comOpen = false, envOpen = false;
+  var quizOpen = false, quizMounted = false;
+  var bubbleVisible = false;
 
-/* ---------------------------------------------------------------
-   ENVELOPE — open on scroll into view
---------------------------------------------------------------- */
-(function () {
-  var env = document.getElementById('envelope');
-  if (!env) return;
-  var obs = new IntersectionObserver(function (entries) {
-    entries.forEach(function (e) {
-      if (e.isIntersecting) { env.classList.add('open'); obs.disconnect(); }
-    });
-  }, { threshold: 0.55 });
-  obs.observe(env);
-})();
+  function q(s) { return document.querySelector(s); }
+  function qa(s) { return Array.from(document.querySelectorAll(s)); }
 
-/* ---------------------------------------------------------------
-   DESTINATARIOS — entrada burbujas
---------------------------------------------------------------- */
-(function () {
-  var obs = new IntersectionObserver(function (entries) {
-    entries.forEach(function (e) {
-      if (e.isIntersecting) { e.target.classList.add('in-view'); obs.unobserve(e.target); }
-    });
-  }, { threshold: 0.3 });
-  document.querySelectorAll('.dest-bubble').forEach(function (el) { obs.observe(el); });
-})();
-
-/* ---------------------------------------------------------------
-   GALERÍA — staggered entrance
---------------------------------------------------------------- */
-(function () {
-  var strip = document.getElementById('galStrip');
-  if (!strip) return;
-  var obs = new IntersectionObserver(function (entries) {
-    entries.forEach(function (e) {
-      if (e.isIntersecting) { strip.classList.add('in'); obs.disconnect(); }
-    });
-  }, { threshold: 0.25 });
-  obs.observe(strip);
-})();
-
-/* ---------------------------------------------------------------
-   COMUNIDAD — formulario Kit (form 9661411)
---------------------------------------------------------------- */
-(function () {
-  var form = document.getElementById('comForm');
-  var success = document.getElementById('comSuccess');
-  var status = document.getElementById('comStatus');
-  if (!form) return;
-
-  form.addEventListener('submit', function (e) {
-    e.preventDefault();
-    var btn = form.querySelector('.btn-com');
-    var email = form.querySelector('[name="email_address"]').value.trim();
-    var nombre = form.querySelector('[name="first_name"]').value.trim();
-    var apellido = form.querySelector('[name="last_name"]').value.trim();
-
-    if (!email || !nombre) {
-      status.textContent = 'Dime tu nombre y tu correo.';
-      return;
+  // Responsive: toggle wide/narrow layouts
+  function applyLayout() {
+    wide = window.innerWidth >= 960;
+    var polasW = q('#polas-wide'), polasN = q('#polas-narrow');
+    var smW = q('#sobremi-wide'), smN = q('#sobremi-narrow');
+    var comW = q('#comunidad-wide'), comN = q('#comunidad-narrow');
+    var notas2 = q('#notas2-wide');
+    if (wide) {
+      if (polasW) polasW.style.display = '';
+      if (polasN) polasN.style.display = 'none';
+      if (smW) smW.style.display = '';
+      if (smN) smN.style.display = 'none';
+      if (comW) comW.style.display = '';
+      if (comN) comN.style.display = 'none';
+      if (notas2) notas2.style.display = '';
+    } else {
+      if (polasW) polasW.style.display = 'none';
+      if (polasN) { polasN.style.display = 'grid'; }
+      if (smW) smW.style.display = 'none';
+      if (smN) smN.style.display = 'block';
+      if (comW) comW.style.display = 'none';
+      if (comN) comN.style.display = 'flex';
+      if (notas2) notas2.style.display = 'none';
     }
+  }
 
-    status.textContent = 'Enviando…';
-    if (btn) btn.disabled = true;
+  // --- Phrase section: adjust min-height for mobile ---
+  function applyPhraseLayout() {
+    var ps = q('#phrase-section');
+    if (!ps) return;
+    ps.style.minHeight = wide ? '115vh' : '0px';
+    ps.style.padding = wide ? '70px 0 120px' : '80px 0 100px';
+  }
 
+  window.addEventListener('resize', function() {
+    var wasWide = wide;
+    applyLayout();
+    applyPhraseLayout();
+    if (wasWide !== wide && ST) ST.refresh();
+  });
+
+  applyLayout();
+  applyPhraseLayout();
+
+  // --- Quiz open / close ---
+  function openQuiz() {
+    quizOpen = true;
+    if (!quizMounted) {
+      quizMounted = true;
+      q('#quiz-iframe').src = '/quiz.html?embed=1';
+    }
+    var overlay = q('#quiz-overlay'), modal = q('#quiz-modal');
+    overlay.style.opacity = '1';
+    overlay.style.pointerEvents = 'auto';
+    modal.style.transform = 'translateY(0) rotate(0deg)';
+    if (lenis) lenis.stop();
+  }
+
+  function closeQuiz() {
+    quizOpen = false;
+    var overlay = q('#quiz-overlay'), modal = q('#quiz-modal');
+    overlay.style.opacity = '0';
+    overlay.style.pointerEvents = 'none';
+    modal.style.transform = 'translateY(40px) rotate(-1.5deg)';
+    if (lenis) lenis.start();
+  }
+
+  q('#btn-quiz-hero').addEventListener('click', openQuiz);
+  q('#btn-seal').addEventListener('click', openQuiz);
+  q('#quiz-overlay').addEventListener('click', closeQuiz);
+  q('#quiz-modal').addEventListener('click', function(e) { e.stopPropagation(); });
+  q('#btn-quiz-close').addEventListener('click', closeQuiz);
+  document.addEventListener('keydown', function(e) { if (e.key === 'Escape' && quizOpen) closeQuiz(); });
+
+  // --- Bubble tooltip ---
+  var sealBtn = q('#btn-seal'), bubbleTip = q('#bubble-tip');
+  sealBtn.addEventListener('mouseenter', function() {
+    bubbleTip.style.opacity = '1';
+    bubbleTip.style.transform = 'translateX(0)';
+  });
+  sealBtn.addEventListener('mouseleave', function() {
+    bubbleTip.style.opacity = '0';
+    bubbleTip.style.transform = 'translateX(12px)';
+  });
+  sealBtn.addEventListener('focus', function() {
+    bubbleTip.style.opacity = '1';
+    bubbleTip.style.transform = 'translateX(0)';
+  });
+  sealBtn.addEventListener('blur', function() {
+    bubbleTip.style.opacity = '0';
+    bubbleTip.style.transform = 'translateX(12px)';
+  });
+
+  // --- Sobre mí book flip ---
+  var book = q('#book'), cover = q('#cover'), spineLine = q('#spine-line');
+  var lazoL = q('#lazo-open-l'), lazoR = q('#lazo-open-r'), lazoClosed = q('#lazo-closed');
+  var cardHint = q('#card-hint');
+
+  function setCardOpen(open) {
+    cardOpen = open;
+    book.style.transform = open ? 'translateX(0%)' : 'translateX(-25%)';
+    cover.style.transform = open ? 'rotateY(-180deg)' : 'rotateY(0deg)';
+    if (spineLine) spineLine.style.opacity = open ? '1' : '0';
+    if (lazoL) { lazoL.style.opacity = open ? '1' : '0'; lazoL.style.clipPath = open ? 'inset(0 0% 0 0)' : 'inset(0 100% 0 0)'; }
+    if (lazoR) { lazoR.style.opacity = open ? '1' : '0'; lazoR.style.clipPath = open ? 'inset(0 0% 0 0)' : 'inset(0 100% 0 0)'; }
+    if (lazoClosed) lazoClosed.style.opacity = open ? '0' : '1';
+    if (cardHint) cardHint.textContent = open ? 'toca otra vez para cerrarla' : '↑ toca la cartita para abrirla';
+  }
+
+  if (book) {
+    book.addEventListener('click', function() { setCardOpen(!cardOpen); });
+    book.addEventListener('keydown', function(e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setCardOpen(!cardOpen); }});
+  }
+
+  // --- Comunidad book flip ---
+  var comBook = q('#com-book'), comCover = q('#com-cover'), comSpine = q('#com-spine');
+  var comLazoL = q('#com-lazo-l'), comLazoR = q('#com-lazo-r'), comLazoClosed = q('#com-lazo-closed');
+  var comHint = q('#com-hint');
+
+  function setComOpen(open) {
+    comOpen = open;
+    comBook.style.transform = open ? 'translateX(0%)' : 'translateX(-25%)';
+    comCover.style.transform = open ? 'rotateY(-180deg)' : 'rotateY(0deg)';
+    if (comSpine) comSpine.style.opacity = open ? '1' : '0';
+    if (comLazoL) { comLazoL.style.opacity = open ? '1' : '0'; comLazoL.style.clipPath = open ? 'inset(0 0% 0 0)' : 'inset(0 100% 0 0)'; }
+    if (comLazoR) { comLazoR.style.opacity = open ? '1' : '0'; comLazoR.style.clipPath = open ? 'inset(0 0% 0 0)' : 'inset(0 100% 0 0)'; }
+    if (comLazoClosed) comLazoClosed.style.opacity = open ? '0' : '1';
+    if (comHint) comHint.textContent = open ? 'toca fuera del formulario para cerrarla' : '↑ toca la cartita para abrirla';
+  }
+
+  if (comBook) {
+    comBook.addEventListener('click', function() { setComOpen(!comOpen); });
+    comBook.addEventListener('keydown', function(e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setComOpen(!comOpen); }});
+  }
+
+  // --- Comunidad form (Kit) ---
+  function submitComForm(form, successEl) {
+    var fd = new FormData(form);
     var payload = new URLSearchParams({
-      email_address: email,
-      first_name: nombre,
-      'fields[last_name]': apellido,
-      'fields[motivo]': form.querySelector('[name="fields[motivo]"]').value.trim()
+      email_address: fd.get('email_address') || '',
+      first_name: fd.get('first_name') || '',
+      'fields[last_name]': fd.get('last_name') || '',
+      'fields[motivo]': fd.get('fields[motivo]') || ''
     });
-
-    var sent = false;
-    function showSuccess() {
-      if (sent) return;
-      sent = true;
+    var showSuccess = function() {
       form.style.display = 'none';
-      success.classList.add('visible');
-    }
-
-    try {
-      var ok = navigator.sendBeacon(
-        'https://app.kit.com/forms/9661411/subscriptions',
-        payload
-      );
-      if (ok) { setTimeout(showSuccess, 400); return; }
-    } catch (_) {}
-
+      if (successEl) successEl.style.display = 'block';
+    };
+    var ok = navigator.sendBeacon('https://app.kit.com/forms/9661411/subscriptions', payload);
+    if (ok) { setTimeout(showSuccess, 400); return; }
     fetch('https://app.kit.com/forms/9661411/subscriptions', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: payload.toString()
-    })
-    .then(function () { showSuccess(); })
-    .catch(function () {
-      status.textContent = 'Sin conexión. Inténtalo en un rato.';
-      if (btn) btn.disabled = false;
+    }).then(showSuccess).catch(function() {
+      var btn = form.querySelector('[type=submit]');
+      if (btn) btn.textContent = 'Sin conexión. Inténtalo de nuevo.';
     });
+  }
+
+  var comForm = q('#com-form'), comSuccess = q('#com-success');
+  if (comForm) {
+    comForm.addEventListener('click', function(e) { e.stopPropagation(); });
+    comForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      submitComForm(comForm, comSuccess);
+    });
+  }
+
+  var comFormNarrow = q('#com-form-narrow'), comSuccessNarrow = q('#com-success-narrow');
+  if (comFormNarrow) {
+    comFormNarrow.addEventListener('submit', function(e) {
+      e.preventDefault();
+      submitComForm(comFormNarrow, comSuccessNarrow);
+    });
+  }
+
+  // --- Envelope ---
+  var envEl = q('#envelope'), envLetter = q('#env-letter'), envFlap = q('#env-flap');
+  var envP1 = q('#env-p1'), envP2 = q('#env-p2'), envBtn = q('#env-btn');
+  var envMono = q('#env-mono'), envHintText = q('#env-hint-text');
+  var envBtn2 = q('#env-btn');
+
+  function setEnvOpen(open) {
+    envOpen = open;
+    if (envLetter) envLetter.style.transform = open ? 'translateY(-250px)' : 'translateY(10px)';
+    if (envFlap) {
+      envFlap.style.transform = open ? 'perspective(1200px) rotateX(180deg)' : 'perspective(1200px) rotateX(0deg)';
+      envFlap.style.zIndex = open ? '1' : '4';
+    }
+    if (envP1) envP1.style.opacity = open ? '1' : '0';
+    if (envP2) envP2.style.opacity = open ? '1' : '0';
+    if (envBtn) envBtn.style.opacity = open ? '1' : '0';
+    if (envMono) envMono.style.opacity = open ? '0' : '1';
+    if (envHintText) envHintText.style.opacity = open ? '0' : '1';
+  }
+
+  if (envEl) {
+    envEl.addEventListener('click', function() { setEnvOpen(!envOpen); });
+    envEl.addEventListener('keydown', function(e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setEnvOpen(!envOpen); }});
+  }
+  if (envBtn2) {
+    envBtn2.addEventListener('click', function(e) { e.stopPropagation(); openQuiz(); });
+  }
+
+  // --- Wait for libs ---
+  function waitLibs() {
+    return new Promise(function(res, rej) {
+      var t = 0;
+      var iv = setInterval(function() {
+        if (window.gsap && window.ScrollTrigger && window.Lenis) { clearInterval(iv); res(); }
+        else if ((t += 50) > 8000) { clearInterval(iv); rej(); }
+      }, 50);
+    });
+  }
+
+  function fallback() {
+    var l = q('#loader');
+    if (l) l.style.display = 'none';
+  }
+
+  // --- Loader ---
+  function playLoader(reduce) {
+    var L = q('#loader');
+    if (!L) return;
+    var curve = q('#loader-curve');
+    var exited = false;
+    var exit = function() {
+      if (exited) return;
+      exited = true;
+      var done = function() {
+        L.style.display = 'none';
+        if (lenis) lenis.start();
+        if (ST) ST.refresh();
+      };
+      if (reduce) {
+        gsap.to(L, { opacity: 0, duration: 0.4, onComplete: done });
+        writeTitle(reduce);
+        return;
+      }
+      gsap.timeline()
+        .to(L, { yPercent: -122, duration: 1.15, ease: 'power4.inOut' }, '+=0.2')
+        .fromTo(curve, { scaleY: 1 }, { scaleY: 0, duration: 0.7, ease: 'power2.in' }, '<0.45')
+        .add(done)
+        .add(function() { writeTitle(false); }, '-=1.0');
+    };
+    var box = q('#lottie-box');
+    if (window.lottie && box && !reduce) {
+      var anim = window.lottie.loadAnimation({ container: box, renderer: 'svg', loop: false, autoplay: true, path: 'assets/anim-logo.json' });
+      anim.addEventListener('complete', exit);
+      anim.addEventListener('data_failed', exit);
+      setTimeout(exit, 7500);
+    } else {
+      setTimeout(exit, reduce ? 0 : 600);
+    }
+  }
+
+  function writeTitle(reduce) {
+    var chars = qa('[data-ch]');
+    gsap.to(chars, {
+      opacity: 1, y: 0, clipPath: 'inset(0 0% 0 0)',
+      duration: reduce ? 0.01 : 0.42, stagger: reduce ? 0 : 0.075, ease: 'power2.out'
+    });
+    if (!reduce) gsap.delayedCall(chars.length * 0.075 + 0.5, function() { startTremble(chars); });
+    gsap.to(qa('[data-hero-fade]'), {
+      opacity: 1, y: 0, duration: 0.8, stagger: 0.15, ease: 'power3.out',
+      delay: reduce ? 0 : chars.length * 0.075 + 0.1
+    });
+  }
+
+  function startTremble(chars) {
+    var r = gsap.utils.random;
+    chars.forEach(function(ch) {
+      gsap.to(ch, {
+        x: function() { return r(-1.4, 1.4); },
+        y: function() { return r(-1.6, 1.6); },
+        rotation: function() { return r(-3.5, 3.5); },
+        duration: function() { return r(0.08, 0.16); },
+        ease: 'none', repeat: -1, repeatRefresh: true
+      });
+    });
+  }
+
+  function initSlider(reduce) {
+    var slides = qa('.slide');
+    if (!slides.length) return;
+    gsap.set(slides, { opacity: 0, zIndex: 0 });
+    gsap.set(slides[0], { opacity: 1, zIndex: 1 });
+    var kb = function(el) {
+      var img = el.querySelector('.kb');
+      if (!img || reduce) return;
+      gsap.fromTo(img, { scale: 1.02, xPercent: 0 }, { scale: 1.14, xPercent: Math.random() > 0.5 ? 1.5 : -1.5, duration: 8, ease: 'none', overwrite: true });
+    };
+    kb(slides[0]);
+    var idx = 0;
+    var iv = setInterval(function() {
+      var cur = slides[idx];
+      idx = (idx + 1) % slides.length;
+      var nxt = slides[idx];
+      gsap.set(nxt, { zIndex: 2 });
+      gsap.set(cur, { zIndex: 1 });
+      kb(nxt);
+      gsap.fromTo(nxt, { opacity: 0 }, { opacity: 1, duration: 1.8, ease: 'power1.inOut', onComplete: function() { gsap.set(cur, { opacity: 0, zIndex: 0 }); }});
+    }, 4000);
+    timers.push(iv);
+  }
+
+  function initScroll(reduce) {
+    if (reduce) return;
+    var hero = q('#hero'), heroPage = q('#hero-page'), heroShade = q('#hero-shade');
+    if (hero && heroPage) {
+      gsap.set(heroPage, { transformPerspective: 1600, transformOrigin: '50% 0%' });
+      gsap.timeline({ scrollTrigger: { trigger: hero, start: 'top top', end: '+=100%', pin: true, pinSpacing: false, scrub: true }})
+        .to(heroPage, { rotationX: -96, yPercent: -8, ease: 'power1.in' }, 0)
+        .to(heroShade, { opacity: 1, ease: 'none' }, 0);
+    }
+
+    qa('[data-marquee]').forEach(function(row) {
+      var dir = parseFloat(row.dataset.marquee);
+      gsap.fromTo(row, { x: function() { return dir * window.innerWidth * 0.05; } }, {
+        x: function() { return -dir * window.innerWidth * 0.05; }, ease: 'none',
+        scrollTrigger: { trigger: row.closest('section'), start: 'top bottom', end: 'bottom top', scrub: 0.6, invalidateOnRefresh: true }
+      });
+    });
+
+    qa('[data-speed]').forEach(function(el) {
+      var s = parseFloat(el.dataset.speed) || 1;
+      gsap.fromTo(el, { y: 220 * s }, {
+        y: -220 * s, ease: 'none',
+        scrollTrigger: { trigger: el.closest('section'), start: 'top bottom', end: 'bottom top', scrub: true }
+      });
+    });
+
+    qa('[data-float]').forEach(function(el, k) {
+      gsap.to(el, { y: k % 2 ? 10 : -10, rotation: k % 2 ? 1 : -1, duration: 2.6 + k * 0.4, yoyo: true, repeat: -1, ease: 'sine.inOut' });
+    });
+
+    qa('[data-reveal]').forEach(function(el) {
+      gsap.fromTo(el, { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 85%' }});
+    });
+
+    var words = qa('[data-word]');
+    if (words.length) {
+      gsap.fromTo(words, { opacity: 0.08, y: 18, clipPath: 'inset(0 100% 0 0)' }, {
+        opacity: 1, y: 0, clipPath: 'inset(0 0% 0 0)', stagger: 0.12, ease: 'power2.out',
+        scrollTrigger: { trigger: q('[data-hand]'), start: 'top 85%', end: 'top 35%', scrub: 0.8 }
+      });
+    }
+
+    var cards = qa('[data-insta-card]');
+    if (cards.length) {
+      gsap.from(cards, { y: 70, opacity: 0, duration: 0.9, stagger: 0.12, ease: 'power3.out', scrollTrigger: { trigger: cards[0], start: 'top 88%' }});
+    }
+  }
+
+  function initTilt() {
+    if (!matchMedia('(pointer: fine)').matches) return;
+    qa('[data-tilt]').forEach(function(el) {
+      gsap.set(el, { transformPerspective: 800 });
+      var rx = gsap.quickTo(el, 'rotationX', { duration: 0.5, ease: 'power3' });
+      var ry = gsap.quickTo(el, 'rotationY', { duration: 0.5, ease: 'power3' });
+      var sc = gsap.quickTo(el, 'scale', { duration: 0.5, ease: 'power3' });
+      var move = function(e) {
+        var r = el.getBoundingClientRect();
+        ry(((e.clientX - r.left) / r.width - 0.5) * 18);
+        rx(-((e.clientY - r.top) / r.height - 0.5) * 18);
+        sc(1.04);
+      };
+      var leave = function() { rx(0); ry(0); sc(1); };
+      el.addEventListener('mousemove', move);
+      el.addEventListener('mouseleave', leave);
+      cleanups.push(function() { el.removeEventListener('mousemove', move); el.removeEventListener('mouseleave', leave); });
+    });
+  }
+
+  function initCursor() {
+    if (!matchMedia('(pointer: fine)').matches) return;
+    var c = q('#cursor'), inner = q('#cursor-inner');
+    if (!c || !inner) return;
+    c.style.display = 'block';
+    document.documentElement.classList.add('kirco-cursor');
+    gsap.set(c, { x: window.innerWidth / 2, y: window.innerHeight / 2 });
+    var xTo = gsap.quickTo(c, 'x', { duration: 0.16, ease: 'power2.out' });
+    var yTo = gsap.quickTo(c, 'y', { duration: 0.16, ease: 'power2.out' });
+    var hov = false;
+    var move = function(e) { xTo(e.clientX); yTo(e.clientY); };
+    var over = function(e) {
+      var h = !!(e.target.closest && e.target.closest('a,button,img,iframe,input,textarea,label,[data-tilt]'));
+      if (h === hov) return;
+      hov = h;
+      inner.style.color = h ? 'var(--kirco-green)' : 'var(--kirco-orange)';
+      gsap.to(inner, { scale: h ? 1.35 : 1, rotation: h ? 45 : 0, duration: 0.25, ease: 'power3.out', overwrite: true });
+    };
+    var out = function() { gsap.to(c, { opacity: 0, duration: 0.2 }); };
+    var enter = function() { gsap.to(c, { opacity: 1, duration: 0.2 }); };
+    window.addEventListener('mousemove', move, { passive: true });
+    document.addEventListener('mouseover', over, { passive: true });
+    document.documentElement.addEventListener('mouseleave', out);
+    document.documentElement.addEventListener('mouseenter', enter);
+    cleanups.push(function() {
+      window.removeEventListener('mousemove', move);
+      document.removeEventListener('mouseover', over);
+      document.documentElement.removeEventListener('mouseleave', out);
+      document.documentElement.removeEventListener('mouseenter', enter);
+    });
+  }
+
+  // --- Initial state (hide chars until loader exits) ---
+  document.addEventListener('DOMContentLoaded', function() {
+    qa('[data-ch]').forEach(function(el) { el.style.opacity = '0'; el.style.transform = 'translateY(14px)'; el.style.clipPath = 'inset(0 100% 0 0)'; });
+    qa('[data-hero-fade]').forEach(function(el) { el.style.opacity = '0'; el.style.transform = 'translateY(16px)'; });
   });
+
+  waitLibs().then(function() {
+    gsap = window.gsap;
+    ST = window.ScrollTrigger;
+    gsap.registerPlugin(ST);
+    var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    lenis = new window.Lenis({ duration: 1.15, smoothWheel: true });
+    lenis.on('scroll', ST.update);
+    var tick = function(t) { lenis.raf(t * 1000); };
+    gsap.ticker.add(tick);
+    gsap.ticker.lagSmoothing(0);
+    lenis.stop();
+    window.scrollTo(0, 0);
+
+    initCursor();
+    initSlider(reduce);
+
+    Promise.race([document.fonts.load('124px "Darumadrop One"'), new Promise(function(r) { setTimeout(r, 1200); })]).then(function() {
+      playLoader(reduce);
+      initScroll(reduce);
+      initTilt();
+
+      var sealInner = q('#seal-inner');
+      if (sealInner && !reduce) gsap.to(sealInner, { rotation: 360, duration: 18, repeat: -1, ease: 'none' });
+    }).catch(function() {
+      playLoader(reduce);
+      initScroll(reduce);
+      initTilt();
+    });
+  }).catch(fallback);
 })();
 </script>
-
 </body>
 </html>

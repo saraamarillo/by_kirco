@@ -1,633 +1,450 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>¿Qué carta necesitas hoy? — by_kirco</title>
-<meta name="description" content="Un quiz para descubrir qué carta necesitas leer hoy." />
-<meta name="theme-color" content="#f7f1e3" />
-<link rel="icon" type="image/png" href="/assets/favicon.png" />
-<link rel="apple-touch-icon" href="/assets/favicon.png" />
-<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&display=swap" rel="stylesheet" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>¿Qué flor eres? — by_kirco</title>
+  <link rel="icon" type="image/png" href="/assets/favicon.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Darumadrop+One&family=Indie+Flower&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+  <style>
+    :root {
+      --kirco-green:        #A0D76B;
+      --kirco-green-deep:   #6F9C3E;
+      --kirco-green-tint:   #ECF7DF;
+      --kirco-orange:       #FFAA4D;
+      --kirco-orange-deep:  #D07F1F;
+      --kirco-paper:        #F7F1E3;
+      --kirco-ink:          #2E2B25;
+      --kirco-line:         #E8E1D2;
+      --font-display:       'Darumadrop One', sans-serif;
+      --font-hand:          'Indie Flower', cursive;
+      --font-mono:          'OCR-B Std', 'Courier New', monospace;
+      --font-ocr:           'OCR-A Std', 'Courier New', monospace;
+      --track-mono:         0.16em;
+      --shadow-card:        0 2px 6px rgba(46,43,37,.06), 0 10px 28px rgba(46,43,37,.08);
+      --shadow-pop:         0 4px 12px rgba(46,43,37,.1), 0 18px 44px rgba(46,43,37,.14);
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; }
+    body {
+      background-color: #F7F1E3;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.45 0 0 0 0 0.36 0 0 0 0 0.2 0 0 0 0.09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      color: var(--kirco-ink);
+      overflow-x: clip;
+    }
+    @font-face {
+      font-family: 'OCR-A Std';
+      src: url('/fonts/OCRAStd.otf') format('opentype');
+      font-weight: 400; font-display: swap;
+    }
+    @font-face {
+      font-family: 'OCR-B Std';
+      src: url('/fonts/OCRBStd.otf') format('opentype');
+      font-weight: 400; font-display: swap;
+    }
+    html.lenis, html.lenis body { height: auto; }
+    .lenis.lenis-smooth { scroll-behavior: auto !important; }
 
-<style>
-@font-face { font-family: "Visby Round CF"; src: url("fonts/VisbyRoundCF-Heavy.ttf") format("truetype"); font-weight: 800; font-style: normal; font-display: swap; }
-@font-face { font-family: "OCR B Std"; src: url("fonts/OCRBStd.otf") format("opentype"); font-weight: 400; font-style: normal; font-display: swap; }
+    .nav-link { transition: color 180ms ease-out; }
+    .nav-link:hover { color: var(--kirco-orange-deep) !important; }
 
-:root {
-  --kirco-green:        #a0d76b;
-  --kirco-green-deep:   #6f9c3e;
-  --kirco-green-tint:   #ecf7df;
-  --kirco-orange:       #ffaa4d;
-  --kirco-orange-deep:  #d07f1f;
-  --kirco-orange-tint:  #fff2e2;
-  --kirco-yellow:       #fffa7d;
-  --kirco-yellow-tint:  #fffdda;
-  --kirco-white:        #ffffff;
-  --kirco-paper:        #f7f1e3;
-  --kirco-ink:          #2e2b25;
-  --kirco-ink-soft:     #6b6557;
-  --kirco-line:         #e8e1d2;
-  --font-display: "Visby Round CF", system-ui, sans-serif;
-  --font-mono:    "OCR B Std", monospace;
-  --font-body:    system-ui, -apple-system, sans-serif;
-  --track-mono:   0.16em;
-  --radius-md:    16px;
-  --radius-lg:    28px;
-  --radius-pill:  999px;
-  --shadow-pop:   0 4px 12px rgba(46,43,37,.10), 0 18px 44px rgba(46,43,37,.14);
-}
-
-*, *::before, *::after { box-sizing: border-box; }
-html { margin: 0; padding: 0; scroll-behavior: smooth; }
-body { margin: 0; padding: 0; background: var(--kirco-paper); color: var(--kirco-ink); font-family: var(--font-body); min-height: 100vh; display: flex; flex-direction: column; }
-
-/* ── Header ── */
-.site-header { position: absolute; top: 0; left: 0; right: 0; z-index: 10; padding: 18px 40px 44px; background: linear-gradient(to bottom, rgba(111,156,62,0.5) 0%, transparent 100%); display: flex; align-items: center; justify-content: space-between; gap: 24px; }
-.site-header .logo-link { flex-shrink: 0; display: flex; align-items: center; }
-.site-header .logo { height: 64px; width: auto; }
-.site-header nav { display: flex; gap: 8px; flex-wrap: wrap; }
-.site-header nav a { font-family: var(--font-mono); font-size: 12px; letter-spacing: var(--track-mono); text-transform: uppercase; color: #FFFDDA; text-decoration: none; padding: 6px 14px; border-radius: var(--radius-pill); transition: background 150ms ease-out, color 150ms ease-out; }
-.site-header nav a:hover { background: rgba(255,255,255,0.82); color: var(--kirco-green-deep); }
-
-/* ── Main layout ── */
-main { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 120px 24px 80px; }
-
-/* ── Intro ── */
-.intro-wrap { width: 100%; max-width: 560px; text-align: center; animation: fadeUp 700ms ease-out both; }
-.intro-kicker { font-family: var(--font-mono); font-size: 12px; letter-spacing: var(--track-mono); text-transform: uppercase; color: var(--kirco-orange-deep); margin: 0 0 20px; }
-.intro-titulo { font-family: var(--font-display); font-weight: 800; font-size: clamp(28px, 5vw, 42px); color: var(--kirco-green-deep); margin: 0 0 18px; line-height: 1.15; }
-.intro-subtitulo { font-size: 17px; line-height: 1.65; color: var(--kirco-ink-soft); margin: 0 0 40px; max-width: 440px; margin-left: auto; margin-right: auto; }
-.btn-empezar { display: inline-block; font-family: var(--font-display); font-weight: 800; font-size: 18px; color: var(--kirco-paper); background: var(--kirco-green-deep); border: none; border-radius: var(--radius-pill); padding: 18px 48px; cursor: pointer; transition: transform 180ms ease-out, filter 180ms ease-out; }
-.btn-empezar:hover { transform: translateY(-2px); filter: brightness(1.05); }
-
-/* ── Quiz card ── */
-.quiz-wrap { width: 100%; max-width: 600px; display: none; }
-.quiz-wrap.visible { display: block; }
-
-.progreso { display: flex; align-items: center; gap: 8px; justify-content: center; margin-bottom: 36px; }
-.progreso-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--kirco-line); transition: background 300ms ease, transform 300ms ease; }
-.progreso-dot.activo { background: var(--kirco-green-deep); transform: scale(1.3); }
-.progreso-dot.hecho { background: var(--kirco-green); }
-
-.pregunta-card { background: var(--kirco-white); border-radius: var(--radius-lg); box-shadow: var(--shadow-pop); padding: 48px 52px 44px; animation: fadeUp 500ms ease-out both; }
-@media (max-width: 600px) { .pregunta-card { padding: 32px 24px 28px; } }
-
-.pregunta-num { font-family: var(--font-mono); font-size: 11px; letter-spacing: var(--track-mono); text-transform: uppercase; color: var(--kirco-ink-soft); margin: 0 0 14px; }
-.pregunta-texto { font-family: var(--font-display); font-weight: 800; font-size: clamp(20px, 3.5vw, 26px); color: var(--kirco-ink); margin: 0 0 32px; line-height: 1.25; }
-
-.opciones { display: flex; flex-direction: column; gap: 12px; }
-.opcion-btn { width: 100%; text-align: left; font-family: var(--font-body); font-size: 16px; line-height: 1.5; color: var(--kirco-ink); background: var(--kirco-paper); border: 2px solid var(--kirco-line); border-radius: var(--radius-md); padding: 16px 20px; cursor: pointer; transition: border-color 150ms ease, background 150ms ease, transform 150ms ease; }
-.opcion-btn:hover { border-color: var(--kirco-green); background: var(--kirco-green-tint); transform: translateX(3px); }
-.opcion-btn.seleccionada { border-color: var(--kirco-green-deep); background: var(--kirco-green-tint); font-weight: 600; }
-
-/* ── Resultado ── */
-.resultado-wrap { width: 100%; max-width: 560px; display: none; animation: fadeUp 700ms ease-out both; }
-.resultado-wrap.visible { display: block; }
-
-/* Tarjeta de identidad del arquetipo */
-.resultado-card-id {
-  border-radius: var(--radius-lg);
-  padding: 32px 36px 28px;
-  margin-bottom: 40px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  transition: background 400ms ease;
-}
-.resultado-card-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.resultado-flor-icon { width: 40px; height: 40px; }
-.resultado-num {
-  font-family: var(--font-mono);
-  font-size: 13px;
-  letter-spacing: var(--track-mono);
-  opacity: 0.55;
-}
-.resultado-nombre {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: clamp(28px, 6vw, 42px);
-  margin: 0;
-  line-height: 1.1;
-}
-.resultado-desc { font-size: 16px; line-height: 1.6; color: var(--kirco-ink-soft); margin: 0; }
-
-/* Esquemas de color por arquetipo */
-.tema-amapola  { background: var(--kirco-orange-tint); }
-.tema-amapola  .resultado-nombre { color: var(--kirco-orange-deep); }
-.tema-amapola  .resultado-flor-icon { filter: invert(55%) sepia(80%) saturate(600%) hue-rotate(5deg) brightness(1.05); }
-
-.tema-nomeolvides { background: var(--kirco-green-tint); }
-.tema-nomeolvides .resultado-nombre { color: var(--kirco-green-deep); }
-.tema-nomeolvides .resultado-flor-icon { filter: invert(60%) sepia(40%) saturate(400%) hue-rotate(65deg) brightness(0.9); }
-
-.tema-pensamiento { background: var(--kirco-yellow-tint); }
-.tema-pensamiento .resultado-nombre { color: #7a7200; }
-.tema-pensamiento .resultado-flor-icon { filter: invert(85%) sepia(60%) saturate(500%) hue-rotate(10deg) brightness(0.88); }
-
-.tema-jazmin { background: #dff0ce; }
-.tema-jazmin  .resultado-nombre { color: var(--kirco-green-deep); }
-.tema-jazmin  .resultado-flor-icon { filter: invert(60%) sepia(40%) saturate(400%) hue-rotate(65deg) brightness(0.9); }
-
-.tema-romero  { background: #ffe4cc; }
-.tema-romero  .resultado-nombre { color: var(--kirco-orange-deep); }
-.tema-romero  .resultado-flor-icon { filter: invert(55%) sepia(80%) saturate(600%) hue-rotate(5deg) brightness(1.05); }
-
-.carta-sombra { position: absolute; inset: 0; background: rgba(46,43,37,.06); border-radius: 18px; transform: rotate(1.8deg) translateY(8px); }
-.carta-outer { position: relative; margin-bottom: 44px; }
-.carta { position: relative; background: var(--kirco-white); border-radius: var(--radius-md); box-shadow: var(--shadow-pop); padding: 52px 56px 44px; transform: rotate(-0.6deg); }
-@media (max-width: 600px) { .carta { padding: 36px 28px 32px; } }
-.carta::before { content: ''; position: absolute; inset: 52px 56px 44px; background-image: repeating-linear-gradient(to bottom, transparent, transparent 37px, rgba(46,43,37,.06) 37px, rgba(46,43,37,.06) 38px); pointer-events: none; border-radius: 4px; }
-.carta p { font-family: "Caveat", cursive; font-weight: 500; font-size: clamp(22px, 3.5vw, 28px); line-height: 1.65; color: var(--kirco-ink); margin: 0 0 12px; position: relative; }
-.carta p:last-of-type { margin-bottom: 0; }
-.carta .firma { display: flex; align-items: center; gap: 12px; margin-top: 32px; position: relative; }
-.carta .firma-logo { width: 44px; height: 44px; }
-.carta .firma-texto { font-family: "Caveat", cursive; font-weight: 600; font-size: 24px; color: var(--kirco-green-deep); }
-
-.resultado-ctas { display: flex; flex-direction: column; gap: 14px; align-items: center; }
-.btn-carta-cta { display: inline-block; font-family: var(--font-display); font-weight: 800; font-size: 17px; color: var(--kirco-paper); background: var(--kirco-orange-deep); border: none; border-radius: var(--radius-pill); padding: 18px 44px; cursor: pointer; text-decoration: none; transition: transform 180ms ease-out, filter 180ms ease-out; }
-.btn-carta-cta:hover { transform: translateY(-2px); filter: brightness(1.05); }
-.btn-repetir { font-family: var(--font-mono); font-size: 12px; letter-spacing: var(--track-mono); text-transform: uppercase; color: var(--kirco-ink-soft); background: none; border: none; cursor: pointer; padding: 8px; text-decoration: underline; text-underline-offset: 3px; }
-.btn-repetir:hover { color: var(--kirco-ink); }
-
-/* ── Formulario inline ── */
-.form-carta-wrap {
-  width: 100%;
-  max-width: 560px;
-  margin-top: 32px;
-  display: none;
-  animation: fadeUp 500ms ease-out both;
-}
-.form-carta-wrap.visible { display: block; }
-.pedido-caja {
-  background: var(--kirco-green-deep);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-pop);
-  padding: 40px 44px;
-}
-.pedido-caja form { display: flex; flex-direction: column; gap: 14px; }
-.pedido-caja input,
-.pedido-caja textarea {
-  width: 100%;
-  font-family: var(--font-body);
-  font-size: 17px;
-  color: var(--kirco-ink);
-  background: var(--kirco-paper);
-  border: 2px solid transparent;
-  border-radius: var(--radius-md);
-  padding: 14px 18px;
-  outline: none;
-}
-.pedido-caja textarea { resize: vertical; min-height: 110px; line-height: 1.5; }
-.pedido-caja input:focus,
-.pedido-caja textarea:focus {
-  border-color: var(--kirco-green);
-  box-shadow: 0 0 0 6px rgba(160,215,107,.3);
-}
-.btn-enviar-carta {
-  width: 100%;
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 18px;
-  color: var(--kirco-green-deep);
-  background: var(--kirco-paper);
-  border: none;
-  border-radius: var(--radius-pill);
-  padding: 16px;
-  cursor: pointer;
-  transition: transform 180ms ease-out, filter 180ms ease-out;
-}
-.btn-enviar-carta:hover { transform: translateY(-2px); filter: brightness(0.97); }
-.btn-enviar-carta:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
-.pedido-nota-quiz {
-  text-align: center;
-  font-size: 11px;
-  color: var(--kirco-paper);
-  opacity: 0.55;
-  font-family: var(--font-mono);
-  letter-spacing: var(--track-mono);
-  text-transform: uppercase;
-  margin: 0;
-}
-.flor-field-wrap { display: flex; flex-direction: column; gap: 4px; }
-.flor-field-label {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: var(--track-mono);
-  text-transform: uppercase;
-  color: var(--kirco-paper);
-  opacity: 0.7;
-  padding-left: 2px;
-}
-.pedido-caja input[readonly] {
-  color: var(--kirco-green-deep);
-  font-weight: 700;
-  font-size: 17px;
-  cursor: default;
-  opacity: 0.92;
-}
-@media (max-width: 600px) { .pedido-caja { padding: 28px 20px; } }
-
-/* ── Footer ── */
-footer { background: var(--kirco-orange-deep); padding: 90px 0 60px; color: var(--kirco-paper); }
-.wrap { max-width: 1120px; margin: 0 auto; padding: 0 40px; }
-.footer-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 64px; align-items: start; }
-.logo-foot { height: 84px; }
-footer .claim { font-size: 16px; line-height: 1.6; color: var(--kirco-paper); opacity: 0.92; margin: 18px 0 0; max-width: 280px; }
-footer h4 { font-family: var(--font-mono); font-size: 12px; font-weight: 400; letter-spacing: var(--track-mono); text-transform: uppercase; color: var(--kirco-paper); opacity: 0.8; margin: 0 0 20px; }
-.foot-links { display: flex; flex-direction: column; gap: 12px; }
-.foot-links a { font-family: var(--font-display); font-weight: 800; font-size: 17px; color: var(--kirco-paper); text-decoration: none; transition: transform 150ms ease-out, opacity 150ms ease-out; }
-.foot-links a:hover { transform: translateX(3px); opacity: 0.85; }
-.redes { display: flex; gap: 12px; margin-top: 6px; flex-wrap: wrap; }
-.redes a { font-family: var(--font-display); font-weight: 800; font-size: 16px; color: var(--kirco-orange-deep); background: var(--kirco-paper); border-radius: var(--radius-pill); padding: 11px 24px; text-decoration: none; transition: transform 150ms ease-out; }
-.redes a:hover { transform: translateY(-2px); }
-.legal { display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; border-top: 2px solid rgba(247,241,227,.35); margin-top: 70px; padding-top: 28px; font-family: var(--font-mono); font-size: 12px; letter-spacing: var(--track-mono); text-transform: uppercase; color: var(--kirco-paper); }
-.legal a { color: var(--kirco-paper); text-decoration: none; }
-.legal a:hover { text-decoration: underline; }
-.legal .legal-links { display: flex; gap: 22px; }
-.flor-legal { width: 50px; height: 50px; vertical-align: -3px; }
-
-@keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
-
-@media (max-width: 900px) { .footer-grid { grid-template-columns: 1fr; gap: 44px; } .wrap { padding: 0 28px; } }
-@media (max-width: 600px) { .site-header { padding: 20px 24px; } .site-header .logo { height: 42px; } footer { padding: 60px 0 44px; } .legal { flex-direction: column; align-items: flex-start; gap: 14px; } }
-@media (prefers-reduced-motion: reduce) { .intro-wrap, .quiz-wrap, .resultado-wrap, .pregunta-card { animation: none; } }
-</style>
+    .quiz-opt {
+      text-align: left;
+      font-family: var(--font-hand);
+      font-size: clamp(19px, 1.7vw, 22px);
+      line-height: 1.3;
+      color: var(--kirco-ink);
+      background: #fff;
+      border: 2px solid transparent;
+      border-radius: 18px;
+      padding: 13px 22px;
+      box-shadow: var(--shadow-card);
+      cursor: pointer;
+      transition: transform 160ms ease-out, border-color 160ms ease-out, background 160ms ease-out;
+      width: 100%;
+    }
+    .quiz-opt:hover {
+      transform: translateX(6px);
+      border-color: var(--kirco-green);
+      background: var(--kirco-green-tint);
+    }
+    .btn-round {
+      font-family: var(--font-display);
+      font-size: 21px;
+      border-radius: 999px;
+      padding: 11px 32px;
+      cursor: pointer;
+      border: none;
+      transition: transform 180ms ease-out;
+    }
+    .btn-round:hover { transform: translateY(-2px); }
+    .btn-round:active { transform: scale(0.98); }
+  </style>
 </head>
 <body>
 
-<header class="site-header">
-  <a href="/" class="logo-link"><img class="logo" src="assets/logo-firma.png" alt="by_kirco" /></a>
-  <nav>
-    <a href="/sobre-mi.html">Sobre mí</a>
-    <a href="/destinatarios.html">Destinatarios</a>
-  </nav>
-</header>
+  <!-- HEADER (solo si no es embed) -->
+  <header id="quiz-header-nav" style="display:flex;align-items:center;justify-content:space-between;gap:24px;max-width:1160px;margin:0 auto;padding:22px clamp(20px,4vw,48px)">
+    <a href="/" style="display:block"><img src="assets/logo-verde.png" alt="by_kirco" style="height:84px;display:block" /></a>
+    <nav style="display:flex;gap:28px;font-family:var(--font-mono);font-size:13px;letter-spacing:var(--track-mono);text-transform:uppercase">
+      <a href="/" class="nav-link" style="color:var(--kirco-green-deep)">Inicio</a>
+      <a href="/sobre-mi.html" class="nav-link" style="color:var(--kirco-green-deep)">Sobre mí</a>
+      <a href="/destinatarios.html" class="nav-link" style="color:var(--kirco-green-deep)">Destinatarios</a>
+    </nav>
+  </header>
 
-<main>
+  <!-- HERO TEXT (solo si no es embed) -->
+  <section id="quiz-hero" style="position:relative;padding:60px clamp(20px,5vw,72px) 10px;text-align:center">
+    <p style="font-family:var(--font-hand);font-size:clamp(20px,1.8vw,24px);line-height:1.35;color:var(--kirco-orange-deep);margin:0 auto;max-width:560px">Haz el test y te digo qué carta necesitas leer hoy...</p>
+  </section>
 
-  <!-- Pantalla intro -->
-  <div class="intro-wrap" id="pantallaIntro">
-    <p class="intro-kicker">Una carta para ti</p>
-    <h1 class="intro-titulo">¿Qué carta necesitas hoy?</h1>
-    <p class="intro-subtitulo">Cinco preguntas. Sin respuestas correctas. Solo lo que sientes ahora mismo.</p>
-    <button class="btn-empezar" id="btnEmpezar">Empezar</button>
-  </div>
+  <!-- TEST SECTION -->
+  <section id="quiz-section" style="position:relative;padding:80px clamp(20px,5vw,72px) 110px;overflow:hidden">
 
-  <!-- Quiz -->
-  <div class="quiz-wrap" id="pantallaQuiz">
-    <div class="progreso" id="progreso" role="progressbar" aria-label="Progreso del quiz"></div>
-    <div class="pregunta-card" id="preguntaCard">
-      <p class="pregunta-num" id="preguntaNum"></p>
-      <h2 class="pregunta-texto" id="preguntaTexto"></h2>
-      <div class="opciones" id="opcionesWrap"></div>
+    <!-- Marquee de fondo (solo si no es embed) -->
+    <div id="quiz-bg-marquee" aria-hidden="true" style="position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;align-items:center;font-family:var(--font-ocr);font-size:clamp(36px,7.4vw,140px);line-height:1;white-space:nowrap;pointer-events:none;z-index:0">
+      <div data-marquee="1" style="color:transparent;-webkit-text-stroke:2px var(--kirco-green);will-change:transform">CINCO PREGUNTAS</div>
+      <div data-marquee="-1" style="color:transparent;-webkit-text-stroke:2px var(--kirco-orange);will-change:transform">UNA CARTA PARA TI</div>
     </div>
-  </div>
 
-  <!-- Resultado -->
-  <div class="resultado-wrap" id="pantallaResultado">
-    <div class="resultado-card-id" id="resultadoCardId">
-      <div class="resultado-card-top">
-        <img class="resultado-flor-icon" src="assets/flor.svg" alt="" aria-hidden="true" />
-        <span class="resultado-num" id="resultadoNum"></span>
-      </div>
-      <h2 class="resultado-nombre" id="resultadoNombre"></h2>
-      <p class="resultado-desc" id="resultadoDesc"></p>
-    </div>
-    <div class="carta-outer">
-      <div class="carta-sombra" aria-hidden="true"></div>
-      <article class="carta" id="cartaResultado">
-        <div class="firma">
-          <img class="firma-logo" src="assets/monograma-verde.png" alt="" aria-hidden="true" />
-          <span class="firma-texto">by_kirco</span>
+    <div style="position:relative;z-index:2;max-width:480px;margin:0 auto">
+      <div id="qcard" style="position:relative;background:var(--kirco-orange);border-radius:32px;box-shadow:var(--shadow-pop);min-height:620px;box-sizing:border-box;padding:96px clamp(28px,4vw,44px) 44px;display:flex;flex-direction:column;justify-content:center;transition:background 400ms ease-out">
+        <!-- Agujero superior -->
+        <div style="position:absolute;left:50%;top:30px;width:20px;height:20px;margin-left:-10px;border-radius:50%;background:#F7F1E3;box-shadow:inset 0 2px 4px rgba(46,43,37,0.35)"></div>
+        <img src="assets/lazo-cerrado.png" alt="" aria-hidden="true" id="quiz-lazo" style="position:absolute;left:50%;top:-30px;width:180px;margin-left:-96px;pointer-events:none;z-index:3" onerror="this.style.display='none'" />
+
+        <!-- INTRO -->
+        <div id="quiz-intro-content" style="text-align:center">
+          <h1 style="font-family:var(--font-display);font-weight:400;font-size:clamp(56px,7vw,88px);line-height:0.98;margin:0;color:#fff;text-wrap:balance">¿Qué flor eres?</h1>
+          <button id="btn-start" class="btn-round" style="margin-top:40px;font-size:24px;color:var(--kirco-orange-deep);background:#fff;box-shadow:var(--shadow-card)">empezar</button>
         </div>
-      </article>
-    </div>
-    <div class="resultado-ctas">
-      <button class="btn-carta-cta" id="btnAbrirForm">Pide tu carta personalizada</button>
-    </div>
 
-    <!-- Formulario inline — oculto hasta que se pulse el CTA -->
-    <div class="form-carta-wrap" id="formCartaWrap">
-      <div class="pedido-caja">
-        <form id="formPedidoQuiz"
-              action="https://app.kit.com/forms/9602040/subscriptions"
-              method="post"
-              data-sv-form="9602040"
-              data-uid="91fd762686"
-              data-format="inline"
-              data-version="5">
-          <input type="text" name="first_name" placeholder="Tu nombre" required />
-          <input type="email" name="email_address" placeholder="tu@correo.com" required />
-          <textarea name="fields[sobre_ti]" placeholder="Cuéntame un poco de ti" rows="4"></textarea>
-          <div class="flor-field-wrap">
-            <span class="flor-field-label">Tu flor</span>
-            <input type="text" name="fields[flor]" id="quizFieldFlor" value="" readonly />
+        <!-- PREGUNTA -->
+        <div id="quiz-question-content" style="display:none">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:6px">
+            <span id="step-label" style="font-family:var(--font-mono);font-size:12px;letter-spacing:var(--track-mono);text-transform:uppercase;color:var(--kirco-ink)">Pregunta 1 de 5</span>
+            <div id="quiz-dots" style="display:flex;gap:6px"></div>
           </div>
-          <button type="submit" data-element="submit" class="btn-enviar-carta">Quiero mi carta</button>
-          <p class="pedido-nota-quiz">Si no recibes noticias mías, revisa tu carpeta de spam.</p>
-        </form>
-      </div>
-    </div>
-
-    <div class="resultado-ctas" style="margin-top:24px">
-      <button class="btn-repetir" id="btnRepetir">Volver a empezar</button>
-    </div>
-  </div>
-
-</main>
-
-<footer>
-  <div class="wrap">
-    <div class="footer-grid">
-      <div>
-        <img class="logo-foot" src="assets/logo-naranja-negativo.png" alt="by_kirco" />
-        <p class="claim">Cartas anónimas escritas a mano, repartidas por España para quien las necesite.</p>
-      </div>
-      <div>
-        <h4>Legal</h4>
-        <div class="foot-links">
-          <a href="/aviso-legal.html">Aviso legal</a>
-          <a href="/politica-privacidad.html">Política de privacidad</a>
-          <a href="/politica-cookies.html">Cookies</a>
+          <h2 id="question-text" style="font-family:var(--font-display);font-weight:400;font-size:clamp(30px,3.2vw,40px);line-height:1.08;margin:22px 0 24px;color:#fff;text-wrap:balance"></h2>
+          <div id="quiz-options" style="display:flex;flex-direction:column;gap:12px"></div>
         </div>
-        <h4 style="margin-top:32px">Sígueme para enterarte dónde dejo la próxima cartita</h4>
-        <div class="redes">
-          <a href="https://www.instagram.com/by_kirco/" target="_blank" rel="noopener">Instagram</a>
-          <a href="https://www.tiktok.com/@by_kirco" target="_blank" rel="noopener">TikTok</a>
-          <a href="https://www.facebook.com/profile.php?id=61567524682650" target="_blank" rel="noopener">Facebook</a>
+
+        <!-- RESULTADO -->
+        <div id="quiz-result-content" style="display:none;text-align:center">
+          <p style="font-family:var(--font-hand);font-size:clamp(24px,2.4vw,32px);color:var(--kirco-ink);margin:0">Querido desconocido, tu flor es</p>
+          <span id="result-flower" style="display:block;width:130px;height:120px;margin:22px auto 10px;-webkit-mask:url(assets/icons/flor.svg) center/contain no-repeat;mask:url(assets/icons/flor.svg) center/contain no-repeat"></span>
+          <h2 id="result-name" style="font-family:var(--font-display);font-weight:400;font-size:clamp(56px,8vw,96px);line-height:1;margin:0"></h2>
+          <p id="result-phrase" style="font-family:var(--font-hand);font-size:clamp(22px,2.2vw,28px);color:var(--kirco-ink);margin:14px 0 0"></p>
+          <p id="result-desc" style="font-size:16px;line-height:1.75;color:var(--kirco-ink);max-width:480px;margin:18px auto 0;text-wrap:pretty"></p>
+          <p style="font-family:var(--font-hand);font-size:22px;color:var(--kirco-ink);margin:22px 0 0">Att. @by_kirco</p>
+          <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:28px">
+            <a href="https://www.instagram.com/by_kirco/" target="_blank" rel="noopener" class="btn-round" style="color:#fff;background:var(--kirco-orange-deep)">quiero mi carta</a>
+            <button id="btn-restart" class="btn-round" style="color:var(--kirco-green-deep);background:#fff;box-shadow:var(--shadow-card)">repetir el test</button>
+          </div>
         </div>
+
       </div>
     </div>
-    <div class="legal">
-      <span>
-        © 2026 by_kirco
-        <img class="flor-legal" src="assets/flor.svg" alt="" style="filter:brightness(0) invert(1);opacity:.85" aria-hidden="true" />
-        Cartas con cariño
-      </span>
-      <span class="legal-links"><a href="#">@BY_KIRCO</a></span>
+  </section>
+
+  <!-- LAS CINCO FLORES (solo si no es embed) -->
+  <section id="quiz-flores-section" style="padding:60px clamp(20px,5vw,72px) 130px">
+    <h2 data-reveal style="font-family:var(--font-display);font-weight:400;font-size:clamp(40px,5vw,68px);line-height:1.05;margin:0;text-align:center;color:var(--kirco-orange-deep)">Las cinco flores</h2>
+    <p data-reveal style="font-family:var(--font-hand);font-size:clamp(20px,1.9vw,26px);color:var(--kirco-green-deep);text-align:center;margin:12px 0 0">Cinco maneras de florecer</p>
+    <div id="flores-grid" data-stagger style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:24px;max-width:1160px;margin:52px auto 0"></div>
+  </section>
+
+  <footer id="quiz-footer" style="background:var(--kirco-orange-deep);padding:70px clamp(20px,5vw,72px) 46px;color:var(--kirco-paper)">
+    <div style="max-width:1100px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:28px">
+      <img src="assets/logo-naranja-negativo.png" alt="by_kirco" style="height:78px" />
+      <div style="display:flex;gap:14px;align-items:center">
+        <a href="https://www.instagram.com/by_kirco/" target="_blank" rel="noopener" aria-label="Instagram" style="display:block;width:54px;height:54px"><img src="assets/icons/instagram.svg" alt="Instagram" style="width:100%;height:100%;display:block" /></a>
+        <a href="https://www.facebook.com/profile.php?id=61567524682650" target="_blank" rel="noopener" aria-label="Facebook" style="display:block;width:54px;height:54px"><img src="assets/icons/facebook.svg" alt="Facebook" style="width:100%;height:100%;display:block" /></a>
+        <a href="#" target="_blank" rel="noopener" aria-label="X" style="display:block;width:54px;height:54px"><img src="assets/icons/x.svg" alt="X" style="width:100%;height:100%;display:block" /></a>
+        <a href="https://www.tiktok.com/@by_kirco" target="_blank" rel="noopener" aria-label="TikTok" style="display:block;width:54px;height:54px"><img src="assets/icons/tiktok.svg" alt="TikTok" style="width:100%;height:100%;display:block" /></a>
+      </div>
     </div>
-  </div>
-</footer>
+    <p style="max-width:1100px;margin:44px auto 0;border-top:2px solid rgba(247,241,227,0.35);padding-top:22px;font-family:var(--font-mono);font-size:12px;letter-spacing:var(--track-mono);text-transform:uppercase">© 2026 by_kirco · Cartas con cariño</p>
+  </footer>
 
 <script>
 (function () {
-  /* ── Datos ── */
-  var ARQUETIPOS = {
-    amapola: {
-      flor: 'Amapola',
-      nombre: 'Amapola',
-      num: '01',
-      tema: 'tema-amapola',
-      descripcion: 'Sientes mucho de golpe. Más que la mayoría, y más nítido.',
-      carta: ['Sentir tanto no es un defecto.', 'Es que tienes la piel más fina que la mayoría', 'y el mundo te llega más nítido.', 'Eso duele a veces.', 'Pero también es la razón por la que ves cosas que otros no ven.']
-    },
-    nomeolvides: {
-      flor: 'Nomeolvides',
-      nombre: 'Nomeolvides',
-      num: '02',
-      tema: 'tema-nomeolvides',
-      descripcion: 'Estás en medio de todo y aun así a veces sientes que nadie te ve del todo.',
-      carta: ['Sé que a veces pareces no estar', 'aunque estés en medio de todo.', 'Que la gente pasa y no se detiene.', 'Pues yo sí me detuve.', 'Y te vi.']
-    },
-    pensamiento: {
-      flor: 'Pensamiento',
-      nombre: 'Pensamiento',
-      num: '03',
-      tema: 'tema-pensamiento',
-      descripcion: 'La cabeza no para. Hay algo que vuelve aunque le digas que no.',
-      carta: ['El ruido de ahí dentro ya sé que es agotador.', 'Tanto pensar y pensar', 'sin encontrar el botón de apagado.', 'Ojalá pudiera dártelo.', 'Solo quería que supieras que no estás sola en eso.']
-    },
-    jazmin: {
-      flor: 'Jazmín',
-      nombre: 'Jazmín',
-      num: '04',
-      tema: 'tema-jazmin',
-      descripcion: 'Hay una versión de ti que muy poca gente conoce. Y es la más tuya.',
-      carta: ['Pocas personas saben lo que hay debajo.', 'La mayoría ve solo lo que muestras—', 'y ya eso es bonito.', 'Pero lo que guardas para dentro', 'es lo más tuyo que tienes.']
-    },
-    romero: {
-      flor: 'Romero',
-      nombre: 'Romero',
-      num: '05',
-      tema: 'tema-romero',
-      descripcion: 'Hay algo que ya pasó pero que todavía no has soltado del todo.',
-      carta: ['Qué difícil es soltar algo', 'que fue tan tuyo.', 'Quedarte ahí un poco más', 'todavía tiene sentido.', 'El presente puede esperar.']
-    }
-  };
+  var isEmbed = new URLSearchParams(location.search).has('embed');
 
-  var PREGUNTAS = [
-    {
-      texto: '¿Cómo sueles llegar al final del día?',
-      opciones: [
-        { texto: 'Con más cosas dentro de las que tenía al empezar', arq: 'amapola' },
-        { texto: 'Preguntándome si alguien me echó de menos', arq: 'nomeolvides' },
-        { texto: 'Con algo en la cabeza que no termina de irse', arq: 'pensamiento' },
-        { texto: 'Con ganas de quitarme la careta por fin', arq: 'jazmin' },
-        { texto: 'Pensando en algo que ya pasó pero que no se va', arq: 'romero' }
-      ]
-    },
-    {
-      texto: '¿Cuál de estas frases podría haber escrito tú?',
-      opciones: [
-        { texto: '"Las cosas me tocan más de lo que quiero admitir"', arq: 'amapola' },
-        { texto: '"A veces estoy en medio de todo y aun así no me ven"', arq: 'nomeolvides' },
-        { texto: '"Me gustaría poder apagar la cabeza un rato"', arq: 'pensamiento' },
-        { texto: '"Hay una versión de mí que casi nadie conoce"', arq: 'jazmin' },
-        { texto: '"Echo de menos algo que no sé muy bien cómo nombrar"', arq: 'romero' }
-      ]
-    },
-    {
-      texto: 'Si encontraras una carta hoy, ¿qué necesitarías que dijera?',
-      opciones: [
-        { texto: 'Que sentir tanto no tiene nada de malo', arq: 'amapola' },
-        { texto: 'Que alguien te ha visto, aunque sea un momento', arq: 'nomeolvides' },
-        { texto: 'Que está bien que el ruido pare aquí', arq: 'pensamiento' },
-        { texto: 'Que no hace falta que te expliques', arq: 'jazmin' },
-        { texto: 'Que lo que viviste valió la pena', arq: 'romero' }
-      ]
-    },
-    {
-      texto: '¿Qué momento te describe mejor últimamente?',
-      opciones: [
-        { texto: 'Cuando una canción te parte por la mitad sin avisar', arq: 'amapola' },
-        { texto: 'Cuando estás en una conversación y sientes que no te están escuchando del todo', arq: 'nomeolvides' },
-        { texto: 'Cuando intentas dormir pero la cabeza tiene otros planes', arq: 'pensamiento' },
-        { texto: 'Cuando estás con gente pero guardas algo solo para ti', arq: 'jazmin' },
-        { texto: 'Cuando algo pequeño y cotidiano te devuelve de golpe a otro tiempo', arq: 'romero' }
-      ]
-    },
-    {
-      texto: '¿Qué es lo que más te pesa ahora mismo?',
-      opciones: [
-        { texto: 'Todo lo que sientes y no siempre sabes dónde poner', arq: 'amapola' },
-        { texto: 'La sensación de que podrías no estar y nadie lo notaría demasiado', arq: 'nomeolvides' },
-        { texto: 'Ese pensamiento que vuelve aunque le digas que no', arq: 'pensamiento' },
-        { texto: 'Lo difícil que es mostrarte de verdad con alguien', arq: 'jazmin' },
-        { texto: 'Algo que ya terminó pero que todavía no has soltado del todo', arq: 'romero' }
-      ]
-    }
+  // Ocultar elementos de página completa en modo embed
+  if (isEmbed) {
+    ['quiz-header-nav', 'quiz-hero', 'quiz-bg-marquee', 'quiz-flores-section', 'quiz-footer'].forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) el.style.display = 'none';
+    });
+    var sec = document.getElementById('quiz-section');
+    if (sec) sec.style.padding = '40px 20px 50px';
+    document.body.style.backgroundImage = 'none';
+    document.body.style.backgroundColor = 'transparent';
+  }
+
+  var questions = [
+    { q: '¿Cómo vives lo que sientes?', opts: [
+      { t: 'Todo llega a la vez, como una ola que no avisa.', key: 'amapola' },
+      { t: 'Lo guardo hasta estar con quien de verdad confío.', key: 'jazmin' },
+      { t: 'Le doy vueltas una y otra vez antes de soltarlo.', key: 'pensamiento' },
+      { t: 'Necesito contarlo para que se vuelva real.', key: 'nomeolvides' },
+      { t: 'Lo comparo con cómo me sentí antes.', key: 'romero' },
+    ]},
+    { q: '¿Qué te quita el sueño por la noche?', opts: [
+      { t: 'Una conversación que no salió como yo quería.', key: 'pensamiento' },
+      { t: 'La sensación de que nadie me ve de verdad.', key: 'nomeolvides' },
+      { t: 'Un recuerdo que vuelve sin pedir permiso.', key: 'romero' },
+      { t: 'Que me conozcan demasiado pronto.', key: 'jazmin' },
+      { t: 'Demasiadas cosas sintiéndose a la vez.', key: 'amapola' },
+    ]},
+    { q: 'Cuando llegas a un grupo nuevo, tú…', opts: [
+      { t: 'Observo y revelo muy poquito de mí.', key: 'jazmin' },
+      { t: 'Busco, sin querer, que alguien me note.', key: 'nomeolvides' },
+      { t: 'Me enciendo con todo lo que está pasando.', key: 'amapola' },
+      { t: 'Analizo cada gesto y cada silencio.', key: 'pensamiento' },
+      { t: 'Echo de menos a la gente de siempre.', key: 'romero' },
+    ]},
+    { q: 'Tu lugar favorito en el mundo es…', opts: [
+      { t: 'Uno donde ya he sido feliz antes.', key: 'romero' },
+      { t: 'Donde me siento mirada y querida.', key: 'nomeolvides' },
+      { t: 'Mi refugio privado, lejos del ruido.', key: 'jazmin' },
+      { t: 'Cualquiera, mientras pasen muchas cosas.', key: 'amapola' },
+      { t: 'Mi propia cabeza.', key: 'pensamiento' },
+    ]},
+    { q: 'La carta anónima perfecta para ti diría…', opts: [
+      { t: '«Lo que sientes no es demasiado».', key: 'amapola' },
+      { t: '«Te veo».', key: 'nomeolvides' },
+      { t: '«Puedes dejar de darle vueltas».', key: 'pensamiento' },
+      { t: '«Gracias por dejarme entrar».', key: 'jazmin' },
+      { t: '«Lo que fue también cuenta».', key: 'romero' },
+    ]},
   ];
 
-  /* ── Estado ── */
-  var preguntaActual = 0;
-  var votos = { amapola: 0, nomeolvides: 0, pensamiento: 0, jazmin: 0, romero: 0 };
+  var flowers = {
+    amapola:     { name: 'Amapola',     phrase: 'Siente demasiado de golpe.',                color: '#FFAA4D', text: '#C96A12', tint: '#FFF2E2', n: '01', rot: -1.6, desc: 'Lo vives todo a flor de piel: sientes en mayúsculas y a veces eso pesa. Pero esa intensidad es justo tu manera de estar viva.' },
+    nomeolvides: { name: 'Nomeolvides', phrase: 'Necesita ser vista.',                       color: '#A0D76B', text: '#5C8A2E', tint: '#ECF7DF', n: '02', rot:  1.2, desc: 'No pides mucho: solo que alguien se quede mirando un poco más. Necesitas que te vean de verdad, y mereces que así sea.' },
+    pensamiento: { name: 'Pensamiento', phrase: 'No puede apagar la cabeza.',                color: '#F2D83A', text: '#8F7A0E', tint: '#FFFDDA', n: '03', rot: -0.8, desc: 'Tu mente no tiene botón de apagado. Le das vueltas a todo, pero en ese ruido también hay una forma silenciosa de cuidar.' },
+    jazmin:      { name: 'Jazmín',      phrase: 'Guarda su parte real para muy pocos.',      color: '#6F9C3E', text: '#4A6E24', tint: '#D9ECC0', n: '04', rot:  1.5, desc: 'Por fuera, amable con todo el mundo. Por dentro, una habitación a la que dejas entrar a muy pocos. Lo de verdad lo reservas.' },
+    romero:      { name: 'Romero',      phrase: 'Vive más en el pasado que en el presente.', color: '#D07F1F', text: '#A35E12', tint: '#FFE1BF', n: '05', rot: -1.2, desc: 'Vuelves una y otra vez a lo que ya pasó. Vives entre recuerdos porque, para ti, lo que fue todavía cuenta.' },
+  };
 
-  /* ── Utilidades ── */
-  function mezclar(arr) {
-    var a = arr.slice();
-    for (var i = a.length - 1; i > 0; i--) {
-      var j = Math.floor(Math.random() * (i + 1));
-      var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
-    }
-    return a;
+  var order = ['amapola', 'nomeolvides', 'pensamiento', 'jazmin', 'romero'];
+
+  var state = {
+    step: -1,
+    scores: { amapola: 0, nomeolvides: 0, pensamiento: 0, jazmin: 0, romero: 0 },
+    busy: false
+  };
+
+  var card = document.getElementById('qcard');
+  var introEl = document.getElementById('quiz-intro-content');
+  var questionEl = document.getElementById('quiz-question-content');
+  var resultEl = document.getElementById('quiz-result-content');
+  var stepLabel = document.getElementById('step-label');
+  var dotsEl = document.getElementById('quiz-dots');
+  var questionText = document.getElementById('question-text');
+  var optionsEl = document.getElementById('quiz-options');
+  var resultFlower = document.getElementById('result-flower');
+  var resultName = document.getElementById('result-name');
+  var resultPhrase = document.getElementById('result-phrase');
+  var resultDesc = document.getElementById('result-desc');
+
+  function freshScores() { return { amapola: 0, nomeolvides: 0, pensamiento: 0, jazmin: 0, romero: 0 }; }
+
+  function winner() {
+    var s = state.scores;
+    var best = order[0];
+    for (var k of order) { if (s[k] > s[best]) best = k; }
+    return flowers[best];
   }
 
-  function mostrar(id) {
-    ['pantallaIntro', 'pantallaQuiz', 'pantallaResultado'].forEach(function (pid) {
-      var el = document.getElementById(pid);
-      el.style.display = 'none';
-      el.classList.remove('visible');
-    });
-    var target = document.getElementById(id);
-    target.style.display = '';
-    target.classList.add('visible');
-  }
+  function render() {
+    var step = state.step;
+    var total = questions.length;
+    var inQ = step >= 0 && step < total;
+    var done = step >= total;
+    var res = done ? winner() : null;
 
-  /* ── Progreso ── */
-  function renderProgreso() {
-    var wrap = document.getElementById('progreso');
-    wrap.innerHTML = '';
-    PREGUNTAS.forEach(function (_, i) {
-      var dot = document.createElement('span');
-      dot.className = 'progreso-dot' + (i === preguntaActual ? ' activo' : i < preguntaActual ? ' hecho' : '');
-      dot.setAttribute('aria-hidden', 'true');
-      wrap.appendChild(dot);
-    });
-  }
+    introEl.style.display = step < 0 ? 'block' : 'none';
+    questionEl.style.display = inQ ? 'block' : 'none';
+    resultEl.style.display = done ? 'block' : 'none';
 
-  /* ── Pregunta ── */
-  function renderPregunta() {
-    var p = PREGUNTAS[preguntaActual];
-    document.getElementById('preguntaNum').textContent = 'Pregunta ' + (preguntaActual + 1) + ' de ' + PREGUNTAS.length;
-    document.getElementById('preguntaTexto').textContent = p.texto;
-    var wrap = document.getElementById('opcionesWrap');
-    wrap.innerHTML = '';
-    mezclar(p.opciones).forEach(function (op) {
-      var btn = document.createElement('button');
-      btn.className = 'opcion-btn';
-      btn.textContent = op.texto;
-      btn.setAttribute('type', 'button');
-      btn.addEventListener('click', function () { elegir(op.arq); });
-      wrap.appendChild(btn);
-    });
-    renderProgreso();
-    var card = document.getElementById('preguntaCard');
-    card.style.animation = 'none';
-    void card.offsetWidth;
-    card.style.animation = '';
-  }
-
-  /* ── Elección ── */
-  function elegir(arq) {
-    votos[arq]++;
-    if (preguntaActual < PREGUNTAS.length - 1) {
-      preguntaActual++;
-      renderPregunta();
+    // Card background
+    if (res) {
+      card.style.background = res.tint;
     } else {
-      mostrarResultado();
+      card.style.background = 'var(--kirco-orange)';
+    }
+
+    if (inQ) {
+      var q = questions[step];
+      stepLabel.textContent = 'Pregunta ' + (step + 1) + ' de ' + total;
+
+      // Dots
+      dotsEl.innerHTML = '';
+      for (var i = 0; i < total; i++) {
+        var dot = document.createElement('span');
+        dot.style.cssText = 'display:block;width:22px;height:22px;transition:background 300ms ease-out;-webkit-mask:url(assets/icons/flor.svg) center/contain no-repeat;mask:url(assets/icons/flor.svg) center/contain no-repeat;';
+        if (i < step) dot.style.background = '#ffffff';
+        else if (i === step) dot.style.background = 'var(--kirco-green-deep)';
+        else dot.style.background = 'rgba(255,255,255,0.4)';
+        dotsEl.appendChild(dot);
+      }
+
+      questionText.textContent = q.q;
+
+      // Options
+      optionsEl.innerHTML = '';
+      q.opts.forEach(function (opt) {
+        var btn = document.createElement('button');
+        btn.className = 'quiz-opt';
+        btn.textContent = opt.t;
+        btn.setAttribute('data-opt', '');
+        btn.addEventListener('click', function () { pick(opt.key); });
+        optionsEl.appendChild(btn);
+      });
+    }
+
+    if (done && res) {
+      resultFlower.style.background = res.color;
+      resultName.textContent = res.name;
+      resultName.style.color = res.text;
+      resultPhrase.textContent = res.phrase;
+      resultDesc.textContent = res.desc;
     }
   }
 
-  /* ── Resultado ── */
-  function calcularResultado() {
-    var ganador = Object.keys(votos).reduce(function (a, b) { return votos[a] >= votos[b] ? a : b; });
-    return ARQUETIPOS[ganador];
+  function animateIn() {
+    var g = window.gsap;
+    if (!card) return;
+    if (!g) { card.style.opacity = '1'; card.style.transform = 'none'; return; }
+    g.killTweensOf(card);
+    g.fromTo(card, { y: 40, opacity: 0, rotation: -1.5 }, { y: 0, opacity: 1, rotation: 0, duration: 0.6, ease: 'back.out(1.4)' });
+    var opts = document.querySelectorAll('[data-opt]');
+    if (opts.length) g.fromTo(opts, { x: -30, opacity: 0 }, { x: 0, opacity: 1, duration: 0.45, stagger: 0.06, delay: 0.15, ease: 'power3.out' });
+    var fl = resultFlower;
+    if (fl && fl.offsetParent !== null) g.fromTo(fl, { scale: 0, rotation: -120 }, { scale: 1, rotation: 0, duration: 0.9, delay: 0.2, ease: 'back.out(1.8)' });
   }
 
-  function mostrarResultado() {
-    var res = calcularResultado();
-    var cardId = document.getElementById('resultadoCardId');
-    cardId.className = 'resultado-card-id ' + res.tema;
-    document.getElementById('resultadoNum').textContent = res.num;
-    document.getElementById('resultadoNombre').textContent = res.nombre;
-    document.getElementById('resultadoDesc').textContent = res.descripcion;
-
-    var carta = document.getElementById('cartaResultado');
-    var firma = carta.querySelector('.firma');
-    carta.innerHTML = '';
-    res.carta.forEach(function (linea) {
-      var p = document.createElement('p');
-      p.textContent = linea;
-      carta.appendChild(p);
-    });
-    carta.appendChild(firma);
-
-    var florInput = document.getElementById('quizFieldFlor');
-    if (florInput) florInput.value = res.flor;
-
-    mostrar('pantallaResultado');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  function pick(key) {
+    if (state.busy) return;
+    state.busy = true;
+    var g = window.gsap;
+    var go = function () {
+      state.scores[key]++;
+      state.step++;
+      render();
+      animateIn();
+      state.busy = false;
+    };
+    if (g && card) {
+      g.to(card, { y: -24, opacity: 0, rotation: 1.5, duration: 0.28, ease: 'power2.in', onComplete: go });
+    } else {
+      go();
+    }
   }
 
-  /* ── Abrir formulario ── */
-  document.getElementById('btnAbrirForm').addEventListener('click', function () {
-    var wrap = document.getElementById('formCartaWrap');
-    wrap.classList.add('visible');
-    this.style.display = 'none';
-    setTimeout(function () { wrap.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 50);
-  });
-
-  /* ── Envío a Kit → carta-para-ti ── */
-  document.getElementById('formPedidoQuiz').addEventListener('submit', function (e) {
-    e.preventDefault();
-    var form = this;
-    var btn = form.querySelector('button[type=submit]');
-    var nombre  = form.querySelector('[name="first_name"]').value.trim();
-    var email   = form.querySelector('[name="email_address"]').value.trim();
-    var sobreTi = form.querySelector('[name="fields[sobre_ti]"]').value.trim();
-    if (!nombre) { form.querySelector('[name="first_name"]').focus(); return; }
-    if (!email)  { form.querySelector('[name="email_address"]').focus(); return; }
-    if (btn) btn.disabled = true;
-    var params = new URLSearchParams();
-    params.append('email_address', email);
-    params.append('first_name', nombre);
-    if (sobreTi) params.append('fields[sobre_ti]', sobreTi);
-    var florVal = document.getElementById('quizFieldFlor').value;
-    if (florVal) params.append('fields[flor]', florVal);
-    var blob = new Blob([params.toString()], { type: 'application/x-www-form-urlencoded' });
-    navigator.sendBeacon('https://app.kit.com/forms/9602040/subscriptions', blob);
-    window.location.href =
-      'https://bykirco.vercel.app/carta-para-ti.html?first_name=' +
-      encodeURIComponent(nombre);
-  });
-
-  /* ── Reset ── */
-  function reiniciar() {
-    preguntaActual = 0;
-    Object.keys(votos).forEach(function (k) { votos[k] = 0; });
-    renderPregunta();
-    mostrar('pantallaQuiz');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  function start() {
+    state.busy = false;
+    state.step = 0;
+    state.scores = freshScores();
+    render();
+    animateIn();
   }
 
-  /* ── Eventos ── */
-  document.getElementById('btnEmpezar').addEventListener('click', function () {
-    renderPregunta();
-    mostrar('pantallaQuiz');
-  });
+  document.getElementById('btn-start').addEventListener('click', start);
+  document.getElementById('btn-restart').addEventListener('click', start);
 
-  document.getElementById('btnRepetir').addEventListener('click', reiniciar);
+  render();
 
-  /* ── Init: ocultar quiz y resultado ── */
-  document.getElementById('pantallaQuiz').style.display = 'none';
-  document.getElementById('pantallaResultado').style.display = 'none';
+  // "Las cinco flores" grid
+  if (!isEmbed) {
+    var grid = document.getElementById('flores-grid');
+    if (grid) {
+      order.forEach(function (key) {
+        var f = flowers[key];
+        var card2 = document.createElement('div');
+        card2.setAttribute('data-tilt', '');
+        card2.style.cssText = 'border-radius:24px;padding:28px 24px 26px;box-shadow:var(--shadow-card);transform:rotate(' + f.rot + 'deg);background:' + f.tint + ';';
+        card2.innerHTML =
+          '<div style="display:flex;align-items:flex-start;justify-content:space-between">' +
+            '<span style="display:block;width:58px;height:54px;background:' + f.color + ';-webkit-mask:url(assets/icons/flor.svg) center/contain no-repeat;mask:url(assets/icons/flor.svg) center/contain no-repeat"></span>' +
+            '<span style="font-family:var(--font-mono);font-size:12px;letter-spacing:var(--track-mono);color:var(--kirco-ink)">' + f.n + '</span>' +
+          '</div>' +
+          '<h3 style="font-family:var(--font-display);font-weight:400;font-size:32px;margin:18px 0 6px;color:' + f.text + '">' + f.name + '</h3>' +
+          '<p style="font-family:var(--font-hand);font-size:20px;line-height:1.3;color:var(--kirco-ink);margin:0">' + f.phrase + '</p>';
+        grid.appendChild(card2);
+      });
+    }
+  }
+
+  // Inicializar animaciones GSAP
+  document.addEventListener('DOMContentLoaded', function () {});
+
+  if (window.Lenis && window.gsap && window.ScrollTrigger && !isEmbed) {
+    var gsap = window.gsap;
+    var ST = window.ScrollTrigger;
+    gsap.registerPlugin(ST);
+    var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    var lenis = new window.Lenis({ duration: 1.15, smoothWheel: true });
+    lenis.on('scroll', ST.update);
+    gsap.ticker.add(function (t) { lenis.raf(t * 1000); });
+    gsap.ticker.lagSmoothing(0);
+
+    if (!reduce) {
+      document.querySelectorAll('[data-reveal]').forEach(function (el) {
+        gsap.fromTo(el, { y: 60, opacity: 0 }, {
+          y: 0, opacity: 1, duration: 1, ease: 'power3.out',
+          scrollTrigger: { trigger: el, start: 'top 88%' }
+        });
+      });
+
+      document.querySelectorAll('[data-marquee]').forEach(function (row) {
+        var dir = parseFloat(row.dataset.marquee);
+        gsap.fromTo(row,
+          { x: function () { return dir * window.innerWidth * 0.05; } },
+          { x: function () { return -dir * window.innerWidth * 0.05; }, ease: 'none',
+            scrollTrigger: { trigger: row.closest('section'), start: 'top bottom', end: 'bottom top', scrub: 0.6, invalidateOnRefresh: true }
+          }
+        );
+      });
+
+      document.querySelectorAll('[data-stagger]').forEach(function (parent) {
+        var children = Array.from(parent.children);
+        gsap.from(children, {
+          y: 50, opacity: 0, duration: 0.7, stagger: 0.05, ease: 'power3.out',
+          scrollTrigger: { trigger: parent, start: 'top 85%' }
+        });
+      });
+    }
+
+    if (matchMedia('(pointer: fine)').matches) {
+      var initTilt = function () {
+        document.querySelectorAll('[data-tilt]').forEach(function (el) {
+          gsap.set(el, { transformPerspective: 800 });
+          var rx = gsap.quickTo(el, 'rotationX', { duration: 0.5, ease: 'power3' });
+          var ry = gsap.quickTo(el, 'rotationY', { duration: 0.5, ease: 'power3' });
+          var sc = gsap.quickTo(el, 'scale', { duration: 0.5, ease: 'power3' });
+          el.addEventListener('mousemove', function (e) {
+            var r = el.getBoundingClientRect();
+            ry(((e.clientX - r.left) / r.width - 0.5) * 18);
+            rx(-((e.clientY - r.top) / r.height - 0.5) * 18);
+            sc(1.04);
+          });
+          el.addEventListener('mouseleave', function () { rx(0); ry(0); sc(1); });
+        });
+      };
+      setTimeout(initTilt, 200);
+    }
+  }
 })();
 </script>
-
 </body>
 </html>

@@ -1,407 +1,325 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Destinatarios — by_kirco</title>
-<meta name="description" content="Mensajes de las personas que encontraron una cartita de by_kirco." />
-<link rel="icon" type="image/png" href="/assets/favicon.png" />
-<link rel="apple-touch-icon" href="/assets/favicon.png" />
-<style>
-@font-face { font-family: "Visby Round CF"; src: url("fonts/VisbyRoundCF-Heavy.ttf") format("truetype"); font-weight: 800; font-style: normal; font-display: swap; }
-@font-face { font-family: "OCR B Std"; src: url("fonts/OCRBStd.otf") format("opentype"); font-weight: 400; font-style: normal; font-display: swap; }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Destinatarios — by_kirco</title>
+  <link rel="icon" type="image/png" href="/assets/favicon.png" />
+  <link rel="apple-touch-icon" href="/assets/favicon.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Darumadrop+One&family=Indie+Flower&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+  <style>
+    :root {
+      --kirco-green:        #A0D76B;
+      --kirco-green-deep:   #6F9C3E;
+      --kirco-green-tint:   #ECF7DF;
+      --kirco-orange:       #FFAA4D;
+      --kirco-orange-deep:  #D07F1F;
+      --kirco-paper:        #F7F1E3;
+      --kirco-ink:          #2E2B25;
+      --kirco-line:         #E8E1D2;
+      --font-display:       'Darumadrop One', sans-serif;
+      --font-hand:          'Indie Flower', cursive;
+      --font-mono:          'OCR-B Std', 'Courier New', monospace;
+      --font-ocr:           'OCR-A Std', 'Courier New', monospace;
+      --track-mono:         0.16em;
+      --shadow-card:        0 2px 6px rgba(46,43,37,.06), 0 10px 28px rgba(46,43,37,.08);
+      --shadow-pop:         0 4px 12px rgba(46,43,37,.1), 0 18px 44px rgba(46,43,37,.14);
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; }
+    body {
+      background-color: #F7F1E3;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.45 0 0 0 0 0.36 0 0 0 0 0.2 0 0 0 0.09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      color: var(--kirco-ink);
+      overflow-x: clip;
+    }
+    @font-face {
+      font-family: 'OCR-A Std';
+      src: url('/fonts/OCRAStd.otf') format('opentype');
+      font-weight: 400; font-display: swap;
+    }
+    @font-face {
+      font-family: 'OCR-B Std';
+      src: url('/fonts/OCRBStd.otf') format('opentype');
+      font-weight: 400; font-display: swap;
+    }
+    html.lenis, html.lenis body { height: auto; }
+    .lenis.lenis-smooth { scroll-behavior: auto !important; }
 
-:root {
-  --kirco-green:        #a0d76b;
-  --kirco-green-deep:   #6f9c3e;
-  --kirco-green-tint:   #ecf7df;
-  --kirco-orange:       #ffaa4d;
-  --kirco-orange-deep:  #d07f1f;
-  --kirco-orange-tint:  #fff2e2;
-  --kirco-yellow-tint:  #fffdda;
-  --kirco-white:        #ffffff;
-  --kirco-paper:        #f7f1e3;
-  --kirco-ink:          #2e2b25;
-  --kirco-ink-soft:     #6b6557;
-  --text-muted:         #6b6557;
-  --font-display: "Visby Round CF", system-ui, sans-serif;
-  --font-mono:    "OCR B Std", monospace;
-  --track-mono:   0.16em;
-  --radius-pill:  999px;
-  --shadow-card:  0 2px 6px rgba(46,43,37,.06), 0 10px 28px rgba(46,43,37,.08);
-  --shadow-pop:   0 4px 12px rgba(46,43,37,.10), 0 18px 44px rgba(46,43,37,.14);
-}
-*, *::before, *::after { box-sizing: border-box; }
-html, body { margin: 0; padding: 0; }
-body {
-  background: var(--kirco-paper);
-  color: var(--kirco-ink);
-  font-family: system-ui, -apple-system, sans-serif;
-  overflow-x: hidden;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
+    /* Nav hover */
+    .nav-link { transition: color 180ms ease-out; }
+    .nav-link:hover { color: var(--kirco-orange-deep) !important; }
 
-/* ── HEADER ── */
-.site-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 26px 48px 0;
-  width: 100%;
-}
-.site-header .logo { height: 96px; display: block; }
-.back-link {
-  font-family: var(--font-mono);
-  font-size: 13px;
-  letter-spacing: var(--track-mono);
-  color: var(--text-muted);
-  text-decoration: none;
-  transition: color 150ms;
-}
-.back-link:hover { color: var(--kirco-green-deep); }
+    /* Polaroid image zoom on hover */
+    .pola-img:hover { transform: scale(1.22); }
 
-/* ── HERO ── */
-.hero-dest {
-  position: relative;
-  overflow: hidden;
-  text-align: center;
-  padding: 90px 48px 110px;
-}
-.hero-wm {
-  position: absolute;
-  background: url("assets/monograma-naranja.png") no-repeat center / contain;
-  width: 520px;
-  height: 520px;
-  top: -140px;
-  left: -160px;
-  transform: rotate(-12deg);
-  opacity: 0.07;
-  pointer-events: none;
-}
-.hero-inner {
-  position: relative;
-  max-width: 720px;
-  margin: 0 auto;
-}
-.kicker-tag {
-  font-family: var(--font-mono);
-  font-size: 13px;
-  letter-spacing: var(--track-mono);
-  text-transform: uppercase;
-  color: var(--kirco-orange-deep);
-  margin: 0 0 20px;
-}
-.hero-dest h1 {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: clamp(46px, 7vw, 72px);
-  line-height: 1.05;
-  margin: 0;
-  color: var(--kirco-green-deep);
-}
-.hero-sub {
-  font-size: 20px;
-  line-height: 1.6;
-  color: var(--text-muted);
-  max-width: 520px;
-  margin: 26px auto 0;
-}
-
-/* ── TESTIMONIOS ── */
-.testimonios {
-  position: relative;
-  padding: 20px 48px 130px;
-}
-.testimonios-grid {
-  max-width: 1100px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 36px;
-}
-
-/* ── CARD ── */
-.dest-card {
-  position: relative;
-  opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 560ms ease-out, transform 560ms ease-out;
-}
-.dest-card.visible { opacity: 1; transform: none; }
-
-.dest-bubble {
-  border-radius: 24px;
-  padding: 32px 28px;
-  position: relative;
-  z-index: 2;
-  box-shadow: var(--shadow-card);
-  transition: transform 200ms ease-out, box-shadow 200ms ease-out;
-}
-.dest-bubble:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-pop);
-}
-.dest-bubble.verde { background: var(--kirco-green-deep); }
-.dest-bubble.naranja { background: var(--kirco-orange-deep); }
-
-.dest-quote {
-  font-size: 17px;
-  line-height: 1.6;
-  color: #ffffff;
-  margin: 0 0 22px;
-}
-.dest-quote::before { content: '\201c'; }
-.dest-quote::after  { content: '\201d'; }
-
-.dest-footer {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.dest-avatar {
-  width: 46px;
-  height: 46px;
-  border-radius: 50%;
-  border: 2px solid rgba(255,255,255,0.6);
-  background: rgba(255,255,255,0.18);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  overflow: hidden;
-}
-.dest-avatar img {
-  width: 28px;
-  height: 28px;
-  filter: brightness(0) invert(1);
-  opacity: 0.8;
-}
-.dest-nombre {
-  display: block;
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 15px;
-  color: #fff;
-}
-.dest-fecha {
-  display: block;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: var(--track-mono);
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.75);
-  margin-top: 2px;
-}
-
-.dest-tail {
-  position: absolute;
-  left: 36px;
-  bottom: -9px;
-  width: 20px;
-  height: 20px;
-  transform: rotate(45deg);
-  border-radius: 4px;
-  z-index: 1;
-}
-.dest-tail.verde { background: var(--kirco-green-deep); }
-.dest-tail.naranja { background: var(--kirco-orange-deep); }
-
-/* ── CTA ── */
-.cta-dest {
-  position: relative;
-  background: var(--kirco-green-tint);
-  padding: 100px 48px;
-  text-align: center;
-  overflow: hidden;
-  flex: 1;
-}
-.cta-wm {
-  position: absolute;
-  background: url("assets/monograma-naranja.png") no-repeat center / contain;
-  width: 340px;
-  height: 340px;
-  bottom: -90px;
-  right: -90px;
-  transform: rotate(12deg);
-  opacity: 0.1;
-  pointer-events: none;
-}
-.cta-dest-inner {
-  position: relative;
-  max-width: 600px;
-  margin: 0 auto;
-}
-.cta-dest h2 {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 38px;
-  margin: 0;
-  color: var(--kirco-green-deep);
-}
-.btn-cta {
-  display: inline-block;
-  margin-top: 32px;
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 18px;
-  color: #fff;
-  background: var(--kirco-orange-deep);
-  border: 2px solid var(--kirco-orange-deep);
-  border-radius: var(--radius-pill);
-  padding: 16px 40px;
-  text-decoration: none;
-  transition: transform 180ms ease-out;
-}
-.btn-cta:hover { transform: translateY(-2px); }
-
-/* ── FOOTER ── */
-footer {
-  background: var(--kirco-orange-deep);
-  padding: 60px 48px;
-  color: var(--kirco-paper);
-  text-align: center;
-}
-footer p {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  letter-spacing: var(--track-mono);
-  text-transform: uppercase;
-  margin: 0;
-  opacity: 0.9;
-}
-
-/* ── RESPONSIVE ── */
-@media (max-width: 900px) {
-  .testimonios-grid { grid-template-columns: repeat(2, 1fr); }
-}
-@media (max-width: 640px) {
-  .site-header { padding: 20px 24px 0; }
-  .site-header .logo { height: 72px; }
-  .hero-dest { padding: 60px 24px 80px; }
-  .hero-sub { font-size: 17px; }
-  .testimonios { padding: 20px 24px 90px; }
-  .testimonios-grid { grid-template-columns: 1fr; }
-  .cta-dest { padding: 70px 24px; }
-  .cta-dest h2 { font-size: 28px; }
-  footer { padding: 40px 24px; }
-}
-</style>
+    /* Social icon hover */
+    .social-icon-link { transition: transform 180ms ease-out; }
+    .social-icon-link:hover { transform: translateY(-3px) rotate(-8deg); }
+  </style>
 </head>
 <body>
 
-<header class="site-header">
-  <a href="/"><img class="logo" src="assets/logo-verde.png" alt="by_kirco" /></a>
-  <a href="/" class="back-link">← VOLVER AL INICIO</a>
-</header>
+  <header style="display:flex;align-items:center;justify-content:space-between;gap:24px;max-width:1160px;margin:0 auto;padding:22px clamp(20px,4vw,48px)">
+    <a href="/" style="display:block"><img src="assets/logo-verde.png" alt="by_kirco" style="height:84px;display:block" /></a>
+    <nav style="display:flex;gap:28px;font-family:var(--font-mono);font-size:13px;letter-spacing:var(--track-mono);text-transform:uppercase">
+      <a href="/" class="nav-link" style="color:var(--kirco-green-deep)">Inicio</a>
+      <a href="/sobre-mi.html" class="nav-link" style="color:var(--kirco-green-deep)">Sobre mí</a>
+    </nav>
+  </header>
 
-<section class="hero-dest">
-  <div class="hero-wm" aria-hidden="true"></div>
-  <div class="hero-inner">
-    <p class="kicker-tag">de mis cartitas</p>
-    <h1>Destinatarios</h1>
-    <p class="hero-sub">Personas que se encontraron una cartita en el peor o el mejor momento, y quisieron contármelo.</p>
-  </div>
-</section>
+  <!-- HERO -->
+  <section style="position:relative;padding:70px clamp(20px,5vw,72px) 40px;text-align:center">
+    <h1 data-reveal style="font-family:var(--font-display);font-weight:400;font-size:clamp(68px,11vw,170px);line-height:0.92;margin:0;color:var(--kirco-green-deep)">Destinatarios</h1>
+    <p data-reveal style="font-family:var(--font-hand);font-size:clamp(22px,2.2vw,30px);line-height:1.35;color:var(--kirco-orange-deep);margin:22px auto 0;max-width:620px;text-wrap:balance">Personas que se encontraron una cartita y quisieron contármelo.</p>
+  </section>
 
-<section class="testimonios">
-  <div class="testimonios-grid" id="testimoniosGrid"></div>
-</section>
+  <!-- GRACIAS POR ESCRIBIRME + polaroids -->
+  <section style="position:relative;min-height:90vh;padding:80px 0 100px;overflow:hidden;display:flex;flex-direction:column;justify-content:center">
+    <div data-reveal aria-hidden="true" style="display:flex;flex-direction:column;align-items:center;font-family:var(--font-ocr);font-size:clamp(36px,8.4vw,150px);line-height:1;white-space:nowrap;pointer-events:none">
+      <div data-marquee="1" style="color:var(--kirco-orange-deep);will-change:transform">GRACIAS POR</div>
+      <div data-marquee="-1" style="color:var(--kirco-green-deep);will-change:transform">ESCRIBIRME</div>
+    </div>
 
-<section class="cta-dest">
-  <div class="cta-wm" aria-hidden="true"></div>
-  <div class="cta-dest-inner">
-    <h2>¿Quieres ser el próximo destinatario?</h2>
-    <a href="/quiz.html" class="btn-cta">Para ti</a>
-  </div>
-</section>
+    <!-- Polaroid 1 -->
+    <div data-speed="1.4" style="position:absolute;z-index:3;left:4%;top:6%;width:clamp(150px,15vw,220px);will-change:transform">
+      <div data-float style="will-change:transform">
+        <div data-tilt style="background:#fff;border-radius:6px;padding:10px 10px 40px;box-shadow:var(--shadow-pop);transform:rotate(-5deg)">
+          <div style="overflow:hidden;border-radius:2px">
+            <img src="assets/hero/04-obra-de-arte.webp" alt="Cartita en un banco" class="pola-img" style="display:block;width:100%;aspect-ratio:1/1;object-fit:cover;transition:transform 600ms cubic-bezier(0.22,1,0.36,1)" />
+          </div>
+        </div>
+      </div>
+    </div>
 
-<footer>
-  <p>© 2026 by_kirco · Cartas con cariño</p>
-</footer>
+    <!-- Polaroid 2 -->
+    <div data-speed="0.9" style="position:absolute;z-index:3;right:6%;top:10%;width:clamp(150px,15vw,220px);will-change:transform">
+      <div data-float style="will-change:transform">
+        <div data-tilt style="background:#fff;border-radius:6px;padding:10px 10px 40px;box-shadow:var(--shadow-pop);transform:rotate(4deg)">
+          <div style="overflow:hidden;border-radius:2px">
+            <img src="assets/hero/02-cafe.webp" alt="Cartita en un café" class="pola-img" style="display:block;width:100%;aspect-ratio:1/1;object-fit:cover;transition:transform 600ms cubic-bezier(0.22,1,0.36,1)" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Polaroid 3 -->
+    <div data-speed="1.7" style="position:absolute;z-index:3;left:12%;top:62%;width:clamp(150px,15vw,220px);will-change:transform">
+      <div data-float style="will-change:transform">
+        <div data-tilt style="background:#fff;border-radius:6px;padding:10px 10px 40px;box-shadow:var(--shadow-pop);transform:rotate(3deg)">
+          <div style="overflow:hidden;border-radius:2px">
+            <img src="assets/hero/05-metro.webp" alt="Cartita en el metro" class="pola-img" style="display:block;width:100%;aspect-ratio:1/1;object-fit:cover;transition:transform 600ms cubic-bezier(0.22,1,0.36,1)" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Polaroid 4 -->
+    <div data-speed="1.1" style="position:absolute;z-index:3;right:13%;top:60%;width:clamp(150px,15vw,220px);will-change:transform">
+      <div data-float style="will-change:transform">
+        <div data-tilt style="background:#fff;border-radius:6px;padding:10px 10px 40px;box-shadow:var(--shadow-pop);transform:rotate(-4deg)">
+          <div style="overflow:hidden;border-radius:2px">
+            <img src="assets/hero/03-arte-simple.webp" alt="Cartita en una planta" class="pola-img" style="display:block;width:100%;aspect-ratio:1/1;object-fit:cover;transition:transform 600ms cubic-bezier(0.22,1,0.36,1)" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MURO DE MENSAJES -->
+  <section style="padding:40px clamp(20px,5vw,72px) 120px">
+    <div data-stagger style="max-width:1160px;margin:0 auto;columns:3 280px;column-gap:28px">
+
+      <div style="break-inside:avoid;padding:0 0 40px;display:block">
+        <div data-tilt style="position:relative;background:var(--kirco-green-deep);border-radius:24px;padding:24px 26px 20px;box-shadow:var(--shadow-card);transform:rotate(-1.5deg)">
+          <p style="font-family:var(--font-ocr);font-size:16px;line-height:1.6;color:#fff;margin:0 0 16px;text-wrap:pretty">&ldquo;La encontré un día horrible y la leí tres veces seguidas. Todavía la guardo en la cartera.&rdquo;</p>
+          <p style="font-family:var(--font-ocr);font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:#fff;margin:0">Marta · 3 feb 2026</p>
+          <div style="position:absolute;left:34px;bottom:-9px;width:20px;height:20px;background:var(--kirco-green-deep);transform:rotate(45deg);border-radius:4px"></div>
+        </div>
+      </div>
+
+      <div style="break-inside:avoid;padding:0 0 40px;display:block">
+        <div data-tilt style="position:relative;background:var(--kirco-orange-deep);border-radius:24px;padding:24px 26px 20px;box-shadow:var(--shadow-card);transform:rotate(1.2deg)">
+          <p style="font-family:var(--font-ocr);font-size:16px;line-height:1.6;color:#fff;margin:0 0 16px;text-wrap:pretty">&ldquo;No sé quién la escribió, pero llegó justo cuando la necesitaba. Gracias, quien seas.&rdquo;</p>
+          <p style="font-family:var(--font-ocr);font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:#fff;margin:0">Diego · 18 mar 2026</p>
+          <div style="position:absolute;left:34px;bottom:-9px;width:20px;height:20px;background:var(--kirco-orange-deep);transform:rotate(45deg);border-radius:4px"></div>
+        </div>
+      </div>
+
+      <div style="break-inside:avoid;padding:0 0 40px;display:block">
+        <div data-tilt style="position:relative;background:var(--kirco-green-deep);border-radius:24px;padding:24px 26px 20px;box-shadow:var(--shadow-card);transform:rotate(-0.8deg)">
+          <p style="font-family:var(--font-ocr);font-size:16px;line-height:1.6;color:#fff;margin:0 0 16px;text-wrap:pretty">&ldquo;Le hice una foto antes de guardármela. Me la reencuentro cada vez que dudo de mí.&rdquo;</p>
+          <p style="font-family:var(--font-ocr);font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:#fff;margin:0">Aroa · 27 abr 2026</p>
+          <div style="position:absolute;left:34px;bottom:-9px;width:20px;height:20px;background:var(--kirco-green-deep);transform:rotate(45deg);border-radius:4px"></div>
+        </div>
+      </div>
+
+      <div style="break-inside:avoid;padding:0 0 40px;display:block">
+        <div data-tilt style="position:relative;background:var(--kirco-orange-deep);border-radius:24px;padding:24px 26px 20px;box-shadow:var(--shadow-card);transform:rotate(1.6deg)">
+          <p style="font-family:var(--font-ocr);font-size:16px;line-height:1.6;color:#fff;margin:0 0 16px;text-wrap:pretty">&ldquo;Pensé que era una broma hasta que la leí entera. Me cambió el día por completo.&rdquo;</p>
+          <p style="font-family:var(--font-ocr);font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:#fff;margin:0">Nico · 9 may 2026</p>
+          <div style="position:absolute;left:34px;bottom:-9px;width:20px;height:20px;background:var(--kirco-orange-deep);transform:rotate(45deg);border-radius:4px"></div>
+        </div>
+      </div>
+
+      <div style="break-inside:avoid;padding:0 0 40px;display:block">
+        <div data-tilt style="position:relative;background:var(--kirco-green-deep);border-radius:24px;padding:24px 26px 20px;box-shadow:var(--shadow-card);transform:rotate(-1.2deg)">
+          <p style="font-family:var(--font-ocr);font-size:16px;line-height:1.6;color:#fff;margin:0 0 16px;text-wrap:pretty">&ldquo;La compartí con mi madre y las dos lloramos un poco.&rdquo;</p>
+          <p style="font-family:var(--font-ocr);font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:#fff;margin:0">Elena · 22 may 2026</p>
+          <div style="position:absolute;left:34px;bottom:-9px;width:20px;height:20px;background:var(--kirco-green-deep);transform:rotate(45deg);border-radius:4px"></div>
+        </div>
+      </div>
+
+      <div style="break-inside:avoid;padding:0 0 40px;display:block">
+        <div data-tilt style="position:relative;background:var(--kirco-orange-deep);border-radius:24px;padding:24px 26px 20px;box-shadow:var(--shadow-card);transform:rotate(0.9deg)">
+          <p style="font-family:var(--font-ocr);font-size:16px;line-height:1.6;color:#fff;margin:0 0 16px;text-wrap:pretty">&ldquo;Iba de mal humor al trabajo y me la encontré en el banco de la parada.&rdquo;</p>
+          <p style="font-family:var(--font-ocr);font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:#fff;margin:0">Javier · 14 jun 2026</p>
+          <div style="position:absolute;left:34px;bottom:-9px;width:20px;height:20px;background:var(--kirco-orange-deep);transform:rotate(45deg);border-radius:4px"></div>
+        </div>
+      </div>
+
+      <div style="break-inside:avoid;padding:0 0 40px;display:block">
+        <div data-tilt style="position:relative;background:var(--kirco-green-deep);border-radius:24px;padding:24px 26px 20px;box-shadow:var(--shadow-card);transform:rotate(-1.6deg)">
+          <p style="font-family:var(--font-ocr);font-size:16px;line-height:1.6;color:#fff;margin:0 0 16px;text-wrap:pretty">&ldquo;La encontré en el metro y le hice foto para mandártela.&rdquo;</p>
+          <p style="font-family:var(--font-ocr);font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:#fff;margin:0">Lucía · 2 jul 2026</p>
+          <div style="position:absolute;left:34px;bottom:-9px;width:20px;height:20px;background:var(--kirco-green-deep);transform:rotate(45deg);border-radius:4px"></div>
+        </div>
+      </div>
+
+      <div style="break-inside:avoid;padding:0 0 40px;display:block">
+        <div data-tilt style="position:relative;background:var(--kirco-orange-deep);border-radius:24px;padding:24px 26px 20px;box-shadow:var(--shadow-card);transform:rotate(1.1deg)">
+          <p style="font-family:var(--font-ocr);font-size:16px;line-height:1.6;color:#fff;margin:0 0 16px;text-wrap:pretty">&ldquo;Estaba colgada de un árbol. Pensé que era para mí, y lo era.&rdquo;</p>
+          <p style="font-family:var(--font-ocr);font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:#fff;margin:0">Pablo · 19 jul 2026</p>
+          <div style="position:absolute;left:34px;bottom:-9px;width:20px;height:20px;background:var(--kirco-orange-deep);transform:rotate(45deg);border-radius:4px"></div>
+        </div>
+      </div>
+
+      <div style="break-inside:avoid;padding:0 0 40px;display:block">
+        <div data-tilt style="position:relative;background:var(--kirco-green-deep);border-radius:24px;padding:24px 26px 20px;box-shadow:var(--shadow-card);transform:rotate(-0.6deg)">
+          <p style="font-family:var(--font-ocr);font-size:16px;line-height:1.6;color:#fff;margin:0 0 16px;text-wrap:pretty">&ldquo;Ahora la tengo pegada en la nevera.&rdquo;</p>
+          <p style="font-family:var(--font-ocr);font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:#fff;margin:0">Hugo · 30 ago 2026</p>
+          <div style="position:absolute;left:34px;bottom:-9px;width:20px;height:20px;background:var(--kirco-green-deep);transform:rotate(45deg);border-radius:4px"></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ¿ENCONTRASTE UNA? -->
+  <section style="padding:0 clamp(20px,5vw,72px) 130px;text-align:center">
+    <h2 data-reveal style="font-family:var(--font-display);font-weight:400;font-size:clamp(40px,5vw,68px);line-height:1.05;margin:0;color:var(--kirco-green-deep);text-wrap:balance">¿Encontraste una cartita?</h2>
+    <p data-reveal style="font-family:var(--font-hand);font-size:clamp(22px,2vw,28px);line-height:1.35;color:var(--kirco-orange-deep);margin:16px auto 0;max-width:600px">Escríbeme en mis redes sociales y aparecerás aquí.</p>
+    <div data-stagger style="display:flex;justify-content:center;gap:16px;margin-top:34px">
+      <a href="https://www.instagram.com/by_kirco/" target="_blank" rel="noopener" aria-label="Instagram" class="social-icon-link" style="display:block;width:76px;height:76px">
+        <span style="display:block;width:100%;height:100%;background:var(--kirco-orange-deep);-webkit-mask:url(assets/icons/instagram.svg) center/contain no-repeat;mask:url(assets/icons/instagram.svg) center/contain no-repeat"></span>
+      </a>
+      <a href="https://www.facebook.com/profile.php?id=61567524682650" target="_blank" rel="noopener" aria-label="Facebook" class="social-icon-link" style="display:block;width:76px;height:76px">
+        <span style="display:block;width:100%;height:100%;background:var(--kirco-green-deep);-webkit-mask:url(assets/icons/facebook.svg) center/contain no-repeat;mask:url(assets/icons/facebook.svg) center/contain no-repeat"></span>
+      </a>
+      <a href="#" target="_blank" rel="noopener" aria-label="X" class="social-icon-link" style="display:block;width:76px;height:76px">
+        <span style="display:block;width:100%;height:100%;background:var(--kirco-orange-deep);-webkit-mask:url(assets/icons/x.svg) center/contain no-repeat;mask:url(assets/icons/x.svg) center/contain no-repeat"></span>
+      </a>
+      <a href="https://www.tiktok.com/@by_kirco" target="_blank" rel="noopener" aria-label="TikTok" class="social-icon-link" style="display:block;width:76px;height:76px">
+        <span style="display:block;width:100%;height:100%;background:var(--kirco-green-deep);-webkit-mask:url(assets/icons/tiktok.svg) center/contain no-repeat;mask:url(assets/icons/tiktok.svg) center/contain no-repeat"></span>
+      </a>
+    </div>
+  </section>
+
+  <footer style="background:var(--kirco-orange-deep);padding:70px clamp(20px,5vw,72px) 46px;color:var(--kirco-paper)">
+    <div style="max-width:1100px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:28px">
+      <img src="assets/logo-naranja-negativo.png" alt="by_kirco" style="height:78px" />
+      <div style="display:flex;gap:14px;align-items:center">
+        <a href="https://www.instagram.com/by_kirco/" target="_blank" rel="noopener" aria-label="Instagram" style="display:block;width:54px;height:54px"><img src="assets/icons/instagram.svg" alt="Instagram" style="width:100%;height:100%;display:block" /></a>
+        <a href="https://www.facebook.com/profile.php?id=61567524682650" target="_blank" rel="noopener" aria-label="Facebook" style="display:block;width:54px;height:54px"><img src="assets/icons/facebook.svg" alt="Facebook" style="width:100%;height:100%;display:block" /></a>
+        <a href="#" target="_blank" rel="noopener" aria-label="X" style="display:block;width:54px;height:54px"><img src="assets/icons/x.svg" alt="X" style="width:100%;height:100%;display:block" /></a>
+        <a href="https://www.tiktok.com/@by_kirco" target="_blank" rel="noopener" aria-label="TikTok" style="display:block;width:54px;height:54px"><img src="assets/icons/tiktok.svg" alt="TikTok" style="width:100%;height:100%;display:block" /></a>
+      </div>
+    </div>
+    <p style="max-width:1100px;margin:44px auto 0;border-top:2px solid rgba(247,241,227,0.35);padding-top:22px;font-family:var(--font-mono);font-size:12px;letter-spacing:var(--track-mono);text-transform:uppercase">© 2026 by_kirco · Cartas con cariño</p>
+  </footer>
 
 <script>
-var mensajes = [
-  { fecha: "26/08/2025", nombre: "Desconocido/a",   mensaje: "J ai trouvé dans une plage une petite bouteille en verre dedans un petit papier avec un beau message signé par By-kirco. J ai décidé de rentrer en contact avec cette personne pour la remercier. Est ce que c est vous By-kirco ? Thank u" },
-  { fecha: "18/04/2025", nombre: "Nerea",            mensaje: "Holaa! El sábado paseando por El Retiro me encontré una de vuestras cartitas en un banco y me atreví a abrirla. ¡Me hizo muchísima ilusión! Gracias desde Badajoz ❤️" },
-  { fecha: "21/02/2025", nombre: "Llaima",           mensaje: "Hola encontré tu mejor historia en metro prosperidad. Mil gracias!!! Y sabes justo iba a una clase de teatro y compartí esto al principio de la clase con todos porque me pareció muy bonito y todos encantados con la idea, tipo cadena de favores." },
-  { fecha: null,         nombre: "Yarin",            mensaje: "Hola buenos días 😃 he encontrado la cartita muy linda ❤️ Me has sacado una sonrisa 🤭" },
-  { fecha: "29/01/2025", nombre: "Pablo",            mensaje: "Muchas gracias 🥹 La he dejado para el siguiente en el Hospital de La Paz 😉 Me ha hecho mucha ilusión. ¡Ten muy buen día tú también, anónim@!" },
-  { fecha: "12/01/2025", nombre: "Sara",             mensaje: "Hola! Lo he encontrado yo, muchas gracias! Necesitaba leer algo así." },
-  { fecha: "22/12/2024", nombre: "Desconocido/a",   mensaje: "Buenasss llegó una carta a mis manos, me encantó el mensaje la verdad. Estaba bastante agobiado, pero muy guay muchas gracias." },
-  { fecha: "20/12/2024", nombre: "Franci",           mensaje: "Hola! Gracias por la tarjeta… me la acabo de encontrar y justo pensaba en eso al entrar al metro." },
-  { fecha: null,         nombre: "Lili",             mensaje: "Hola acabo de encontrar una de tus cartas, y la verdad es que estoy en una etapa de mi vida en la que el mensaje me hace fuerte, y sobre todo me quita las ganas de dejar de luchar. Gracias a ti por dar la gotita de esperanza que a veces cambia el mundo de alguien." },
-  { fecha: "03/10/2024", nombre: "Alejandra",        mensaje: "Me ha llegado la cartita y me ha encantado. Me alegraste el día 🥰. ¡Gracias!" },
-  { fecha: "12/01/2024", nombre: "Noa",              mensaje: "Holiii, encontré tu tarjetita de la rosa, me hizo mucha ilu 🥰" },
-  { fecha: "07/06/2023", nombre: "Álvaro",           mensaje: "Me encontré uno de tus mensajes 😚 Me animó mucho 🙂 Después de una situación complicada en el trabajo la semana pasada. Parece que fue el destinooo." },
-  { fecha: "10/01/2023", nombre: "Elena",            mensaje: "Me quedé con el mensaje y dejé la nota otra vez para que así tú y tu bonito acto lleguen a más personas." },
-  { fecha: "14/09/2021", nombre: "Andrea",           mensaje: "¡Hola! Paseando por la Zenia Boulevard he encontrado una cartita. Me alegré un montón. Quería agradecerte por tomarte un momento y escribir a gente desconocida cosas tan bonitas. Ha sido todo un placer." },
-  { fecha: "30/08/2021", nombre: "Ángel",            mensaje: "Hola, ¿por casualidad es tuya esta carta? Me gustó mucho." },
-  { fecha: "07/08/2021", nombre: "Salvador",         mensaje: "Buenas noches, he encontrado una de tus cartas a desconocidos por Estepona, Málaga. Simplemente quería darte las gracias por la carta y los consejos que escribiste 🤠" },
-  { fecha: "21/08/2021", nombre: "Kimera",           mensaje: "Holaaa me he encontrado tu cartita en Quevedo!! Iba a trabajar súper amargada y me has cambiado un poco la mañana, gracias!" },
-  { fecha: "07/05/2021", nombre: "Viryi",            mensaje: "Ayer en un banco del metro de Canillas encontré tu mensaje. Me dieron una mala noticia en mi trabajo, iba sumida en mis pensamientos y me pasé de parada. Así encontré tu mensaje. Me dio un subidón tremendo: justo lo que necesitaba leer." },
-  { fecha: "22/04/2021", nombre: "Tammy",            mensaje: "Me has hecho el día. Es una carta súper bonita." },
-  { fecha: "21/04/2021", nombre: "Laura",            mensaje: "Hola, te escribo porque he encontrado tu carta esta tarde. Me ha parecido algo precioso ☺️ y bueno, quería darte las gracias por hacer estas cosas tan bonitas ❤️" }
-];
+document.addEventListener('DOMContentLoaded', function () {
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-function parseFecha(f) {
-  if (!f) return new Date(0);
-  var p = f.split('/');
-  return new Date(+p[2], +p[1] - 1, +p[0]);
-}
+  if (window.Lenis && window.gsap && window.ScrollTrigger) {
+    var gsap = window.gsap;
+    var ST = window.ScrollTrigger;
+    gsap.registerPlugin(ST);
 
-function esc(s) {
-  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
+    var lenis = new window.Lenis({ duration: 1.15, smoothWheel: true });
+    lenis.on('scroll', ST.update);
+    gsap.ticker.add(function (t) { lenis.raf(t * 1000); });
+    gsap.ticker.lagSmoothing(0);
 
-function formatFecha(f) {
-  if (!f) return '';
-  var meses = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
-  var p = f.split('/');
-  return p[0] + ' ' + meses[+p[1]-1] + ' ' + p[2];
-}
-
-function renderizar() {
-  var sorted = mensajes.slice().sort(function(a, b) {
-    return parseFecha(b.fecha) - parseFecha(a.fecha);
-  });
-
-  var grid = document.getElementById('testimoniosGrid');
-  grid.innerHTML = sorted.map(function(m, i) {
-    var color = i % 2 === 0 ? 'verde' : 'naranja';
-    var fecha = m.fecha ? formatFecha(m.fecha) : '';
-    return '<div class="dest-card" style="transition-delay:' + (i * 45) + 'ms">' +
-      '<div class="dest-bubble ' + color + '">' +
-        '<p class="dest-quote">' + esc(m.mensaje) + '</p>' +
-        '<div class="dest-footer">' +
-          '<div class="dest-avatar">' +
-            '<img src="assets/monograma-verde.png" alt="" />' +
-          '</div>' +
-          '<div>' +
-            '<span class="dest-nombre">' + esc(m.nombre) + '</span>' +
-            (fecha ? '<span class="dest-fecha">' + fecha + '</span>' : '') +
-          '</div>' +
-        '</div>' +
-      '</div>' +
-      '<div class="dest-tail ' + color + '"></div>' +
-    '</div>';
-  }).join('');
-
-  requestAnimationFrame(function() {
-    var obs = new IntersectionObserver(function(entries) {
-      entries.forEach(function(e) {
-        if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+    if (!reduce) {
+      // data-reveal
+      document.querySelectorAll('[data-reveal]').forEach(function (el) {
+        gsap.fromTo(el, { y: 60, opacity: 0 }, {
+          y: 0, opacity: 1, duration: 1, ease: 'power3.out',
+          scrollTrigger: { trigger: el, start: 'top 88%' }
+        });
       });
-    }, { threshold: 0.05 });
-    grid.querySelectorAll('.dest-card').forEach(function(c) { obs.observe(c); });
-  });
-}
 
-document.addEventListener('DOMContentLoaded', renderizar);
+      // data-marquee
+      document.querySelectorAll('[data-marquee]').forEach(function (row) {
+        var dir = parseFloat(row.dataset.marquee);
+        gsap.fromTo(row,
+          { x: function () { return dir * window.innerWidth * 0.05; } },
+          {
+            x: function () { return -dir * window.innerWidth * 0.05; }, ease: 'none',
+            scrollTrigger: { trigger: row.closest('section'), start: 'top bottom', end: 'bottom top', scrub: 0.6, invalidateOnRefresh: true }
+          }
+        );
+      });
+
+      // data-speed parallax
+      document.querySelectorAll('[data-speed]').forEach(function (el) {
+        var s = parseFloat(el.dataset.speed) || 1;
+        gsap.fromTo(el, { y: 220 * s }, {
+          y: -220 * s, ease: 'none',
+          scrollTrigger: { trigger: el.closest('section'), start: 'top bottom', end: 'bottom top', scrub: true }
+        });
+      });
+
+      // data-float
+      document.querySelectorAll('[data-float]').forEach(function (el, k) {
+        gsap.to(el, { y: k % 2 ? 10 : -10, rotation: k % 2 ? 1 : -1, duration: 2.6 + k * 0.4, yoyo: true, repeat: -1, ease: 'sine.inOut' });
+      });
+
+      // data-stagger
+      document.querySelectorAll('[data-stagger]').forEach(function (parent) {
+        var children = Array.from(parent.children);
+        gsap.from(children, {
+          y: 50, opacity: 0, duration: 0.7, stagger: 0.05, ease: 'power3.out',
+          scrollTrigger: { trigger: parent, start: 'top 85%' }
+        });
+      });
+    }
+
+    // data-tilt (pointer:fine only)
+    if (matchMedia('(pointer: fine)').matches) {
+      document.querySelectorAll('[data-tilt]').forEach(function (el) {
+        gsap.set(el, { transformPerspective: 800 });
+        var rx = gsap.quickTo(el, 'rotationX', { duration: 0.5, ease: 'power3' });
+        var ry = gsap.quickTo(el, 'rotationY', { duration: 0.5, ease: 'power3' });
+        var sc = gsap.quickTo(el, 'scale', { duration: 0.5, ease: 'power3' });
+        el.addEventListener('mousemove', function (e) {
+          var r = el.getBoundingClientRect();
+          ry(((e.clientX - r.left) / r.width - 0.5) * 18);
+          rx(-((e.clientY - r.top) / r.height - 0.5) * 18);
+          sc(1.04);
+        });
+        el.addEventListener('mouseleave', function () { rx(0); ry(0); sc(1); });
+      });
+    }
+  }
+});
 </script>
-
 </body>
 </html>
